@@ -343,6 +343,59 @@ SH.saveProfileFromForm = () => {
 
 SH.clearProfile = () => { localStorage.removeItem(SH.profileKey); SH.renderNavProfile(); SH.toast('Logged out'); };
 
+SH.themeKey = 'sh_theme';
+
+SH.getSavedTheme = () => {
+  try {
+    return localStorage.getItem(SH.themeKey) || 'dark';
+  } catch (e) {
+    return 'dark';
+  }
+};
+
+SH.applyTheme = (theme) => {
+  const nextTheme = theme === 'light' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = nextTheme;
+  const toggle = document.getElementById('theme-toggle');
+  if (toggle) {
+    const isLight = nextTheme === 'light';
+    toggle.setAttribute('aria-pressed', String(isLight));
+    toggle.setAttribute('aria-label', `Switch to ${isLight ? 'dark' : 'light'} mode`);
+    const thumb = toggle.querySelector('.theme-toggle-thumb');
+    const label = toggle.querySelector('.theme-toggle-label');
+    if (thumb) thumb.textContent = isLight ? '☀' : '☾';
+    if (label) label.textContent = isLight ? 'Light mode' : 'Dark mode';
+  }
+};
+
+SH.toggleTheme = () => {
+  const current = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+  const nextTheme = current === 'light' ? 'dark' : 'light';
+  try {
+    localStorage.setItem(SH.themeKey, nextTheme);
+  } catch (e) {
+    console.warn('Failed to save theme preference', e);
+  }
+  SH.applyTheme(nextTheme);
+};
+
+SH.renderThemeToggle = () => {
+  if (document.getElementById('theme-toggle')) return;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.id = 'theme-toggle';
+  btn.className = 'theme-toggle';
+  btn.innerHTML = `
+    <span class="theme-toggle-track" aria-hidden="true">
+      <span class="theme-toggle-thumb">☾</span>
+    </span>
+    <span class="theme-toggle-label">Dark mode</span>
+  `;
+  btn.addEventListener('click', SH.toggleTheme);
+  document.body.appendChild(btn);
+  SH.applyTheme(SH.getSavedTheme());
+};
+
 SH.renderNavProfile = () => {
   const profile = SH.loadProfile();
   const nav = document.querySelector('.nav');
@@ -351,11 +404,12 @@ SH.renderNavProfile = () => {
   if (profile) {
     const initial = (profile.name || 'U').charAt(0).toUpperCase();
     const avatarColor = SH.avatarColors[0];
+    const profileHref = window.location.pathname.includes('/pages/') ? 'profile.html' : 'pages/profile.html';
     const html = `
-      <div id="nav-user" style="display:flex;align-items:center;gap:0.6rem;margin-left:1rem">
-        <button class="btn-post" style="display:flex;align-items:center;gap:0.6rem;padding:0.3rem 0.6rem" onclick="window.location.href='pages/profile.html'">
+      <div id="nav-user" class="nav-user">
+        <button class="nav-profile-btn" onclick="window.location.href='${profileHref}'">
           <span class="av" style="width:28px;height:28px;border-radius:99px;background:${avatarColor};font-size:0.85rem">${initial}</span>
-          <span style="font-weight:600;font-size:0.9rem;color:var(--text)">${profile.name.split(' ')[0]}</span>
+          <span>${profile.name.split(' ')[0]}</span>
         </button>
         <button class="mini-link-btn outline" onclick="SH.clearProfile()">Logout</button>
       </div>
@@ -488,6 +542,8 @@ SH.openProjectDetail = (id) => {
 
 // Run on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
+  SH.applyTheme(SH.getSavedTheme());
+  SH.renderThemeToggle();
   SH.animateCounters();
   SH.renderNavProfile();
   // Fetch live GitHub stats for the repo and show them on the homepage

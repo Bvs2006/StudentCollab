@@ -40,18 +40,18 @@
         <button class="btn-primary" onclick="SH.openModal('onboard-modal')">Get Started — Create Profile</button>
         <a href="pages/projects.html" class="btn-ghost">Browse Projects</a>
       </div>
-      <div class="github-stats" style="display:flex;gap:1rem;margin-top:1.6rem;align-items:center">
-        <div style="display:flex;align-items:center;gap:0.6rem;color:var(--text2)">
+      <div class="github-stats">
+        <div class="github-stat">
           <strong id="gh-stars">—</strong>
-          <span style="font-size:0.9rem">Stars</span>
+          <span>Stars</span>
         </div>
-        <div style="display:flex;align-items:center;gap:0.6rem;color:var(--text2)">
+        <div class="github-stat">
           <strong id="gh-forks">—</strong>
-          <span style="font-size:0.9rem">Forks</span>
+          <span>Forks</span>
         </div>
-        <div style="display:flex;align-items:center;gap:0.6rem;color:var(--text2)">
-          <div id="gh-contribs" style="display:flex;gap:0.2rem;align-items:center"></div>
-          <span style="font-size:0.9rem">Contributors</span>
+        <div class="github-stat contributors-stat">
+          <div id="gh-contribs"></div>
+          <span>Contributors</span>
         </div>
       </div>
     </div>
@@ -95,18 +95,21 @@
         <h2 class="section-title" id="mission-heading">Why StudentHub exists</h2>
       </div>
     </div>
-    <div style="display:flex;gap:2rem;flex-wrap:wrap;">
-      <div style="flex:1;min-width:220px;">
-        <h3 style="font-family:var(--font-display);margin-bottom:0.5rem;">Learn by doing</h3>
-        <p style="color:var(--text2);">Apply coursework to real problems, learn tools and workflows used in industry, and build portfolio-ready projects.</p>
+    <div class="mission-grid">
+      <div class="mission-card">
+        <div class="mission-icon">01</div>
+        <h3>Learn by doing</h3>
+        <p>Apply coursework to real problems, learn tools and workflows used in industry, and build portfolio-ready projects.</p>
       </div>
-      <div style="flex:1;min-width:220px;">
-        <h3 style="font-family:var(--font-display);margin-bottom:0.5rem;">Find teammates</h3>
-        <p style="color:var(--text2);">Connect with students across disciplines — designers, developers, data scientists, and hardware tinkerers.</p>
+      <div class="mission-card">
+        <div class="mission-icon">02</div>
+        <h3>Find teammates</h3>
+        <p>Connect with students across disciplines — designers, developers, data scientists, and hardware tinkerers.</p>
       </div>
-      <div style="flex:1;min-width:220px;">
-        <h3 style="font-family:var(--font-display);margin-bottom:0.5rem;">Ship together</h3>
-        <p style="color:var(--text2);">Move from idea → prototype → launch with lightweight collaboration features and visible progress.</p>
+      <div class="mission-card">
+        <div class="mission-icon">03</div>
+        <h3>Ship together</h3>
+        <p>Move from idea → prototype → launch with lightweight collaboration features and visible progress.</p>
       </div>
     </div>
   </section>
