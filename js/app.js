@@ -1,0 +1,146 @@
+// ─── SHARED APP UTILITIES ───
+
+// Counter animation
+SH.animateCounters = () => {
+  document.querySelectorAll('.stat-n[data-target]').forEach(el => {
+    const target = +el.dataset.target;
+    let cur = 0;
+    const step = target / 50;
+    const timer = setInterval(() => {
+      cur = Math.min(cur + step, target);
+      el.textContent = Math.floor(cur).toLocaleString();
+      if (cur >= target) clearInterval(timer);
+    }, 30);
+  });
+};
+
+// Toast
+SH.toast = (msg) => {
+  let t = document.querySelector('.toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.className = 'toast';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+};
+
+// Modal
+SH.openModal = (id) => {
+  const m = document.getElementById(id);
+  if (m) m.classList.add('open');
+};
+SH.closeModal = (id) => {
+  const m = document.getElementById(id);
+  if (m) m.classList.remove('open');
+};
+
+// Render project card
+SH.renderProjectCard = (p, onclick) => {
+  const memberAvatars = p.members.slice(0, 4).map((m, i) => SH.av(m, i)).join('');
+  const extra = p.members.length > 4 ? `<span class="av" style="background:var(--surface2);color:var(--text2)">+${p.members.length - 4}</span>` : '';
+  return `
+    <div class="project-card" onclick="${onclick || `SH.openProjectDetail(${p.id})`}">
+      <div class="pc-top">
+        <div class="pc-tags">${p.tags.map(t => `<span class="tag ${SH.getTagClass(t)}">${t}</span>`).join('')}</div>
+        ${SH.statusBadge(p.status)}
+      </div>
+      <div class="pc-title">${p.title}</div>
+      <div class="pc-desc">${p.desc}</div>
+      <div class="pc-footer">
+        <div class="pc-members">${memberAvatars}${extra}</div>
+        <div class="pc-meta">
+          <span class="pc-likes">❤ <span>${p.likes}</span></span>
+        </div>
+      </div>
+    </div>
+  `;
+};
+
+// Render idea item
+SH.renderIdeaItem = (idea, compact) => {
+  return `
+    <div class="idea-item">
+      <div class="idea-vote">
+        <button class="vote-btn ${idea.voted ? 'voted' : ''}" onclick="SH.voteIdea(${idea.id}, this)">▲</button>
+        <span class="vote-count" id="vote-${idea.id}">${idea.votes}</span>
+      </div>
+      <div class="idea-body">
+        <div class="idea-title">${idea.title}</div>
+        ${!compact ? `<div class="idea-desc">${idea.desc}</div>` : ''}
+        <div class="idea-meta">
+          <div class="pc-tags">${idea.tags.map(t => `<span class="tag ${SH.getTagClass(t)}">${t}</span>`).join('')}</div>
+          <span class="idea-author">by ${idea.author}</span>
+          <span class="idea-time">· ${idea.time}</span>
+          <span class="idea-time">· 💬 ${idea.comments}</span>
+        </div>
+      </div>
+      <div class="idea-actions">
+        <button class="join-btn" onclick="SH.joinIdea(${idea.id})">Join</button>
+      </div>
+    </div>
+  `;
+};
+
+// Vote on idea
+SH.voteIdea = (id, btn) => {
+  const idea = SH.ideas.find(i => i.id === id);
+  if (!idea) return;
+  idea.voted = !idea.voted;
+  idea.votes += idea.voted ? 1 : -1;
+  btn.classList.toggle('voted', idea.voted);
+  const countEl = document.getElementById(`vote-${id}`);
+  if (countEl) countEl.textContent = idea.votes;
+};
+
+SH.joinIdea = (id) => {
+  const idea = SH.ideas.find(i => i.id === id);
+  SH.toast(`✅ Requested to join "${idea?.title || 'idea'}"!`);
+};
+
+// Project detail modal
+SH.openProjectDetail = (id) => {
+  const p = SH.projects.find(x => x.id === id);
+  if (!p) return;
+  let overlay = document.getElementById('project-modal');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.id = 'project-modal';
+    overlay.innerHTML = `<div class="modal" id="project-modal-inner"></div>`;
+    overlay.addEventListener('click', e => { if (e.target === overlay) SH.closeModal('project-modal'); });
+    document.body.appendChild(overlay);
+  }
+  const inner = document.getElementById('project-modal-inner');
+  inner.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem">
+      <div>
+        <div class="pc-tags" style="margin-bottom:0.5rem">${p.tags.map(t => `<span class="tag ${SH.getTagClass(t)}">${t}</span>`).join('')} ${SH.statusBadge(p.status)}</div>
+        <div class="modal-title" style="margin-bottom:0">${p.title}</div>
+        <div style="color:var(--text3);font-size:0.82rem;margin-top:0.25rem">Posted by ${p.owner} · ${p.created}</div>
+      </div>
+      <button class="btn-cancel" onclick="SH.closeModal('project-modal')" style="flex-shrink:0">✕</button>
+    </div>
+    <p style="color:var(--text2);font-size:0.9rem;line-height:1.65;margin-bottom:1.25rem">${p.details}</p>
+    <div style="margin-bottom:1.25rem">
+      <div class="form-label">Looking for</div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap">${p.lookingFor.map(r => `<span class="skill-pill">${r}</span>`).join('')}</div>
+    </div>
+    <div style="margin-bottom:1.5rem">
+      <div class="form-label">Team (${p.members.length} members)</div>
+      <div style="display:flex;gap:0.4rem">${p.members.map((m,i) => SH.av(m, i)).join('')}</div>
+    </div>
+    <div class="modal-footer" style="margin-top:0">
+      <button class="btn-cancel" onclick="SH.closeModal('project-modal')">Close</button>
+      <button class="btn-submit" onclick="SH.toast('✅ Join request sent!');SH.closeModal('project-modal')">Request to Join</button>
+    </div>
+  `;
+  SH.openModal('project-modal');
+};
+
+// Run on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  SH.animateCounters();
+});

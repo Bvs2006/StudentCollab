@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — StudentHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="brand-icon">⬡</span>
+      <span class="brand-name">StudentHub</span>
+    </div>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-link">Home</a>
+      <a href="projects.html" class="nav-link active">Projects</a>
+      <a href="ideas.html" class="nav-link">Ideas Board</a>
+      <a href="profile.html" class="nav-link">Profile</a>
+    </div>
+    <button class="btn-post" onclick="SH.openModal('new-project-modal')">+ New Project</button>
+  </nav>
+
+  <div class="page-header">
+    <h1>Student Projects</h1>
+    <p>Browse active collaborations — find one to join or start your own.</p>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="All" onclick="filterProjects(this, 'All')">All</button>
+    <button class="filter-btn" data-filter="open" onclick="filterProjects(this, 'open')">🟢 Open</button>
+    <button class="filter-btn" data-filter="progress" onclick="filterProjects(this, 'progress')">🟡 In Progress</button>
+    <button class="filter-btn" data-filter="AI/ML" onclick="filterProjects(this, 'AI/ML')">AI/ML</button>
+    <button class="filter-btn" data-filter="Web Dev" onclick="filterProjects(this, 'Web Dev')">Web Dev</button>
+    <button class="filter-btn" data-filter="Mobile" onclick="filterProjects(this, 'Mobile')">Mobile</button>
+    <button class="filter-btn" data-filter="Hardware" onclick="filterProjects(this, 'Hardware')">Hardware</button>
+    <button class="filter-btn" data-filter="Health" onclick="filterProjects(this, 'Health')">Health</button>
+    <button class="filter-btn" data-filter="Education" onclick="filterProjects(this, 'Education')">Education</button>
+    <input type="text" class="search-input" placeholder="🔍 Search projects..." oninput="searchProjects(this.value)" />
+  </div>
+
+  <div class="page-content">
+    <div class="project-grid" id="projects-grid"></div>
+    <div id="no-results" class="empty-state" style="display:none">
+      <div class="empty-icon">🔍</div>
+      <h3>No projects found</h3>
+      <p>Try a different filter or search term.</p>
+    </div>
+  </div>
+
+  <!-- NEW PROJECT MODAL -->
+  <div class="modal-overlay" id="new-project-modal" onclick="if(event.target===this)SH.closeModal('new-project-modal')">
+    <div class="modal">
+      <div class="modal-title">🚀 Start a New Project</div>
+      <div class="form-group">
+        <label class="form-label">Project Title *</label>
+        <input type="text" class="form-input" id="np-title" placeholder="e.g. Smart Canteen Queue System" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Short Description *</label>
+        <input type="text" class="form-input" id="np-desc" placeholder="One-line pitch for your project" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Detailed Overview</label>
+        <textarea class="form-textarea" id="np-details" placeholder="What problem does it solve? How will you build it?"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Primary Category</label>
+          <select class="form-select" id="np-tag">
+            <option value="AI/ML">AI/ML</option>
+            <option value="Web Dev">Web Dev</option>
+            <option value="Mobile">Mobile</option>
+            <option value="Hardware">Hardware</option>
+            <option value="Health">Health</option>
+            <option value="Education">Education</option>
+            <option value="Finance">Finance</option>
+            <option value="Social">Social</option>
+            <option value="Green Tech">Green Tech</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Secondary Tag (optional)</label>
+          <select class="form-select" id="np-tag2">
+            <option value="">None</option>
+            <option value="AI/ML">AI/ML</option>
+            <option value="Web Dev">Web Dev</option>
+            <option value="Mobile">Mobile</option>
+            <option value="Hardware">Hardware</option>
+            <option value="Health">Health</option>
+            <option value="Education">Education</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Roles Needed (comma separated)</label>
+        <input type="text" class="form-input" id="np-roles" placeholder="e.g. Frontend Dev, ML Engineer, UI Designer" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="SH.closeModal('new-project-modal')">Cancel</button>
+        <button class="btn-submit" onclick="submitProject()">Create Project</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    let activeFilter = 'All';
+    let searchQuery = '';
+
+    function renderProjects() {
+      let list = SH.projects;
+      if (activeFilter !== 'All') {
+        list = list.filter(p =>
+          p.status === activeFilter ||
+          p.tags.includes(activeFilter)
+        );
+      }
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        list = list.filter(p =>
+          p.title.toLowerCase().includes(q) ||
+          p.desc.toLowerCase().includes(q) ||
+          p.tags.some(t => t.toLowerCase().includes(q))
+        );
+      }
+      const grid = document.getElementById('projects-grid');
+      const noRes = document.getElementById('no-results');
+      if (list.length === 0) {
+        grid.innerHTML = '';
+        noRes.style.display = 'block';
+      } else {
+        noRes.style.display = 'none';
+        grid.innerHTML = list.map(p => SH.renderProjectCard(p)).join('');
+      }
+    }
+
+    function filterProjects(btn, filter) {
+      activeFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProjects();
+    }
+
+    function searchProjects(q) {
+      searchQuery = q;
+      renderProjects();
+    }
+
+    function submitProject() {
+      const title = document.getElementById('np-title').value.trim();
+      const desc = document.getElementById('np-desc').value.trim();
+      if (!title || !desc) { SH.toast('⚠️ Please fill in required fields.'); return; }
+      const tag1 = document.getElementById('np-tag').value;
+      const tag2 = document.getElementById('np-tag2').value;
+      const roles = document.getElementById('np-roles').value.split(',').map(r => r.trim()).filter(Boolean);
+      const newProject = {
+        id: Date.now(), title, desc,
+        tags: tag2 ? [tag1, tag2] : [tag1],
+        status: 'open', members: ['Y'], likes: 0,
+        owner: 'You', created: 'Just now',
+        lookingFor: roles.length ? roles : ['Open Roles'],
+        details: document.getElementById('np-details').value || desc
+      };
+      SH.projects.unshift(newProject);
+      SH.closeModal('new-project-modal');
+      renderProjects();
+      SH.toast('🎉 Project created! Students can now join.');
+      // Reset form
+      ['np-title','np-desc','np-details','np-roles'].forEach(id => document.getElementById(id).value = '');
+    }
+
+    document.addEventListener('DOMContentLoaded', renderProjects);
+  </script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ideas Board — StudentHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .ideas-layout { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; padding: 3rem 4rem; max-width: 1300px; margin: 0 auto; }
+    .sidebar-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+    .sidebar-title { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; margin-bottom: 1rem; }
+    .trending-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: color 0.2s; }
+    .trending-item:last-child { border-bottom: none; }
+    .trending-item:hover .ti-title { color: var(--accent2); }
+    .ti-rank { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--border); min-width: 24px; }
+    .ti-body { flex: 1; }
+    .ti-title { font-size: 0.85rem; font-weight: 500; color: var(--text); }
+    .ti-votes { font-size: 0.75rem; color: var(--text3); margin-top: 0.1rem; }
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag-cloud-item { padding: 0.3rem 0.7rem; border-radius: 99px; border: 1px solid var(--border); background: var(--bg2); color: var(--text2); font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
+    .tag-cloud-item:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .ideas-controls { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .sort-btn { padding: 0.35rem 0.8rem; border-radius: 99px; border: 1px solid var(--border); background: transparent; color: var(--text2); font-family: var(--font-body); font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+    .sort-btn.active, .sort-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .ideas-search { margin-left: auto; padding: 0.4rem 0.9rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-family: var(--font-body); font-size: 0.85rem; width: 200px; outline: none; transition: border-color 0.2s; }
+    .ideas-search:focus { border-color: var(--accent); }
+    .ideas-search::placeholder { color: var(--text3); }
+    @media (max-width: 900px) { .ideas-layout { grid-template-columns: 1fr; padding: 2rem; } }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="brand-icon">⬡</span>
+      <span class="brand-name">StudentHub</span>
+    </div>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-link">Home</a>
+      <a href="projects.html" class="nav-link">Projects</a>
+      <a href="ideas.html" class="nav-link active">Ideas Board</a>
+      <a href="profile.html" class="nav-link">Profile</a>
+    </div>
+    <button class="btn-post" onclick="SH.openModal('new-idea-modal')">+ Post Idea</button>
+  </nav>
+
+  <div class="page-header">
+    <h1>💡 Ideas Board</h1>
+    <p>Pitch your idea, gather interest, and build a team. The best ideas become real projects.</p>
+  </div>
+
+  <div class="ideas-layout">
+    <!-- MAIN -->
+    <div>
+      <div class="ideas-controls">
+        <button class="sort-btn active" onclick="sortIdeas('votes', this)">🔥 Top</button>
+        <button class="sort-btn" onclick="sortIdeas('new', this)">✨ New</button>
+        <button class="sort-btn" onclick="sortIdeas('comments', this)">💬 Most Discussed</button>
+        <input type="text" class="ideas-search" placeholder="🔍 Search ideas..." oninput="searchIdeas(this.value)" />
+      </div>
+      <div class="ideas-list" id="ideas-list"></div>
+      <div id="no-ideas" class="empty-state" style="display:none">
+        <div class="empty-icon">💭</div>
+        <h3>No ideas found</h3>
+        <p>Try a different search term.</p>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div style="display:flex;flex-direction:column;gap:1.25rem;align-self:start">
+      <div class="sidebar-card">
+        <div class="sidebar-title">🏆 Trending Ideas</div>
+        <div id="trending-list"></div>
+      </div>
+      <div class="sidebar-card">
+        <div class="sidebar-title">🏷️ Browse by Tag</div>
+        <div class="tag-cloud" id="tag-cloud"></div>
+      </div>
+      <div class="sidebar-card" style="background:linear-gradient(135deg,rgba(124,92,252,0.1),rgba(34,211,238,0.05));border-color:rgba(124,92,252,0.3)">
+        <div class="sidebar-title">Have an idea?</div>
+        <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;line-height:1.55">Share it with the community. Ideas with 20+ upvotes automatically become featured projects.</p>
+        <button class="btn-submit" style="width:100%;padding:0.65rem" onclick="SH.openModal('new-idea-modal')">Post Your Idea ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW IDEA MODAL -->
+  <div class="modal-overlay" id="new-idea-modal" onclick="if(event.target===this)SH.closeModal('new-idea-modal')">
+    <div class="modal">
+      <div class="modal-title">💡 Share Your Idea</div>
+      <div class="form-group">
+        <label class="form-label">Idea Title *</label>
+        <input type="text" class="form-input" id="ni-title" placeholder="What's your big idea?" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description *</label>
+        <textarea class="form-textarea" id="ni-desc" placeholder="Describe the problem you want to solve and how you'd approach it..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Category 1</label>
+          <select class="form-select" id="ni-tag1">
+            <option value="AI/ML">AI/ML</option>
+            <option value="Web Dev">Web Dev</option>
+            <option value="Mobile">Mobile</option>
+            <option value="Hardware">Hardware</option>
+            <option value="Health">Health</option>
+            <option value="Education">Education</option>
+            <option value="Finance">Finance</option>
+            <option value="Social">Social</option>
+            <option value="Green Tech">Green Tech</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category 2 (optional)</label>
+          <select class="form-select" id="ni-tag2">
+            <option value="">None</option>
+            <option value="AI/ML">AI/ML</option>
+            <option value="Web Dev">Web Dev</option>
+            <option value="Mobile">Mobile</option>
+            <option value="Hardware">Hardware</option>
+            <option value="Health">Health</option>
+            <option value="Education">Education</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="SH.closeModal('new-idea-modal')">Cancel</button>
+        <button class="btn-submit" onclick="submitIdea()">Post Idea 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    let currentSort = 'votes';
+    let ideaSearch = '';
+
+    function getSortedIdeas() {
+      let list = [...SH.ideas];
+      if (ideaSearch) {
+        const q = ideaSearch.toLowerCase();
+        list = list.filter(i => i.title.toLowerCase().includes(q) || i.desc.toLowerCase().includes(q));
+      }
+      if (currentSort === 'votes') list.sort((a,b) => b.votes - a.votes);
+      else if (currentSort === 'comments') list.sort((a,b) => b.comments - a.comments);
+      // 'new' keeps original order
+      return list;
+    }
+
+    function renderIdeas() {
+      const list = getSortedIdeas();
+      const container = document.getElementById('ideas-list');
+      const noIdeas = document.getElementById('no-ideas');
+      if (list.length === 0) { container.innerHTML = ''; noIdeas.style.display = 'block'; return; }
+      noIdeas.style.display = 'none';
+      container.innerHTML = list.map(i => SH.renderIdeaItem(i)).join('');
+    }
+
+    function renderTrending() {
+      const top = [...SH.ideas].sort((a,b) => b.votes - a.votes).slice(0, 5);
+      document.getElementById('trending-list').innerHTML = top.map((idea, i) => `
+        <div class="trending-item">
+          <div class="ti-rank">${i + 1}</div>
+          <div class="ti-body">
+            <div class="ti-title">${idea.title}</div>
+            <div class="ti-votes">▲ ${idea.votes} votes</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderTagCloud() {
+      const tags = ['AI/ML', 'Web Dev', 'Mobile', 'Hardware', 'Health', 'Education', 'Finance', 'Social', 'Green Tech'];
+      document.getElementById('tag-cloud').innerHTML = tags.map(t =>
+        `<span class="tag-cloud-item" onclick="filterByTag('${t}')">${t}</span>`
+      ).join('');
+    }
+
+    function filterByTag(tag) {
+      ideaSearch = tag;
+      renderIdeas();
+    }
+
+    function sortIdeas(sort, btn) {
+      currentSort = sort;
+      document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderIdeas();
+    }
+
+    function searchIdeas(q) {
+      ideaSearch = q;
+      renderIdeas();
+    }
+
+    function submitIdea() {
+      const title = document.getElementById('ni-title').value.trim();
+      const desc = document.getElementById('ni-desc').value.trim();
+      if (!title || !desc) { SH.toast('⚠️ Title and description required.'); return; }
+      const tag1 = document.getElementById('ni-tag1').value;
+      const tag2 = document.getElementById('ni-tag2').value;
+      const newIdea = {
+        id: Date.now(), title, desc,
+        tags: tag2 ? [tag1, tag2] : [tag1],
+        votes: 1, author: 'You', time: 'Just now', comments: 0, voted: true
+      };
+      SH.ideas.unshift(newIdea);
+      SH.closeModal('new-idea-modal');
+      renderIdeas();
+      renderTrending();
+      SH.toast('🎉 Idea posted! Share it with your campus.');
+      document.getElementById('ni-title').value = '';
+      document.getElementById('ni-desc').value = '';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderIdeas();
+      renderTrending();
+      renderTagCloud();
+    });
+  </script>
+</body>
+</html>
