@@ -11,7 +11,9 @@ SH.projects = [
     members: ['A','R','J','K','T'], likes: 47,
     owner: 'Arjun K.', created: '2 days ago',
     lookingFor: ['Backend Dev', 'ML Engineer'],
-    details: 'We want to build a chatbot deployed on the campus portal that can handle safety queries, connect to emergency services, and use NLP to understand student reports. The AI component will classify reports and route them to appropriate departments.'
+    details: 'We want to build a chatbot deployed on the campus portal that can handle safety queries, connect to emergency services, and use NLP to understand student reports. The AI component will classify reports and route them to appropriate departments.',
+    contributeUrl: 'https://github.com/Bvs2006/StudentCollab/issues',
+    demoUrl: 'https://bvs2006.github.io/StudentCollab/'
   },
   {
     id: 2, title: 'Alumni Network App',
@@ -20,7 +22,9 @@ SH.projects = [
     members: ['S','M','P'], likes: 38,
     owner: 'Sanya M.', created: '5 days ago',
     lookingFor: ['React Native Dev', 'UI Designer'],
-    details: 'Built in React Native, this app bridges current students with alumni. Features: mentor matching, coffee chat scheduling, job board, and verified alumni profiles integrated with LinkedIn.'
+    details: 'Built in React Native, this app bridges current students with alumni. Features: mentor matching, coffee chat scheduling, job board, and verified alumni profiles integrated with LinkedIn.',
+    contributeUrl: 'https://github.com/Bvs2006/StudentCollab/issues',
+    demoUrl: 'https://bvs2006.github.io/StudentCollab/'
   },
   {
     id: 3, title: 'Smart Study Desk',
@@ -29,7 +33,9 @@ SH.projects = [
     members: ['K','V'], likes: 29,
     owner: 'Karthik V.', created: '1 week ago',
     lookingFor: ['Hardware Eng', 'Embedded Systems', 'App Dev'],
-    details: 'Using Raspberry Pi and various sensors, we build a desk attachment that monitors posture via camera (privacy-safe, on-device), light levels, and tracks focused vs distracted time. Data syncs to a companion app.'
+    details: 'Using Raspberry Pi and various sensors, we build a desk attachment that monitors posture via camera (privacy-safe, on-device), light levels, and tracks focused vs distracted time. Data syncs to a companion app.',
+    contributeUrl: 'https://github.com/Bvs2006/StudentCollab/issues',
+    demoUrl: 'https://bvs2006.github.io/StudentCollab/'
   },
   {
     id: 4, title: 'Wellness Tracker for Students',
@@ -38,7 +44,9 @@ SH.projects = [
     members: ['J','L','N','A','B','C'], likes: 62,
     owner: 'Jaya L.', created: '3 days ago',
     lookingFor: ['Flutter Dev', 'UX Researcher'],
-    details: 'A compassionate wellness companion for college students. Tracks mood, sleep quality, study-life balance, and provides personalized recommendations. Integrates with Apple Health and Google Fit. Focus on privacy — no data leaves device.'
+    details: 'A compassionate wellness companion for college students. Tracks mood, sleep quality, study-life balance, and provides personalized recommendations. Integrates with Apple Health and Google Fit. Focus on privacy — no data leaves device.',
+    contributeUrl: 'https://github.com/Bvs2006/StudentCollab/issues',
+    demoUrl: 'https://bvs2006.github.io/StudentCollab/'
   },
   {
     id: 5, title: 'Peer Tutoring Marketplace',
@@ -47,7 +55,9 @@ SH.projects = [
     members: ['R','D','H'], likes: 44,
     owner: 'Riya D.', created: '2 weeks ago',
     lookingFor: ['Full-stack Dev'],
-    details: 'A Fiverr-style platform but exclusively for peer tutoring within universities. Verified students post tutoring profiles, students book sessions, payment via Razorpay/Stripe. Rating system ensures quality.'
+    details: 'A Fiverr-style platform but exclusively for peer tutoring within universities. Verified students post tutoring profiles, students book sessions, payment via Razorpay/Stripe. Rating system ensures quality.',
+    contributeUrl: 'https://github.com/Bvs2006/StudentCollab/issues',
+    demoUrl: 'https://bvs2006.github.io/StudentCollab/'
   },
   {
     id: 6, title: 'GreenCampus Energy Dashboard',
@@ -56,7 +66,9 @@ SH.projects = [
     members: ['P','Q'], likes: 21,
     owner: 'Priya G.', created: '4 days ago',
     lookingFor: ['Data Engineer', 'Frontend Dev', 'IoT'],
-    details: 'Working with the campus facilities team to install smart meters and aggregate data into a public-facing dashboard. Students can see real-time consumption per building and track sustainability goals.'
+    details: 'Working with the campus facilities team to install smart meters and aggregate data into a public-facing dashboard. Students can see real-time consumption per building and track sustainability goals.',
+    contributeUrl: 'https://github.com/Bvs2006/StudentCollab/issues',
+    demoUrl: 'https://bvs2006.github.io/StudentCollab/'
   }
 ];
 

@@ -26,7 +26,7 @@
 
   <div class="page-header">
     <h1>Student Projects</h1>
-    <p>Browse active collaborations — find one to join or start your own.</p>
+    <p>Browse active collaborations — open the GitHub repo, contribute directly, or view a live demo.</p>
   </div>
 
   <div class="filter-bar">
@@ -164,12 +164,14 @@
         status: 'open', members: ['Y'], likes: 0,
         owner: 'You', created: 'Just now',
         lookingFor: roles.length ? roles : ['Open Roles'],
-        details: document.getElementById('np-details').value || desc
+        details: document.getElementById('np-details').value || desc,
+        contributeUrl: SH.contributeUrl,
+        demoUrl: SH.demoUrl
       };
       SH.projects.unshift(newProject);
       SH.closeModal('new-project-modal');
       renderProjects();
-      SH.toast('🎉 Project created! Students can now join.');
+      SH.toast('🎉 Project created! Share the GitHub repo to collect contributions.');
       // Reset form
       ['np-title','np-desc','np-details','np-roles'].forEach(id => document.getElementById(id).value = '');
     }

@@ -1,5 +1,9 @@
 // ─── SHARED APP UTILITIES ───
 
+SH.repoUrl = 'https://github.com/Bvs2006/StudentCollab';
+SH.contributeUrl = `${SH.repoUrl}/issues`;
+SH.demoUrl = 'https://bvs2006.github.io/StudentCollab/';
+
 // Counter animation
 SH.animateCounters = () => {
   document.querySelectorAll('.stat-n[data-target]').forEach(el => {
@@ -41,6 +45,8 @@ SH.closeModal = (id) => {
 SH.renderProjectCard = (p, onclick) => {
   const memberAvatars = p.members.slice(0, 4).map((m, i) => SH.av(m, i)).join('');
   const extra = p.members.length > 4 ? `<span class="av" style="background:var(--surface2);color:var(--text2)">+${p.members.length - 4}</span>` : '';
+  const contributeUrl = p.contributeUrl || SH.contributeUrl;
+  const demoUrl = p.demoUrl || SH.demoUrl;
   return `
     <div class="project-card" onclick="${onclick || `SH.openProjectDetail(${p.id})`}">
       <div class="pc-top">
@@ -53,6 +59,10 @@ SH.renderProjectCard = (p, onclick) => {
         <div class="pc-members">${memberAvatars}${extra}</div>
         <div class="pc-meta">
           <span class="pc-likes">❤ <span>${p.likes}</span></span>
+          <div class="pc-actions">
+            <button class="mini-link-btn" onclick="event.stopPropagation();window.open('${contributeUrl}', '_blank', 'noopener,noreferrer')">Contribute</button>
+            <button class="mini-link-btn outline" onclick="event.stopPropagation();window.open('${demoUrl}', '_blank', 'noopener,noreferrer')">Demo</button>
+          </div>
         </div>
       </div>
     </div>
@@ -78,7 +88,7 @@ SH.renderIdeaItem = (idea, compact) => {
         </div>
       </div>
       <div class="idea-actions">
-        <button class="join-btn" onclick="SH.joinIdea(${idea.id})">Join</button>
+        <button class="join-btn" onclick="SH.openContributionLink('${encodeURIComponent(idea.title)}')">Contribute</button>
       </div>
     </div>
   `;
@@ -95,9 +105,10 @@ SH.voteIdea = (id, btn) => {
   if (countEl) countEl.textContent = idea.votes;
 };
 
-SH.joinIdea = (id) => {
-  const idea = SH.ideas.find(i => i.id === id);
-  SH.toast(`✅ Requested to join "${idea?.title || 'idea'}"!`);
+SH.openContributionLink = (topic) => {
+  const url = `${SH.contributeUrl}`;
+  window.open(url, '_blank', 'noopener,noreferrer');
+  SH.toast('Opened GitHub contribution page');
 };
 
 // Project detail modal
@@ -134,7 +145,8 @@ SH.openProjectDetail = (id) => {
     </div>
     <div class="modal-footer" style="margin-top:0">
       <button class="btn-cancel" onclick="SH.closeModal('project-modal')">Close</button>
-      <button class="btn-submit" onclick="SH.toast('✅ Join request sent!');SH.closeModal('project-modal')">Request to Join</button>
+      <button class="btn-submit" onclick="window.open('${SH.contributeUrl}', '_blank', 'noopener,noreferrer');SH.toast('Opened GitHub issues for contribution');SH.closeModal('project-modal')">Contribute on GitHub</button>
+      <button class="btn-cancel" onclick="window.open('${SH.demoUrl}', '_blank', 'noopener,noreferrer');SH.toast('Opened demo link');SH.closeModal('project-modal')">View Demo</button>
     </div>
   `;
   SH.openModal('project-modal');

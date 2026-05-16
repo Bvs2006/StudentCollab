@@ -52,6 +52,7 @@ python3 -m http.server 8080
 ### 📝 Proposals
 - Submit project proposals and request mentorship via `pages/proposals.html`.
 - Admins can review proposals and accept them into the projects list via `pages/admin.html`.
+- Project collaboration now routes contributors to the GitHub repo/issues instead of internal join requests.
 
 ### 💡 Ideas Board
 - Post and discover project ideas

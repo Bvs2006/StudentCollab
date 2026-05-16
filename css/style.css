@@ -237,6 +237,25 @@ img { max-width: 100%; }
 .pc-meta { display: flex; align-items: center; gap: 1rem; }
 .pc-likes { font-size: 0.82rem; color: var(--text3); }
 .pc-likes span { color: var(--text2); font-weight: 600; }
+.pc-actions { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+.mini-link-btn {
+  padding: 0.34rem 0.7rem;
+  border-radius: 99px;
+  border: 1px solid var(--accent);
+  background: rgba(124,92,252,0.15);
+  color: var(--accent2);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mini-link-btn:hover { background: var(--accent); color: #fff; }
+.mini-link-btn.outline {
+  border-color: var(--border);
+  background: transparent;
+  color: var(--text2);
+}
+.mini-link-btn.outline:hover { border-color: var(--accent3); color: var(--text); background: rgba(34,211,238,0.12); }
 
 /* ─── IDEAS LIST ─── */
 .ideas-list { display: flex; flex-direction: column; gap: 0.85rem; }
