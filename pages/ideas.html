@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ideas Board — StudentHub</title>
+  <title>Idea Hub — StudentHub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
@@ -40,15 +40,23 @@
     <div class="nav-links">
       <a href="../index.html" class="nav-link">Home</a>
       <a href="projects.html" class="nav-link">Projects</a>
-      <a href="ideas.html" class="nav-link active">Ideas Board</a>
+      <a href="ideas.html" class="nav-link active">Ideas</a>
       <a href="profile.html" class="nav-link">Profile</a>
     </div>
     <button class="btn-post" onclick="SH.openModal('new-idea-modal')">+ Post Idea</button>
   </nav>
 
   <div class="page-header">
-    <h1>💡 Ideas Board</h1>
-    <p>Pitch your idea, gather interest, and build a team. The best ideas become real projects.</p>
+    <h1>💡 Idea Hub</h1>
+    <p>Share early concepts, get feedback, and refine the next thing the community could build. This page is for ideas only.</p>
+  </div>
+
+  <div style="max-width:1300px;margin:0 auto;padding:0 4rem 1.25rem;">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;background:linear-gradient(135deg,rgba(124,92,252,0.08),rgba(34,211,238,0.05));border:1px solid rgba(124,92,252,0.22);border-radius:var(--radius);padding:1rem 1.25rem;">
+      <div style="font-size:0.85rem;color:var(--text2)"><strong style="color:var(--text)">1. Idea only</strong><br/>Post a concept, not a finished project.</div>
+      <div style="font-size:0.85rem;color:var(--text2)"><strong style="color:var(--text)">2. Get feedback</strong><br/>Upvotes and comments help sharpen the direction.</div>
+      <div style="font-size:0.85rem;color:var(--text2)"><strong style="color:var(--text)">3. Move forward</strong><br/>Accepted ideas can become proposals or GitHub issues.</div>
+    </div>
   </div>
 
   <div class="ideas-layout">
@@ -80,7 +88,7 @@
       </div>
       <div class="sidebar-card" style="background:linear-gradient(135deg,rgba(124,92,252,0.1),rgba(34,211,238,0.05));border-color:rgba(124,92,252,0.3)">
         <div class="sidebar-title">Have an idea?</div>
-        <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;line-height:1.55">Share it with the community. Ideas with 20+ upvotes automatically become featured projects.</p>
+        <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;line-height:1.55">Post the concept here. If it becomes a project later, contributors will work from the Projects page with direct GitHub contribution and demo links.</p>
         <button class="btn-submit" style="width:100%;padding:0.65rem" onclick="SH.openModal('new-idea-modal')">Post Your Idea ✨</button>
       </div>
     </div>
