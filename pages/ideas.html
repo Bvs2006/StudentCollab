@@ -141,7 +141,18 @@
       </div>
       <div class="form-group">
         <label class="form-label">Description *</label>
-        <textarea class="form-textarea" id="ni-desc" placeholder="Describe the problem you want to solve and how you'd approach it..."></textarea>
+        <div class="md-editor" id="ni-desc-editor">
+          <div class="md-toolbar">
+            <div class="md-tabs">
+              <button type="button" class="md-tab active" onclick="SH.switchMdTab('ni-desc','write',this)">WRITE</button>
+              <button type="button" class="md-tab" onclick="SH.switchMdTab('ni-desc','preview',this)">PREVIEW</button>
+            </div>
+            <div class="md-hint">Markdown supported</div>
+          </div>
+          <textarea class="form-textarea md-input" id="ni-desc" placeholder="Tell us about the problem, why it matters, and your proposed approach..."></textarea>
+          <div class="md-preview" id="ni-desc-preview" style="display:none"></div>
+          <div class="md-footer">Use **bold**, *italic*, links, and bullets to structure your idea clearly.</div>
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">LinkedIn Profile (optional)</label>

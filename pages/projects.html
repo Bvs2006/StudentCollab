@@ -65,7 +65,18 @@
       </div>
       <div class="form-group">
         <label class="form-label">Detailed Overview</label>
-        <textarea class="form-textarea" id="np-details" placeholder="What problem does it solve? How will you build it?"></textarea>
+        <div class="md-editor" id="np-details-editor">
+          <div class="md-toolbar">
+            <div class="md-tabs">
+              <button type="button" class="md-tab active" onclick="SH.switchMdTab('np-details','write',this)">WRITE</button>
+              <button type="button" class="md-tab" onclick="SH.switchMdTab('np-details','preview',this)">PREVIEW</button>
+            </div>
+            <div class="md-hint">Markdown supported</div>
+          </div>
+          <textarea class="form-textarea md-input" id="np-details" placeholder="Tell us about the challenge, approach, and implementation details..."></textarea>
+          <div class="md-preview" id="np-details-preview" style="display:none"></div>
+          <div class="md-footer">Attach links with [text](https://url), use **bold**, *italic*, and bullet lines.</div>
+        </div>
       </div>
       <div class="form-row">
         <div class="form-group">

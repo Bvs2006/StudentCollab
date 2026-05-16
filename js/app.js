@@ -274,6 +274,46 @@ SH.closeModal = (id) => {
   if (m) m.classList.remove('open');
 };
 
+SH.escapeHtml = (text) => {
+  return String(text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+};
+
+// Minimal markdown renderer for form preview (bold, italic, links, bullets, line breaks).
+SH.renderMarkdownPreview = (text) => {
+  let html = SH.escapeHtml(text);
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  html = html.replace(/\[(.*?)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  html = html.replace(/(^|\n)-\s+(.*?)(?=\n|$)/g, '$1• $2');
+  html = html.replace(/\n/g, '<br/>');
+  return html;
+};
+
+SH.switchMdTab = (targetId, mode, trigger) => {
+  const input = document.getElementById(targetId);
+  const preview = document.getElementById(`${targetId}-preview`);
+  const wrap = document.getElementById(`${targetId}-editor`);
+  if (!input || !preview || !wrap) return;
+
+  const tabs = wrap.querySelectorAll('.md-tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  if (trigger) trigger.classList.add('active');
+
+  if (mode === 'preview') {
+    preview.innerHTML = SH.renderMarkdownPreview(input.value || 'Nothing to preview yet.');
+    input.style.display = 'none';
+    preview.style.display = 'block';
+  } else {
+    input.style.display = 'block';
+    preview.style.display = 'none';
+  }
+};
+
 // --- Profile persistence (localStorage)
 SH.profileKey = 'sh_profile';
 SH.saveProfile = (p) => {
