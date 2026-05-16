@@ -182,6 +182,19 @@
         console.warn('Failed to enrich project demo URL', e);
       }
 
+      // Save to Supabase (or local fallback)
+      try {
+        const saved = await SH.saveProjectToSupabase(newProject);
+        // If Supabase returned an id or row, prefer that
+        if (saved && saved.id) {
+          newProject.id = saved.id;
+          // copy back any returned demoUrl
+          if (saved.demo_url || saved.demoUrl) newProject.demoUrl = saved.demo_url || saved.demoUrl;
+        }
+      } catch (e) {
+        console.warn('Save to Supabase failed', e);
+      }
+
       SH.projects.unshift(newProject);
       SH.closeModal('new-project-modal');
       renderProjects();
@@ -190,7 +203,13 @@
       ['np-title','np-desc','np-details','np-roles','np-repo'].forEach(id => document.getElementById(id).value = '');
     }
 
-    document.addEventListener('DOMContentLoaded', renderProjects);
+    document.addEventListener('DOMContentLoaded', async () => {
+      // try load projects from Supabase (falls back to local cache)
+      if (window.SH && SH.fetchProjectsFromSupabase) {
+        await SH.fetchProjectsFromSupabase();
+      }
+      renderProjects();
+    });
   </script>
 </body>
 </html>

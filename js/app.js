@@ -18,6 +18,91 @@ SH.parseGitHubRepo = (url) => {
   } catch (e) { return null; }
 };
 
+// Supabase REST settings (uses publishable anon key)
+SH.SUPABASE_URL = 'https://wyccxmgkhahtcwkqhair.supabase.co';
+SH.SUPABASE_KEY = 'sb_publishable_aVE9k66o2XOtBl3p1VM30w_a8QDO9JB';
+
+// Simple Supabase REST helpers (fallbacks to localStorage on failure)
+SH.supabaseHeaders = () => ({
+  'apikey': SH.SUPABASE_KEY,
+  'Authorization': `Bearer ${SH.SUPABASE_KEY}`,
+  'Content-Type': 'application/json'
+});
+
+SH.fetchProjectsFromSupabase = async () => {
+  try {
+    const url = `${SH.SUPABASE_URL}/rest/v1/projects?select=*&order=created.desc`;
+    const res = await fetch(url, { headers: SH.supabaseHeaders() });
+    if (!res.ok) throw new Error('Supabase fetch failed');
+    const data = await res.json();
+    // Normalize rows to app format if needed
+    SH.projects = data.map(d => ({
+      id: d.id,
+      title: d.title,
+      desc: d.desc,
+      tags: d.tags || [],
+      status: d.status || 'open',
+      members: d.members || [],
+      likes: d.likes || 0,
+      owner: d.owner || d.owner_name || 'Unknown',
+      created: d.created || d.created_at || 'Some time',
+      lookingFor: d.looking_for || d.lookingFor || [],
+      details: d.details || d.desc,
+      repoUrl: d.repo_url || d.repoUrl || null,
+      contributeUrl: d.contribute_url || d.contributeUrl || SH.contributeUrl,
+      demoUrl: d.demo_url || d.demoUrl || null
+    }));
+    // cache locally
+    localStorage.setItem('sh_projects', JSON.stringify(SH.projects));
+    return SH.projects;
+  } catch (e) {
+    console.warn('Supabase projects load failed, using local cache', e);
+    const raw = localStorage.getItem('sh_projects');
+    SH.projects = raw ? JSON.parse(raw) : (SH.projects || []);
+    return SH.projects;
+  }
+};
+
+SH.saveProjectToSupabase = async (project) => {
+  try {
+    const url = `${SH.SUPABASE_URL}/rest/v1/projects`;
+    // Map fields to snake_case columns if your table uses them
+    const payload = {
+      title: project.title,
+      desc: project.desc,
+      details: project.details,
+      tags: project.tags,
+      status: project.status,
+      members: project.members,
+      likes: project.likes,
+      owner: project.owner,
+      created: project.created,
+      looking_for: project.lookingFor || project.looking_for,
+      repo_url: project.repoUrl || null,
+      contribute_url: project.contributeUrl || null,
+      demo_url: project.demoUrl || null
+    };
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: SH.supabaseHeaders(),
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('Supabase insert failed');
+    const resp = await res.json();
+    // Supabase returns an array of inserted rows
+    const row = Array.isArray(resp) ? resp[0] : resp;
+    return row;
+  } catch (e) {
+    console.warn('Supabase save failed, saving locally', e);
+    // assign an id and save locally
+    project.id = project.id || Date.now();
+    const cur = JSON.parse(localStorage.getItem('sh_projects') || '[]');
+    cur.unshift(project);
+    localStorage.setItem('sh_projects', JSON.stringify(cur));
+    return project;
+  }
+};
+
 SH.repoIssuesUrl = (repoUrl) => {
   const parsed = SH.parseGitHubRepo(repoUrl);
   if (!parsed) return null;
