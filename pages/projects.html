@@ -99,6 +99,10 @@
         <label class="form-label">Roles Needed (comma separated)</label>
         <input type="text" class="form-input" id="np-roles" placeholder="e.g. Frontend Dev, ML Engineer, UI Designer" />
       </div>
+      <div class="form-group">
+        <label class="form-label">GitHub Repo URL (optional)</label>
+        <input type="text" class="form-input" id="np-repo" placeholder="https://github.com/owner/repo" />
+      </div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="SH.closeModal('new-project-modal')">Cancel</button>
         <button class="btn-submit" onclick="submitProject()">Create Project</button>
@@ -151,13 +155,15 @@
       renderProjects();
     }
 
-    function submitProject() {
+    async function submitProject() {
       const title = document.getElementById('np-title').value.trim();
       const desc = document.getElementById('np-desc').value.trim();
       if (!title || !desc) { SH.toast('⚠️ Please fill in required fields.'); return; }
       const tag1 = document.getElementById('np-tag').value;
       const tag2 = document.getElementById('np-tag2').value;
       const roles = document.getElementById('np-roles').value.split(',').map(r => r.trim()).filter(Boolean);
+      const repoUrl = document.getElementById('np-repo').value.trim();
+
       const newProject = {
         id: Date.now(), title, desc,
         tags: tag2 ? [tag1, tag2] : [tag1],
@@ -166,14 +172,22 @@
         lookingFor: roles.length ? roles : ['Open Roles'],
         details: document.getElementById('np-details').value || desc,
         contributeUrl: SH.contributeUrl,
-        demoUrl: SH.demoUrl
+        repoUrl: repoUrl || undefined,
+        demoUrl: undefined
       };
+      // Try to enrich project with a demo URL from the provided GitHub repo
+      try {
+        await SH.enrichProjectWithDemo(newProject);
+      } catch (e) {
+        console.warn('Failed to enrich project demo URL', e);
+      }
+
       SH.projects.unshift(newProject);
       SH.closeModal('new-project-modal');
       renderProjects();
-      SH.toast('🎉 Project created! Share the GitHub repo to collect contributions.');
+      SH.toast('🎉 Project created! ' + (newProject.demoUrl ? 'Demo detected and linked.' : 'Share the GitHub repo to collect contributions.'));
       // Reset form
-      ['np-title','np-desc','np-details','np-roles'].forEach(id => document.getElementById(id).value = '');
+      ['np-title','np-desc','np-details','np-roles','np-repo'].forEach(id => document.getElementById(id).value = '');
     }
 
     document.addEventListener('DOMContentLoaded', renderProjects);
