@@ -18,6 +18,12 @@ SH.parseGitHubRepo = (url) => {
   } catch (e) { return null; }
 };
 
+SH.repoIssuesUrl = (repoUrl) => {
+  const parsed = SH.parseGitHubRepo(repoUrl);
+  if (!parsed) return null;
+  return `https://github.com/${parsed.owner}/${parsed.repo}/issues`;
+};
+
 SH.fetchRepoApi = async (owner, repo) => {
   const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
   if (!res.ok) throw new Error('repo fetch failed');
@@ -176,7 +182,7 @@ SH.renderNavProfile = () => {
 SH.renderProjectCard = (p, onclick) => {
   const memberAvatars = p.members.slice(0, 4).map((m, i) => SH.av(m, i)).join('');
   const extra = p.members.length > 4 ? `<span class="av" style="background:var(--surface2);color:var(--text2)">+${p.members.length - 4}</span>` : '';
-  const contributeUrl = p.contributeUrl || SH.contributeUrl;
+  const contributeUrl = p.repoUrl ? (SH.repoIssuesUrl(p.repoUrl) || p.contributeUrl || SH.contributeUrl) : (p.contributeUrl || SH.contributeUrl);
   const demoUrl = p.demoUrl || SH.demoUrl;
   return `
     <div class="project-card" onclick="${onclick || `SH.openProjectDetail(${p.id})`}">
@@ -256,6 +262,8 @@ SH.openProjectDetail = (id) => {
     document.body.appendChild(overlay);
   }
   const inner = document.getElementById('project-modal-inner');
+  const contributeUrl = p.repoUrl ? (SH.repoIssuesUrl(p.repoUrl) || p.contributeUrl || SH.contributeUrl) : (p.contributeUrl || SH.contributeUrl);
+  const demoUrl = p.demoUrl || SH.demoUrl;
   inner.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem">
       <div>
@@ -276,8 +284,8 @@ SH.openProjectDetail = (id) => {
     </div>
     <div class="modal-footer" style="margin-top:0">
       <button class="btn-cancel" onclick="SH.closeModal('project-modal')">Close</button>
-      <button class="btn-submit" onclick="window.open('${SH.contributeUrl}', '_blank', 'noopener,noreferrer');SH.toast('Opened GitHub issues for contribution');SH.closeModal('project-modal')">Contribute on GitHub</button>
-      <button class="btn-cancel" onclick="window.open('${SH.demoUrl}', '_blank', 'noopener,noreferrer');SH.toast('Opened demo link');SH.closeModal('project-modal')">View Demo</button>
+      <button class="btn-submit" onclick="window.open('${contributeUrl}', '_blank', 'noopener,noreferrer');SH.toast('Opened GitHub issues for contribution');SH.closeModal('project-modal')">Contribute on GitHub</button>
+      <button class="btn-cancel" onclick="window.open('${demoUrl}', '_blank', 'noopener,noreferrer');SH.toast('Opened demo link');SH.closeModal('project-modal')">View Demo</button>
     </div>
   `;
   SH.openModal('project-modal');
