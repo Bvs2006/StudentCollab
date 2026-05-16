@@ -103,6 +103,73 @@ SH.saveProjectToSupabase = async (project) => {
   }
 };
 
+SH.fetchIdeasFromSupabase = async () => {
+  try {
+    const url = `${SH.SUPABASE_URL}/rest/v1/ideas?select=*&order=created.desc`;
+    const res = await fetch(url, { headers: SH.supabaseHeaders() });
+    if (!res.ok) throw new Error('Supabase ideas fetch failed');
+    const data = await res.json();
+    SH.ideas = data.map(d => ({
+      id: d.id,
+      title: d.title,
+      desc: d.desc,
+      tags: d.tags || [],
+      votes: d.votes || 0,
+      author: d.author || 'Unknown',
+      time: d.time || d.created || 'Just now',
+      comments: d.comments || 0,
+      voted: false
+    }));
+    localStorage.setItem('sh_ideas', JSON.stringify(SH.ideas));
+    return SH.ideas;
+  } catch (e) {
+    console.warn('Supabase ideas load failed, using local cache', e);
+    const raw = localStorage.getItem('sh_ideas');
+    SH.ideas = raw ? JSON.parse(raw) : (SH.ideas || []);
+    return SH.ideas;
+  }
+};
+
+SH.saveIdeaToSupabase = async (idea) => {
+  try {
+    const url = `${SH.SUPABASE_URL}/rest/v1/ideas`;
+    const payload = {
+      title: idea.title,
+      desc: idea.desc,
+      tags: idea.tags,
+      votes: idea.votes,
+      author: idea.author,
+      time: idea.time,
+      comments: idea.comments,
+      created: idea.time
+    };
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: SH.supabaseHeaders(),
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('Supabase idea insert failed');
+    const resp = await res.json();
+    const row = Array.isArray(resp) ? resp[0] : resp;
+    return row;
+  } catch (e) {
+    console.warn('Supabase idea save failed, saving locally', e);
+    idea.id = idea.id || Date.now();
+    const cur = JSON.parse(localStorage.getItem('sh_ideas') || '[]');
+    cur.unshift(idea);
+    localStorage.setItem('sh_ideas', JSON.stringify(cur));
+    return idea;
+  }
+};
+
+SH.persistIdeasCache = () => {
+  try {
+    localStorage.setItem('sh_ideas', JSON.stringify(SH.ideas || []));
+  } catch (e) {
+    console.warn('Failed to persist ideas cache', e);
+  }
+};
+
 SH.repoIssuesUrl = (repoUrl) => {
   const parsed = SH.parseGitHubRepo(repoUrl);
   if (!parsed) return null;
@@ -325,6 +392,7 @@ SH.voteIdea = (id, btn) => {
   btn.classList.toggle('voted', idea.voted);
   const countEl = document.getElementById(`vote-${id}`);
   if (countEl) countEl.textContent = idea.votes;
+  SH.persistIdeasCache();
 };
 
 SH.openContributionLink = (topic) => {

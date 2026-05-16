@@ -27,6 +27,34 @@
     .ideas-search { margin-left: auto; padding: 0.4rem 0.9rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-family: var(--font-body); font-size: 0.85rem; width: 200px; outline: none; transition: border-color 0.2s; }
     .ideas-search:focus { border-color: var(--accent); }
     .ideas-search::placeholder { color: var(--text3); }
+    .ideas-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.9rem; }
+    .idea-mini-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.95rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .idea-mini-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .idea-mini-title { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; line-height: 1.35; }
+    .idea-mini-desc {
+      color: var(--text2);
+      font-size: 0.82rem;
+      line-height: 1.45;
+      display: -webkit-box;
+      line-clamp: 3;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 3.6em;
+    }
+    .idea-mini-meta { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+    .idea-mini-author { color: var(--text3); font-size: 0.76rem; }
+    .idea-mini-votes { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .idea-mini-votes .vote-btn { width: 26px; height: 24px; }
     @media (max-width: 900px) { .ideas-layout { grid-template-columns: 1fr; padding: 2rem; } }
   </style>
 </head>
@@ -165,7 +193,20 @@
       const noIdeas = document.getElementById('no-ideas');
       if (list.length === 0) { container.innerHTML = ''; noIdeas.style.display = 'block'; return; }
       noIdeas.style.display = 'none';
-      container.innerHTML = list.map(i => SH.renderIdeaItem(i)).join('');
+      container.innerHTML = list.map(i => `
+        <div class="idea-mini-card">
+          <div class="idea-mini-title">${i.title}</div>
+          <div class="idea-mini-desc">${i.desc}</div>
+          <div class="pc-tags">${i.tags.map(t => `<span class="tag ${SH.getTagClass(t)}">${t}</span>`).join('')}</div>
+          <div class="idea-mini-meta">
+            <span class="idea-mini-author">by ${i.author} · ${i.time}</span>
+            <span class="idea-mini-votes">
+              <button class="vote-btn ${i.voted ? 'voted' : ''}" onclick="SH.voteIdea(${i.id}, this)">▲</button>
+              <span class="vote-count" id="vote-${i.id}">${i.votes}</span>
+            </span>
+          </div>
+        </div>
+      `).join('');
     }
 
     function renderTrending() {
@@ -205,7 +246,7 @@
       renderIdeas();
     }
 
-    function submitIdea() {
+    async function submitIdea() {
       const title = document.getElementById('ni-title').value.trim();
       const desc = document.getElementById('ni-desc').value.trim();
       if (!title || !desc) { SH.toast('⚠️ Title and description required.'); return; }
@@ -216,7 +257,16 @@
         tags: tag2 ? [tag1, tag2] : [tag1],
         votes: 1, author: 'You', time: 'Just now', comments: 0, voted: true
       };
+
+      try {
+        const saved = await SH.saveIdeaToSupabase(newIdea);
+        if (saved && saved.id) newIdea.id = saved.id;
+      } catch (e) {
+        console.warn('Idea save failed', e);
+      }
+
       SH.ideas.unshift(newIdea);
+      SH.persistIdeasCache();
       SH.closeModal('new-idea-modal');
       renderIdeas();
       renderTrending();
@@ -225,7 +275,10 @@
       document.getElementById('ni-desc').value = '';
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.SH && SH.fetchIdeasFromSupabase) {
+        await SH.fetchIdeasFromSupabase();
+      }
       renderIdeas();
       renderTrending();
       renderTagCloud();
