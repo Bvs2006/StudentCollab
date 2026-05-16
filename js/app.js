@@ -41,6 +41,64 @@ SH.closeModal = (id) => {
   if (m) m.classList.remove('open');
 };
 
+// --- Profile persistence (localStorage)
+SH.profileKey = 'sh_profile';
+SH.saveProfile = (p) => {
+  try {
+    localStorage.setItem(SH.profileKey, JSON.stringify(p));
+    return true;
+  } catch (e) { return false; }
+};
+SH.loadProfile = () => {
+  try {
+    const raw = localStorage.getItem(SH.profileKey);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+};
+
+SH.saveProfileFromForm = () => {
+  const name = document.getElementById('p-name')?.value?.trim();
+  const role = document.getElementById('p-role')?.value?.trim();
+  const skills = (document.getElementById('p-skills')?.value || '').split(',').map(s=>s.trim()).filter(Boolean);
+  if (!name) { SH.toast('Please enter your name'); return; }
+  const profile = { name, role, skills };
+  SH.saveProfile(profile);
+  SH.toast('Profile saved');
+  SH.closeModal('onboard-modal');
+  SH.renderNavProfile();
+};
+
+SH.clearProfile = () => { localStorage.removeItem(SH.profileKey); SH.renderNavProfile(); SH.toast('Logged out'); };
+
+SH.renderNavProfile = () => {
+  const profile = SH.loadProfile();
+  const nav = document.querySelector('.nav');
+  if (!nav) return;
+  let node = document.getElementById('nav-user');
+  if (profile) {
+    const initial = (profile.name || 'U').charAt(0).toUpperCase();
+    const avatarColor = SH.avatarColors[0];
+    const html = `
+      <div id="nav-user" style="display:flex;align-items:center;gap:0.6rem;margin-left:1rem">
+        <button class="btn-post" style="display:flex;align-items:center;gap:0.6rem;padding:0.3rem 0.6rem" onclick="window.location.href='pages/profile.html'">
+          <span class="av" style="width:28px;height:28px;border-radius:99px;background:${avatarColor};font-size:0.85rem">${initial}</span>
+          <span style="font-weight:600;font-size:0.9rem;color:var(--text)">${profile.name.split(' ')[0]}</span>
+        </button>
+        <button class="mini-link-btn outline" onclick="SH.clearProfile()">Logout</button>
+      </div>
+    `;
+    if (!node) {
+      // insert before nav-links
+      const links = nav.querySelector('.nav-links');
+      if (links) links.insertAdjacentHTML('beforebegin', html);
+    } else {
+      node.outerHTML = html;
+    }
+  } else {
+    if (node) node.remove();
+  }
+};
+
 // Render project card
 SH.renderProjectCard = (p, onclick) => {
   const memberAvatars = p.members.slice(0, 4).map((m, i) => SH.av(m, i)).join('');
@@ -155,4 +213,5 @@ SH.openProjectDetail = (id) => {
 // Run on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   SH.animateCounters();
+  SH.renderNavProfile();
 });
