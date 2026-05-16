@@ -3,6 +3,79 @@
 SH.repoUrl = 'https://github.com/Bvs2006/StudentCollab';
 SH.contributeUrl = `${SH.repoUrl}/issues`;
 SH.demoUrl = 'https://bvs2006.github.io/StudentCollab/';
+SH.githubRepo = 'Bvs2006/StudentCollab';
+
+// Resolve a GitHub repository URL to a likely demo/homepage URL.
+SH.parseGitHubRepo = (url) => {
+  if (!url) return null;
+  try {
+    const u = url.trim();
+    const m = u.match(/github\.com\/(?:.+?@)?([^\/\s]+)\/([^\/\s]+)(?:\/|$)/i);
+    if (!m) return null;
+    const owner = m[1].replace('.git','');
+    const repo = m[2].replace(/\.git$/,'');
+    return { owner, repo };
+  } catch (e) { return null; }
+};
+
+SH.fetchRepoApi = async (owner, repo) => {
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+  if (!res.ok) throw new Error('repo fetch failed');
+  return res.json();
+};
+
+SH.fetchPackageJsonHomepage = async (owner, repo) => {
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/package.json`);
+  if (!res.ok) return null;
+  const json = await res.json();
+  if (!json.content) return null;
+  try {
+    const decoded = atob(json.content.replace(/\n/g, ''));
+    const pj = JSON.parse(decoded);
+    return pj.homepage || null;
+  } catch (e) { return null; }
+};
+
+SH.testUrlExists = async (url) => {
+  try {
+    const res = await fetch(url, { method: 'HEAD' });
+    return res.ok;
+  } catch (e) { return false; }
+};
+
+SH.resolveRepoDemoUrl = async (repoUrl) => {
+  const parsed = SH.parseGitHubRepo(repoUrl);
+  if (!parsed) return null;
+  const { owner, repo } = parsed;
+  try {
+    const repoInfo = await SH.fetchRepoApi(owner, repo);
+    if (repoInfo && repoInfo.homepage) return repoInfo.homepage;
+  } catch (e) { /* ignore */ }
+  // try package.json
+  try {
+    const homepage = await SH.fetchPackageJsonHomepage(owner, repo);
+    if (homepage) return homepage;
+  } catch (e) { /* ignore */ }
+  // try GitHub Pages default
+  const pages = `https://${owner}.github.io/${repo}/`;
+  if (await SH.testUrlExists(pages)) return pages;
+  // fallback: repo html url
+  return `https://github.com/${owner}/${repo}`;
+};
+
+// Enrich a project object with `demoUrl` if a GitHub repo link is provided.
+SH.enrichProjectWithDemo = async (project) => {
+  if (!project || project.demoUrl) return project;
+  const repoCandidates = [project.repoUrl, project.github, project.contributeUrl].filter(Boolean);
+  for (const r of repoCandidates) {
+    if (!r) continue;
+    const parsed = SH.parseGitHubRepo(r);
+    if (!parsed) continue;
+    const demo = await SH.resolveRepoDemoUrl(r);
+    if (demo) { project.demoUrl = demo; return project; }
+  }
+  return project;
+};
 
 // Counter animation
 SH.animateCounters = () => {
@@ -214,4 +287,28 @@ SH.openProjectDetail = (id) => {
 document.addEventListener('DOMContentLoaded', () => {
   SH.animateCounters();
   SH.renderNavProfile();
+  // Fetch live GitHub stats for the repo and show them on the homepage
+  SH.fetchGitHubStats = async () => {
+    try {
+      const repoRes = await fetch(`https://api.github.com/repos/${SH.githubRepo}`);
+      if (!repoRes.ok) return;
+      const repo = await repoRes.json();
+      const starsEl = document.getElementById('gh-stars');
+      const forksEl = document.getElementById('gh-forks');
+      if (starsEl) starsEl.textContent = repo.stargazers_count?.toLocaleString() || '0';
+      if (forksEl) forksEl.textContent = repo.forks_count?.toLocaleString() || '0';
+
+      // Contributors (first 6)
+      const contribRes = await fetch(`https://api.github.com/repos/${SH.githubRepo}/contributors?per_page=6`);
+      if (!contribRes.ok) return;
+      const contribs = await contribRes.json();
+      const contribsEl = document.getElementById('gh-contribs');
+      if (contribsEl) {
+        contribsEl.innerHTML = contribs.slice(0,6).map(c => `<img src="${c.avatar_url}" alt="${c.login}" title="${c.login}" style="width:28px;height:28px;border-radius:99px;border:2px solid var(--surface);">`).join('');
+      }
+    } catch (e) {
+      console.warn('GitHub stats fetch failed', e);
+    }
+  };
+  SH.fetchGitHubStats();
 });
