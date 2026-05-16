@@ -9,6 +9,10 @@
   <link rel="stylesheet" href="../css/style.css" />
   <style>
     .ideas-layout { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; padding: 3rem 4rem; max-width: 1300px; margin: 0 auto; }
+    .idea-rules-wrap { max-width: 1300px; margin: 0 auto; padding: 0 4rem 1.25rem; }
+    .idea-rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; background: linear-gradient(135deg, rgba(124,92,252,0.08), rgba(34,211,238,0.05)); border: 1px solid rgba(124,92,252,0.22); border-radius: var(--radius); padding: 1rem 1.25rem; }
+    .idea-rule { font-size: 0.85rem; color: var(--text2); }
+    .idea-rule strong { color: var(--text); }
     .sidebar-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
     .sidebar-title { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; margin-bottom: 1rem; }
     .trending-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: color 0.2s; }
@@ -36,6 +40,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.55rem;
+      cursor: pointer;
       transition: border-color 0.2s, transform 0.2s;
     }
     .idea-mini-card:hover { border-color: var(--accent); transform: translateY(-2px); }
@@ -55,7 +60,11 @@
     .idea-mini-author { color: var(--text3); font-size: 0.76rem; }
     .idea-mini-votes { display: inline-flex; align-items: center; gap: 0.35rem; }
     .idea-mini-votes .vote-btn { width: 26px; height: 24px; }
-    @media (max-width: 900px) { .ideas-layout { grid-template-columns: 1fr; padding: 2rem; } }
+    @media (max-width: 900px) {
+      .ideas-layout { grid-template-columns: 1fr; padding: 2rem 1.25rem; }
+      .idea-rules-wrap { padding: 0 1.25rem 1rem; }
+      .idea-rules { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -79,11 +88,11 @@
     <p>Share early concepts, get feedback, and refine the next thing the community could build. This page is for ideas only.</p>
   </div>
 
-  <div style="max-width:1300px;margin:0 auto;padding:0 4rem 1.25rem;">
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;background:linear-gradient(135deg,rgba(124,92,252,0.08),rgba(34,211,238,0.05));border:1px solid rgba(124,92,252,0.22);border-radius:var(--radius);padding:1rem 1.25rem;">
-      <div style="font-size:0.85rem;color:var(--text2)"><strong style="color:var(--text)">1. Idea only</strong><br/>Post a concept, not a finished project.</div>
-      <div style="font-size:0.85rem;color:var(--text2)"><strong style="color:var(--text)">2. Get feedback</strong><br/>Upvotes and comments help sharpen the direction.</div>
-      <div style="font-size:0.85rem;color:var(--text2)"><strong style="color:var(--text)">3. Move forward</strong><br/>Accepted ideas can become proposals or GitHub issues.</div>
+  <div class="idea-rules-wrap">
+    <div class="idea-rules">
+      <div class="idea-rule"><strong>1. Idea only</strong><br/>Post a concept, not a finished project.</div>
+      <div class="idea-rule"><strong>2. Get feedback</strong><br/>Upvotes and comments help sharpen the direction.</div>
+      <div class="idea-rule"><strong>3. Move forward</strong><br/>Accepted ideas can become proposals or GitHub issues.</div>
     </div>
   </div>
 
@@ -133,6 +142,10 @@
       <div class="form-group">
         <label class="form-label">Description *</label>
         <textarea class="form-textarea" id="ni-desc" placeholder="Describe the problem you want to solve and how you'd approach it..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">LinkedIn Profile (optional)</label>
+        <input type="text" class="form-input" id="ni-linkedin" placeholder="https://www.linkedin.com/in/your-profile" />
       </div>
       <div class="form-row">
         <div class="form-group">
@@ -194,14 +207,14 @@
       if (list.length === 0) { container.innerHTML = ''; noIdeas.style.display = 'block'; return; }
       noIdeas.style.display = 'none';
       container.innerHTML = list.map(i => `
-        <div class="idea-mini-card">
+        <div class="idea-mini-card" onclick="openIdeaDetail(${i.id})">
           <div class="idea-mini-title">${i.title}</div>
           <div class="idea-mini-desc">${i.desc}</div>
           <div class="pc-tags">${i.tags.map(t => `<span class="tag ${SH.getTagClass(t)}">${t}</span>`).join('')}</div>
           <div class="idea-mini-meta">
             <span class="idea-mini-author">by ${i.author} · ${i.time}</span>
             <span class="idea-mini-votes">
-              <button class="vote-btn ${i.voted ? 'voted' : ''}" onclick="SH.voteIdea(${i.id}, this)">▲</button>
+              <button class="vote-btn ${i.voted ? 'voted' : ''}" onclick="event.stopPropagation();SH.voteIdea(${i.id}, this)">▲</button>
               <span class="vote-count" id="vote-${i.id}">${i.votes}</span>
             </span>
           </div>
@@ -212,7 +225,7 @@
     function renderTrending() {
       const top = [...SH.ideas].sort((a,b) => b.votes - a.votes).slice(0, 5);
       document.getElementById('trending-list').innerHTML = top.map((idea, i) => `
-        <div class="trending-item">
+        <div class="trending-item" onclick="openIdeaDetail(${idea.id})">
           <div class="ti-rank">${i + 1}</div>
           <div class="ti-body">
             <div class="ti-title">${idea.title}</div>
@@ -220,6 +233,57 @@
           </div>
         </div>
       `).join('');
+    }
+
+    function normalizeLinkedInUrl(raw) {
+      const input = (raw || '').trim();
+      if (!input) return '';
+      if (/^https?:\/\//i.test(input)) return input;
+      if (input.includes('linkedin.com/')) return `https://${input.replace(/^\/+/, '')}`;
+      return `https://www.linkedin.com/in/${input.replace(/^@/, '')}`;
+    }
+
+    function openIdeaDetail(id) {
+      const idea = SH.ideas.find(i => i.id === id);
+      if (!idea) return;
+      let overlay = document.getElementById('idea-detail-modal');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.id = 'idea-detail-modal';
+        overlay.innerHTML = '<div class="modal" id="idea-detail-inner"></div>';
+        overlay.addEventListener('click', (e) => {
+          if (e.target === overlay) SH.closeModal('idea-detail-modal');
+        });
+        document.body.appendChild(overlay);
+      }
+
+      const linkedinUrl = normalizeLinkedInUrl(idea.linkedin || '');
+      const inner = document.getElementById('idea-detail-inner');
+      inner.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem">
+          <div>
+            <div class="pc-tags" style="margin-bottom:0.55rem">${idea.tags.map(t => `<span class="tag ${SH.getTagClass(t)}">${t}</span>`).join('')}</div>
+            <div class="modal-title" style="margin-bottom:0.2rem">${idea.title}</div>
+            <div style="color:var(--text3);font-size:0.82rem">by ${idea.author} · ${idea.time}</div>
+          </div>
+          <button class="btn-cancel" onclick="SH.closeModal('idea-detail-modal')">✕</button>
+        </div>
+        <p style="color:var(--text2);font-size:0.92rem;line-height:1.65;margin-bottom:1rem">${idea.desc}</p>
+        <div style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap;margin-bottom:1.2rem">
+          <button class="vote-btn ${idea.voted ? 'voted' : ''}" onclick="SH.voteIdea(${idea.id}, this)">▲</button>
+          <span class="vote-count" id="vote-${idea.id}">${idea.votes}</span>
+          <span class="idea-time">votes</span>
+        </div>
+        <div class="modal-footer" style="margin-top:0">
+          <button class="btn-cancel" onclick="SH.closeModal('idea-detail-modal')">Close</button>
+          ${linkedinUrl
+            ? `<button class="btn-submit" onclick="window.open('${linkedinUrl}', '_blank', 'noopener,noreferrer')">Connect on LinkedIn</button>`
+            : `<button class="btn-submit" disabled style="opacity:0.6;cursor:not-allowed">LinkedIn not provided</button>`
+          }
+        </div>
+      `;
+      SH.openModal('idea-detail-modal');
     }
 
     function renderTagCloud() {
@@ -252,10 +316,12 @@
       if (!title || !desc) { SH.toast('⚠️ Title and description required.'); return; }
       const tag1 = document.getElementById('ni-tag1').value;
       const tag2 = document.getElementById('ni-tag2').value;
+      const linkedin = normalizeLinkedInUrl(document.getElementById('ni-linkedin').value.trim());
       const newIdea = {
         id: Date.now(), title, desc,
         tags: tag2 ? [tag1, tag2] : [tag1],
-        votes: 1, author: 'You', time: 'Just now', comments: 0, voted: true
+        votes: 1, author: 'You', time: 'Just now', comments: 0, voted: true,
+        linkedin
       };
 
       try {
@@ -273,6 +339,7 @@
       SH.toast('🎉 Idea posted! Share it with your campus.');
       document.getElementById('ni-title').value = '';
       document.getElementById('ni-desc').value = '';
+      document.getElementById('ni-linkedin').value = '';
     }
 
     document.addEventListener('DOMContentLoaded', async () => {

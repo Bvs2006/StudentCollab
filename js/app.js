@@ -118,6 +118,7 @@ SH.fetchIdeasFromSupabase = async () => {
       author: d.author || 'Unknown',
       time: d.time || d.created || 'Just now',
       comments: d.comments || 0,
+      linkedin: d.linkedin || d.linkedin_url || '',
       voted: false
     }));
     localStorage.setItem('sh_ideas', JSON.stringify(SH.ideas));
@@ -141,6 +142,7 @@ SH.saveIdeaToSupabase = async (idea) => {
       author: idea.author,
       time: idea.time,
       comments: idea.comments,
+      linkedin: idea.linkedin || '',
       created: idea.time
     };
     const res = await fetch(url, {
