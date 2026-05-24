@@ -6,7 +6,7 @@
   <title>Projects — StudentHub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
 </head>
 <body>
 
@@ -19,15 +19,15 @@
       <a href="../index.html" class="nav-link">Home</a>
       <a href="projects.html" class="nav-link active">Projects</a>
       <a href="proposals.html" class="nav-link">Proposals</a>
-      <a href="ideas.html" class="nav-link">Ideas Board</a>
+      <a href="ideas.html" class="nav-link">Ideas</a>
+      <a href="about.html" class="nav-link">About</a>
       <a href="profile.html" class="nav-link">Profile</a>
-      <a href="admin.html" class="nav-link">Admin</a>
     </div>
-    <button class="btn-post" onclick="SH.openModal('new-project-modal')">+ New Project</button>
   </nav>
 
   <div class="page-header">
     <h1>Student Projects</h1>
+    <button class="btn-post page-action-btn" onclick="SH.openProtectedModal('new-project-modal')">+ New Project</button>
     <p>Browse active collaborations — open the GitHub repo, contribute directly, or view a live demo.</p>
   </div>
 
@@ -123,8 +123,8 @@
     </div>
   </div>
 
-  <script src="../js/data.js"></script>
-  <script src="../js/app.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/app.js"></script>
   <script>
     let activeFilter = 'All';
     let searchQuery = '';
@@ -169,6 +169,8 @@
     }
 
     async function submitProject() {
+      const user = SH.requireAuth();
+      if (!user) return;
       const title = document.getElementById('np-title').value.trim();
       const desc = document.getElementById('np-desc').value.trim();
       if (!title || !desc) { SH.toast('⚠️ Please fill in required fields.'); return; }
@@ -180,8 +182,8 @@
       const newProject = {
         id: Date.now(), title, desc,
         tags: tag2 ? [tag1, tag2] : [tag1],
-        status: 'open', members: ['Y'], likes: 0,
-        owner: 'You', created: 'Just now',
+        status: 'open', members: [(user.name || 'U').charAt(0).toUpperCase()], likes: 0,
+        owner: user.name || 'You', ownerEmail: user.email, ownerId: user.id, created: 'Just now',
         lookingFor: roles.length ? roles : ['Open Roles'],
         details: document.getElementById('np-details').value || desc,
         contributeUrl: SH.contributeUrl,

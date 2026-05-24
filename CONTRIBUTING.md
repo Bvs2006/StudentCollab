@@ -1,14 +1,64 @@
 # Contributing to StudentHub
 
-Thank you for wanting to contribute! This project is designed as a collaborative workspace where students can propose and join projects. Here's how you can participate.
+Thanks for your interest in contributing to StudentHub! We welcome contributions of all sizes — from documentation fixes to new features.
 
-1. Read the Code of Conduct: Respectful, inclusive behavior is required. See CODE_OF_CONDUCT.md.
-2. Submit a proposal: Open the Proposals page (`pages/proposals.html`) and use the "Submit Proposal" form. Provide a clear title, short abstract, timeline, and link to your GitHub profile.
-3. Proposal review: Mentors/admins will review proposals via the Admin dashboard (`pages/admin.html`). You will be notified on this prototype via UI state; in production we will integrate email/GitHub notifications.
-4. Code contributions: Fork the repo, make changes on a feature branch, and open a pull request with a clear description and link to any related proposal.
-5. Direct contribution path: If you are on a project page, click the GitHub contribution link to open repo issues and start contributing without a separate join request.
-5. Tests & style: Keep changes minimal and follow the existing style (vanilla HTML/CSS/JS). Run the site locally (`open index.html` or a static server) to verify.
+## How to contribute
 
-If you're interested in mentoring or helping run the program, please mention it in your proposal or contact the project admins.
+1. Read the `CODE_OF_CONDUCT.md` and be respectful and inclusive.
+2. Search existing issues or open a new issue to discuss larger changes before implementing them.
+3. Fork the repo and create a descriptive feature branch:
 
-Thanks — we're excited to build with you!
+```bash
+git checkout -b feat/short-description
+```
+
+4. Make small, focused commits with clear messages. Rebase or squash as appropriate before opening a PR.
+5. Open a pull request against `main` with:
+	- A clear title and description
+	- Screenshots or short verification steps if the change affects UI
+	- Link to any related proposal or issue
+
+## Code style and tools
+
+- JavaScript: follow the existing vanilla JS style. We recommend using ESLint and Prettier. If you add dependencies, update `package.json` and include instructions.
+- Keep UI changes responsive and accessible.
+- Do not commit secrets or environment variables — use a `.env` file and add it to `.gitignore`.
+
+## Pull request checklist
+
+- [ ] My changes follow the repository style
+- [ ] I added or updated documentation where needed
+- [ ] I opened an issue for major changes (if applicable)
+- [ ] CI/lint/format checks pass (when configured)
+
+## Local development
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Serve the project locally:
+
+```bash
+npx serve .
+```
+
+3. Run linter and formatter (if installed):
+
+```bash
+npm run lint
+npm run format
+```
+
+## Reporting issues
+
+- Use the issue templates when creating bug reports or feature requests.
+- Provide steps to reproduce, expected vs actual behavior, and any relevant environment details.
+
+## Code of conduct
+
+All contributors must follow `CODE_OF_CONDUCT.md`.
+
+Thanks — your contributions make StudentHub better for everyone.

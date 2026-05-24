@@ -6,25 +6,41 @@
   <title>StudentHub — Collaborative Project Workspace</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
 
   <!-- NAV -->
-  <nav class="nav">
+  <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-brand">
       <span class="brand-icon">⬡</span>
       <span class="brand-name">StudentHub</span>
     </div>
-    <div class="nav-links">
+
+    <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">☰</button>
+
+    <div class="nav-links" id="desktop-links">
       <a href="index.html" class="nav-link active">Home</a>
       <a href="pages/projects.html" class="nav-link">Projects</a>
       <a href="pages/proposals.html" class="nav-link">Proposals</a>
-      <a href="pages/ideas.html" class="nav-link">Ideas Board</a>
+      <a href="pages/ideas.html" class="nav-link">Ideas</a>
+      <a href="pages/about.html" class="nav-link">About</a>
       <a href="pages/profile.html" class="nav-link">Profile</a>
-      <a href="pages/admin.html" class="nav-link">Admin</a>
     </div>
-    <button class="btn-post" onclick="window.location.href='pages/ideas.html'">+ Post Idea</button>
+
+    <div class="nav-actions">
+      <button class="btn-join" onclick="window.location.href='pages/login.html'">Login</button>
+    </div>
+
+    <!-- Mobile menu (hidden on desktop) -->
+    <div id="mobile-menu" class="mobile-menu" aria-hidden="true">
+      <a href="index.html" class="mobile-link">Home</a>
+      <a href="pages/projects.html" class="mobile-link">Projects</a>
+      <a href="pages/proposals.html" class="mobile-link">Proposals</a>
+      <a href="pages/ideas.html" class="mobile-link">Ideas</a>
+      <a href="pages/about.html" class="mobile-link">About</a>
+      <a href="pages/profile.html" class="mobile-link">Profile</a>
+    </div>
   </nav>
 
   <!-- HERO -->
@@ -32,12 +48,13 @@
     <div class="hero-noise"></div>
     <div class="hero-content">
       <div class="hero-badge">🎓 StudentHub — collaborative learning & product-building</div>
+      <div class="hero-badge">StudentHub - collaborative learning and product-building</div>
       <h1 class="hero-title">
-        Turn classroom curiosity into<br/>real-world <strong>projects</strong>
+        Build student <mark>projects</mark> at every stage of development
       </h1>
       <p class="hero-sub">A lightweight workspace where students discover problems worth solving, form multidisciplinary teams, and ship working prototypes — together.</p>
       <div class="hero-cta">
-        <button class="btn-primary" onclick="SH.openModal('onboard-modal')">Get Started — Create Profile</button>
+        <button class="btn-primary" onclick="window.location.href='pages/login.html'">Get Started - Login</button>
         <a href="pages/projects.html" class="btn-ghost">Browse Projects</a>
       </div>
       <div class="github-stats">
@@ -114,17 +131,6 @@
     </div>
   </section>
 
-  <!-- STATS -->
-  <section class="stats-bar">
-    <div class="stat"><span class="stat-n" data-target="248">0</span><span class="stat-l">Active Projects</span></div>
-    <div class="stat-divider"></div>
-    <div class="stat"><span class="stat-n" data-target="1340">0</span><span class="stat-l">Students Joined</span></div>
-    <div class="stat-divider"></div>
-    <div class="stat"><span class="stat-n" data-target="89">0</span><span class="stat-l">Ideas This Month</span></div>
-    <div class="stat-divider"></div>
-    <div class="stat"><span class="stat-n" data-target="32">0</span><span class="stat-l">Shipped Products</span></div>
-  </section>
-
   <!-- FEATURED PROJECTS -->
   <section class="section">
     <div class="section-header">
@@ -177,6 +183,17 @@
     </div>
   </section>
 
+  <section class="cta-band">
+    <div>
+      <h2>Deliver better student projects continuously</h2>
+      <p>Start with an idea, find teammates, and turn project work into a visible portfolio.</p>
+    </div>
+    <div class="cta-band-actions">
+      <a class="btn-primary" href="pages/login.html">Sign up</a>
+      <a class="btn-ghost" href="pages/projects.html">Explore projects</a>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-brand">
@@ -191,9 +208,9 @@
     </div>
   </footer>
 
-  <script src="js/data.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/home.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/home.js"></script>
 
   <!-- Onboarding / Profile Modal -->
   <div class="modal-overlay" id="onboard-modal" aria-hidden="true">

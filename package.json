@@ -1,6 +1,33 @@
 {
+  "name": "studenthub",
+  "version": "0.1.0",
+  "description": "StudentHub — a collaborative frontend prototype for student projects",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "lint": "eslint assets/js --ext .js",
+    "format": "prettier --write .",
+    "test": "jest",
+    "prepare": "husky install"
+  },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.105.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.0",
+    "jest": "^29.0.0",
+    "lint-staged": "^14.0.0",
+    "prettier": "^2.8.8",
+    "serve": "^14.2.4"
+  },
+  "lint-staged": {
+    "assets/js/**/*.js": [
+      "npm run lint",
+      "npm run format"
+    ]
   }
 }

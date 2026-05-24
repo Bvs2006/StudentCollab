@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - StudentHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-brand"><span class="brand-icon">SH</span><span class="brand-name">StudentHub</span></div>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-link">Home</a>
+      <a href="projects.html" class="nav-link">Projects</a>
+      <a href="proposals.html" class="nav-link">Proposals</a>
+      <a href="ideas.html" class="nav-link">Ideas</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="profile.html" class="nav-link">Profile</a>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <h1>Login to StudentHub</h1>
+    <p>Use a student account for your workspace, or the admin account for review and moderation.</p>
+  </header>
+
+  <main class="page-content auth-page">
+    <section class="auth-grid">
+      <div class="panel auth-panel">
+        <div class="auth-tabs">
+          <button class="sort-btn active" id="user-tab" type="button" onclick="setLoginRole('user')">User Login</button>
+          <button class="sort-btn" id="admin-tab" type="button" onclick="setLoginRole('admin')">Admin Login</button>
+        </div>
+        <div class="modal-title" id="login-title">User Login</div>
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-input" id="login-email" type="email" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input class="form-input" id="login-password" type="password" placeholder="Password" required />
+          </div>
+          <div class="modal-footer">
+            <button class="btn-submit" type="submit">Login</button>
+          </div>
+        </form>
+        <div class="auth-note" id="admin-note" style="display:none">
+          Default admin: admin@studenthub.local / admin123
+        </div>
+      </div>
+
+      <div class="panel auth-panel" id="register-panel">
+        <div class="modal-title">Create User Account</div>
+        <form id="register-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Full name</label>
+              <input class="form-input" id="reg-name" placeholder="Your name" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Course / role</label>
+              <input class="form-input" id="reg-course" placeholder="CSE / Frontend" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input class="form-input" id="reg-email" type="email" placeholder="you@example.com" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <input class="form-input" id="reg-password" type="password" placeholder="Create a password" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">GitHub profile</label>
+            <input class="form-input" id="reg-github" placeholder="github.com/username" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Skills</label>
+            <input class="form-input" id="reg-skills" placeholder="React, Python, UI Design" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bio</label>
+            <textarea class="form-textarea" id="reg-bio" placeholder="What do you like building?"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-submit" type="submit">Create Account</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/app.js"></script>
+  <script>
+    let loginRole = 'user';
+    const params = new URLSearchParams(window.location.search);
+
+    function nextUrlFor(user) {
+      const redirect = params.get('redirect');
+      if (redirect) return redirect;
+      return user.role === 'admin' ? 'admin.html' : 'profile.html';
+    }
+
+    function setLoginRole(role) {
+      loginRole = role;
+      document.getElementById('user-tab').classList.toggle('active', role === 'user');
+      document.getElementById('admin-tab').classList.toggle('active', role === 'admin');
+      document.getElementById('login-title').textContent = role === 'admin' ? 'Admin Login' : 'User Login';
+      document.getElementById('register-panel').style.display = role === 'admin' ? 'none' : 'block';
+      document.getElementById('admin-note').style.display = role === 'admin' ? 'block' : 'none';
+      document.getElementById('login-email').value = role === 'admin' ? 'admin@studenthub.local' : '';
+      document.getElementById('login-password').value = role === 'admin' ? 'admin123' : '';
+    }
+
+    document.getElementById('login-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const result = SH.login(
+        document.getElementById('login-email').value,
+        document.getElementById('login-password').value,
+        loginRole
+      );
+      if (!result.ok) {
+        SH.toast(result.message);
+        return;
+      }
+      SH.toast('Login successful');
+      window.location.href = nextUrlFor(result.user);
+    });
+
+    document.getElementById('register-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const result = SH.registerUser({
+        name: document.getElementById('reg-name').value,
+        course: document.getElementById('reg-course').value,
+        email: document.getElementById('reg-email').value,
+        password: document.getElementById('reg-password').value,
+        github: document.getElementById('reg-github').value,
+        skills: document.getElementById('reg-skills').value.split(',').map(s => s.trim()).filter(Boolean),
+        bio: document.getElementById('reg-bio').value
+      });
+      if (!result.ok) {
+        SH.toast(result.message);
+        return;
+      }
+      SH.toast('Account created');
+      window.location.href = nextUrlFor(result.user);
+    });
+
+    if (params.get('role') === 'admin') setLoginRole('admin');
+  </script>
+</body>
+</html>

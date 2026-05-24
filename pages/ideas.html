@@ -6,7 +6,7 @@
   <title>Idea Hub — StudentHub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
   <style>
     .ideas-layout { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; padding: 3rem 4rem; max-width: 1300px; margin: 0 auto; }
     .idea-rules-wrap { max-width: 1300px; margin: 0 auto; padding: 0 4rem 1.25rem; }
@@ -79,15 +79,15 @@
       <a href="projects.html" class="nav-link">Projects</a>
       <a href="proposals.html" class="nav-link">Proposals</a>
       <a href="ideas.html" class="nav-link active">Ideas</a>
+      <a href="about.html" class="nav-link">About</a>
       <a href="profile.html" class="nav-link">Profile</a>
-      <a href="admin.html" class="nav-link">Admin</a>
     </div>
-    <button class="btn-post" onclick="SH.openModal('new-idea-modal')">+ Post Idea</button>
   </nav>
 
   <div class="page-header">
     <h1>💡 Idea Hub</h1>
     <p>Share early concepts, get feedback, and refine the next thing the community could build. This page is for ideas only.</p>
+    <button class="btn-post page-action-btn" onclick="SH.openProtectedModal('new-idea-modal')">+ Post Idea</button>
   </div>
 
   <div class="idea-rules-wrap">
@@ -128,7 +128,7 @@
       <div class="sidebar-card" style="background:linear-gradient(135deg,rgba(124,92,252,0.1),rgba(34,211,238,0.05));border-color:rgba(124,92,252,0.3)">
         <div class="sidebar-title">Have an idea?</div>
         <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;line-height:1.55">Post the concept here. If it becomes a project later, contributors will work from the Projects page with direct GitHub contribution and demo links.</p>
-        <button class="btn-submit" style="width:100%;padding:0.65rem" onclick="SH.openModal('new-idea-modal')">Post Your Idea ✨</button>
+        <button class="btn-submit" style="width:100%;padding:0.65rem" onclick="SH.openProtectedModal('new-idea-modal')">Post Your Idea</button>
       </div>
     </div>
   </div>
@@ -195,8 +195,8 @@
     </div>
   </div>
 
-  <script src="../js/data.js"></script>
-  <script src="../js/app.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/app.js"></script>
   <script>
     let currentSort = 'votes';
     let ideaSearch = '';
@@ -324,6 +324,8 @@
     }
 
     async function submitIdea() {
+      const user = SH.requireAuth();
+      if (!user) return;
       const title = document.getElementById('ni-title').value.trim();
       const desc = document.getElementById('ni-desc').value.trim();
       if (!title || !desc) { SH.toast('⚠️ Title and description required.'); return; }
@@ -333,7 +335,7 @@
       const newIdea = {
         id: Date.now(), title, desc,
         tags: tag2 ? [tag1, tag2] : [tag1],
-        votes: 1, author: 'You', time: 'Just now', comments: 0, voted: true,
+        votes: 1, author: user.name || 'You', authorEmail: user.email, authorId: user.id, time: 'Just now', comments: 0, voted: true,
         linkedin
       };
 

@@ -1,114 +1,77 @@
-# ⬡ StudentHub — Collaborative Project Workspace
+# StudentHub
 
-A beautiful, fully-functional workspace for college students to discover, pitch, and collaborate on project ideas.
+StudentHub is a lightweight, contributor-friendly frontend prototype for discovering, pitching, and collaborating on student projects.
 
-## 📁 Project Structure
+**This repository is maintained as a community project. Contributions, issues, and pull requests are welcome.**
 
-```
-studenthub/
-├── index.html          ← Home / Dashboard
-├── pages/
-│   ├── projects.html   ← Browse & create projects
-│   ├── ideas.html      ← Ideas board with voting
-│   └── profile.html    ← Student profile page
-├── css/
-│   └── style.css       ← All styles (dark theme, design tokens)
-└── js/
-    ├── data.js         ← Shared mock data & helpers
-    ├── app.js          ← Shared utilities (modals, toast, cards)
-    └── home.js         ← Home page logic
-```
+**Quick links**
+- Home: index.html
+- Pages: pages/
+- Styles: assets/css/style.css
+- Scripts: assets/js/
 
-## 🚀 Getting Started
+## Getting started
 
-Simply open `index.html` in any modern browser. No build step required.
+Recommended: use Node.js and a static server for development so live-reload tools can be added later.
 
-```
-open index.html
+1. Install Node.js (v16+ recommended).
+2. Install dev dependencies:
+
+```bash
+npm install
 ```
 
-Or use a local server for best experience:
-```
-npx serve .
+3. Serve locally:
+
+```bash
+npm run start
 # or
-python3 -m http.server 8080
+python -m http.server 8080
 ```
 
-## ✨ Features
+## Development workflow
 
-### 🏠 Home Page
-- Animated floating project cards
-- Live stats counter animation
-- Featured projects grid
-- Latest ideas preview
+- Fork the repository and create a feature branch: `git checkout -b feat/short-description`.
+- Make focused changes, add tests for logic where feasible, and run lint/format scripts before committing.
+- Open a pull request with a description of the change and any manual verification steps.
 
-### 🚀 Projects Page
-- Browse all student projects
-- Filter by status (Open, In Progress) and category
-- Search projects by keyword
-- Create new projects via modal form
-- View project details and request to join
+## Contribution guide
 
-### 📝 Proposals
-- Submit project proposals and request mentorship via `pages/proposals.html`.
-- Admins can review proposals and accept them into the projects list via `pages/admin.html`.
-- Project collaboration now routes contributors to the GitHub repo/issues instead of internal join requests.
+- See the full contributing guide: [CONTRIBUTING.md](CONTRIBUTING.md).
+- Follow the Code of Conduct: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
-### 💡 Ideas Board
-- Post and discover project ideas
-- Upvote/downvote system
-- Sort by: Top, New, Most Discussed
-- Tag-based filtering
-- Trending ideas sidebar
-- Post new ideas with categories
+### PR checklist
 
-### 👤 Profile Page
-- Editable student profile (persisted in localStorage)
-- Contribution activity graph
-- Joined projects list
-- Activity feed
-- Skills showcase
+- [ ] I read the contribution guidelines
+- [ ] Changes are small and scoped to one purpose
+- [ ] Lint and formatting pass: `npm run lint` and `npm run format`
+- [ ] No sensitive data is committed (use `.env` and `.gitignore`)
 
-## 🎨 Design System
+## Project structure
 
-| Token | Value |
-|-------|-------|
-| Primary | `#7c5cfc` (violet) |
-| Secondary | `#c084fc` (purple) |
-| Accent | `#22d3ee` (cyan) |
-| Success | `#34d399` (green) |
-| Background | `#0a0a0f` (near black) |
-| Font Display | Syne (bold, geometric) |
-| Font Body | DM Sans (clean, readable) |
-
-## 🔧 Customization
-
-### Add more projects
-Edit `js/data.js` → `SH.projects` array:
-```js
-{
-  id: 7,
-  title: 'Your Project Name',
-  desc: 'Short description',
-  tags: ['AI/ML', 'Web Dev'],
-  status: 'open',          // 'open' | 'progress' | 'closed'
-  members: ['A', 'B'],     // initials for avatars
-  likes: 10,
-  owner: 'Your Name',
-  created: '1 day ago',
-  lookingFor: ['Frontend Dev'],
-  details: 'Longer description...'
-}
+```text
+.
+|-- assets/
+|   |-- css/        # shared styling
+|   `-- js/         # browser scripts and feature logic
+|-- pages/          # secondary HTML pages
+|-- utils/          # Supabase helper files kept for future backend integration
+|-- __tests__/      # Jest tests
+|-- index.html      # app entry page
+|-- package.json    # scripts and dependencies
+`-- README.md
 ```
 
-### Add more ideas
-Edit `js/data.js` → `SH.ideas` array similarly.
+## Recommended tools
 
-### Change color theme
-Edit CSS variables in `css/style.css` under `:root { ... }`.
+- ESLint for JS linting
+- Prettier for consistent formatting
+- GitHub Actions for CI checks
 
-## 📱 Responsive
-Works on mobile, tablet, and desktop.
+## Licensing
 
----
-Built with vanilla HTML, CSS, and JavaScript. No frameworks required.
+This project is distributed under the MIT License. See the `LICENSE` file for details.
+
+## Maintainers & Contact
+
+If you want to help maintain the project, open an issue or mention it when opening a PR.

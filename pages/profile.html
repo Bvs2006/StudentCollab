@@ -6,7 +6,7 @@
   <title>Profile — StudentHub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
   <style>
     .activity-item { display: flex; gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
     .activity-item:last-child { border-bottom: none; }
@@ -44,7 +44,9 @@
     <div class="nav-links">
       <a href="../index.html" class="nav-link">Home</a>
       <a href="projects.html" class="nav-link">Projects</a>
-      <a href="ideas.html" class="nav-link">Ideas Board</a>
+      <a href="proposals.html" class="nav-link">Proposals</a>
+      <a href="ideas.html" class="nav-link">Ideas</a>
+      <a href="about.html" class="nav-link">About</a>
       <a href="profile.html" class="nav-link active">Profile</a>
     </div>
     <button class="btn-post" onclick="SH.openModal('edit-profile-modal')">✏️ Edit Profile</button>
@@ -58,6 +60,7 @@
         <div class="profile-name" id="profile-name">Your Name</div>
         <div class="profile-role" id="profile-role">Computer Science · 3rd Year</div>
         <div style="margin-top:0.75rem;font-size:0.83rem;color:var(--text2)" id="profile-bio">Passionate about building useful things. Open to collaborations in AI and Web Dev.</div>
+        <div class="profile-link-list" id="profile-links"></div>
 
         <div class="profile-skills" id="profile-skills">
           <span class="skill-pill">React</span>
@@ -77,11 +80,11 @@
             <div class="pstat-l">Ideas</div>
           </div>
           <div class="pstat">
-            <div class="pstat-n">38</div>
+            <div class="pstat-n" id="stat-upvotes">0</div>
             <div class="pstat-l">Upvotes</div>
           </div>
           <div class="pstat">
-            <div class="pstat-n">4</div>
+            <div class="pstat-n" id="stat-teams">0</div>
             <div class="pstat-l">Teams</div>
           </div>
         </div>
@@ -110,67 +113,14 @@
           <div class="panel-title" style="margin-bottom:0">🚀 My Projects</div>
           <a href="projects.html" style="font-size:0.82rem;color:var(--accent2)">Browse more →</a>
         </div>
-        <div>
-          <div class="joined-project">
-            <div class="jp-dot" style="background:var(--green)"></div>
-            <div style="flex:1">
-              <div class="jp-title">Campus Safety Bot</div>
-              <div class="jp-role">Role: ML Engineer · Active</div>
-            </div>
-            <span class="badge badge-open">● Open</span>
-          </div>
-          <div class="joined-project">
-            <div class="jp-dot" style="background:var(--yellow)"></div>
-            <div style="flex:1">
-              <div class="jp-title">Peer Tutoring Marketplace</div>
-              <div class="jp-role">Role: Full-stack Dev · In Progress</div>
-            </div>
-            <span class="badge badge-progress">◐ In Progress</span>
-          </div>
-        </div>
+        <div id="profile-projects"></div>
         <button class="btn-primary" style="margin-top:1.25rem;padding:0.55rem 1.25rem;font-size:0.88rem" onclick="window.open('https://github.com/Bvs2006/StudentCollab/issues', '_blank', 'noopener,noreferrer')">+ Contribute on GitHub</button>
       </div>
 
       <!-- Activity Feed -->
       <div class="panel">
         <div class="panel-title">📋 Recent Activity</div>
-        <div>
-          <div class="activity-item">
-            <div class="activity-icon">💡</div>
-            <div class="activity-body">
-              <div class="activity-text">You posted idea <strong>"AI-Powered Hostel Room Allocation"</strong></div>
-              <div class="activity-time">2 hours ago</div>
-            </div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-icon">🤝</div>
-            <div class="activity-body">
-              <div class="activity-text">You joined <strong>Campus Safety Bot</strong> as ML Engineer</div>
-              <div class="activity-time">1 day ago</div>
-            </div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-icon">▲</div>
-            <div class="activity-body">
-              <div class="activity-text">You upvoted <strong>"Collaborative Lecture Notes Platform"</strong></div>
-              <div class="activity-time">1 day ago</div>
-            </div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-icon">💬</div>
-            <div class="activity-body">
-              <div class="activity-text">You commented on <strong>"Student Startup Legal Assistant"</strong></div>
-              <div class="activity-time">2 days ago</div>
-            </div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-icon">🚀</div>
-            <div class="activity-body">
-              <div class="activity-text">You created project <strong>"Peer Tutoring Marketplace"</strong></div>
-              <div class="activity-time">2 weeks ago</div>
-            </div>
-          </div>
-        </div>
+        <div id="profile-activity"></div>
       </div>
     </div>
   </div>
@@ -193,6 +143,16 @@
         <label class="form-label">Course & Year</label>
         <input type="text" class="form-input" id="ep-role" placeholder="e.g. Computer Science · 3rd Year" />
       </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="ep-email" placeholder="you@example.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">GitHub Profile</label>
+          <input type="text" class="form-input" id="ep-github" placeholder="github.com/username" />
+        </div>
+      </div>
       <div class="form-group">
         <label class="form-label">Bio</label>
         <textarea class="form-textarea" id="ep-bio" placeholder="Tell the community about yourself..." style="min-height:80px"></textarea>
@@ -208,8 +168,8 @@
     </div>
   </div>
 
-  <script src="../js/data.js"></script>
-  <script src="../js/app.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/app.js"></script>
   <script>
     // Contribution graph
     function renderContribGraph() {
@@ -223,51 +183,107 @@
       grid.innerHTML = html;
     }
 
-    // Load saved profile
-    function loadProfile() {
-      const saved = localStorage.getItem('sh_profile');
-      if (saved) {
-        const p = JSON.parse(saved);
-        if (p.name) document.getElementById('profile-name').textContent = p.name;
-        if (p.initial) document.getElementById('profile-av').textContent = p.initial;
-        if (p.role) document.getElementById('profile-role').textContent = p.role;
-        if (p.bio) document.getElementById('profile-bio').textContent = p.bio;
-        if (p.skills && p.skills.length) {
-          document.getElementById('profile-skills').innerHTML =
-            p.skills.map(s => `<span class="skill-pill">${s}</span>`).join('') +
-            `<span class="skill-pill" style="cursor:pointer" onclick="SH.openModal('edit-profile-modal')">+ Add Skill</span>`;
-        }
-      }
+    const sameUser = (item, user) => {
+      if (!item || !user) return false;
+      return item.ownerId === user.id || item.authorId === user.id ||
+        String(item.ownerEmail || item.authorEmail || '').toLowerCase() === String(user.email || '').toLowerCase() ||
+        item.owner === user.name || item.author === user.name;
+    };
+
+    const githubUrl = (github) => {
+      const value = (github || '').trim().replace(/^@/, '').replace(/^https?:\/\/github.com\//i, '');
+      return value ? `https://github.com/${value}` : '';
+    };
+
+    function renderUserProfile() {
+      const user = SH.requireAuth('user');
+      if (!user) return;
+      const saved = SH.loadProfile() || {};
+      const profile = { ...user, ...saved };
+      const initial = (profile.initial || profile.name || 'U').charAt(0).toUpperCase();
+      const skills = Array.isArray(profile.skills) ? profile.skills : [];
+      const myProjects = (SH.projects || []).filter(p => sameUser(p, user));
+      const myIdeas = (SH.ideas || []).filter(i => sameUser(i, user));
+      const upvotes = myIdeas.reduce((total, idea) => total + (Number(idea.votes) || 0), 0);
+      const teams = new Set(myProjects.map(p => p.id)).size;
+      const gh = githubUrl(profile.github);
+
+      document.getElementById('profile-av').textContent = initial;
+      document.getElementById('profile-name').textContent = profile.name || 'Student';
+      document.getElementById('profile-role').textContent = profile.role && profile.role !== 'user' ? profile.role : (saved.role || 'Student Builder');
+      document.getElementById('profile-bio').textContent = profile.bio || 'Add a short bio so collaborators know what you like building.';
+      document.getElementById('profile-links').innerHTML = `
+        <span>${SH.escapeHtml(profile.email || user.email)}</span>
+        ${gh ? `<a href="${gh}" target="_blank" rel="noopener noreferrer">${gh}</a>` : '<span>Add your GitHub profile to show your work.</span>'}
+      `;
+      document.getElementById('profile-skills').innerHTML =
+        (skills.length ? skills.map(s => `<span class="skill-pill">${SH.escapeHtml(s)}</span>`).join('') : '<span class="skill-pill">Add skills</span>') +
+        `<span class="skill-pill" style="cursor:pointer" onclick="SH.openModal('edit-profile-modal')">+ Add Skill</span>`;
+      document.getElementById('stat-projects').textContent = myProjects.length;
+      document.getElementById('stat-ideas').textContent = myIdeas.length;
+      document.getElementById('stat-upvotes').textContent = upvotes;
+      document.getElementById('stat-teams').textContent = teams;
+
+      document.getElementById('profile-projects').innerHTML = myProjects.length ? myProjects.map(project => `
+        <div class="joined-project">
+          <div class="jp-dot" style="background:${project.status === 'progress' ? 'var(--yellow)' : 'var(--green)'}"></div>
+          <div style="flex:1">
+            <div class="jp-title">${SH.escapeHtml(project.title)}</div>
+            <div class="jp-role">${SH.escapeHtml((project.lookingFor || []).join(', ') || 'Project owner')}</div>
+          </div>
+          ${SH.statusBadge(project.status)}
+        </div>
+      `).join('') : `<div class="empty-state"><div class="empty-icon">+</div><h3>No projects yet</h3><p>Create a project from the Projects page.</p></div>`;
+
+      const activity = [
+        ...myProjects.map(p => ({ icon: 'P', text: `Created project <strong>${SH.escapeHtml(p.title)}</strong>`, time: p.created || 'Recently' })),
+        ...myIdeas.map(i => ({ icon: 'I', text: `Posted idea <strong>${SH.escapeHtml(i.title)}</strong>`, time: i.time || 'Recently' }))
+      ];
+      document.getElementById('profile-activity').innerHTML = activity.length ? activity.map(item => `
+        <div class="activity-item">
+          <div class="activity-icon">${item.icon}</div>
+          <div class="activity-body">
+            <div class="activity-text">You ${item.text}</div>
+            <div class="activity-time">${SH.escapeHtml(item.time)}</div>
+          </div>
+        </div>
+      `).join('') : `<div class="empty-state"><div class="empty-icon">.</div><h3>No activity yet</h3><p>Your projects and ideas will appear here after you post them.</p></div>`;
+
+      document.getElementById('ep-name').value = profile.name || '';
+      document.getElementById('ep-initial').value = initial;
+      document.getElementById('ep-role').value = saved.role || 'Student Builder';
+      document.getElementById('ep-email').value = profile.email || user.email || '';
+      document.getElementById('ep-github').value = profile.github || '';
+      document.getElementById('ep-bio').value = profile.bio || '';
+      document.getElementById('ep-skills').value = skills.join(', ');
     }
 
     function saveProfile() {
+      const user = SH.requireAuth('user');
+      if (!user) return;
       const name = document.getElementById('ep-name').value.trim();
       const initial = document.getElementById('ep-initial').value.trim();
       const role = document.getElementById('ep-role').value.trim();
+      const email = document.getElementById('ep-email').value.trim();
+      const github = document.getElementById('ep-github').value.trim().replace(/^https?:\/\/github.com\//i, '').replace(/^@/, '');
       const bio = document.getElementById('ep-bio').value.trim();
-      const skillsRaw = document.getElementById('ep-skills').value;
-      const skills = skillsRaw.split(',').map(s => s.trim()).filter(Boolean);
-
-      const profile = { name, initial, role, bio, skills };
-      localStorage.setItem('sh_profile', JSON.stringify(profile));
-
-      if (name) document.getElementById('profile-name').textContent = name;
-      if (initial) document.getElementById('profile-av').textContent = initial.toUpperCase();
-      if (role) document.getElementById('profile-role').textContent = role;
-      if (bio) document.getElementById('profile-bio').textContent = bio;
-      if (skills.length) {
-        document.getElementById('profile-skills').innerHTML =
-          skills.map(s => `<span class="skill-pill">${s}</span>`).join('') +
-          `<span class="skill-pill" style="cursor:pointer" onclick="SH.openModal('edit-profile-modal')">+ Add Skill</span>`;
-      }
-
+      const skills = document.getElementById('ep-skills').value.split(',').map(s => s.trim()).filter(Boolean);
+      const profile = { name, initial, role, email, github, bio, skills };
+      SH.saveProfile(profile);
+      SH.updateCurrentUser({ name, email, github, bio, skills });
       SH.closeModal('edit-profile-modal');
-      SH.toast('✅ Profile updated!');
+      SH.toast('Profile updated');
+      renderUserProfile();
+      SH.renderNavProfile();
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = SH.requireAuth('user');
+      if (!user) return;
+      if (SH.fetchProjectsFromSupabase) await SH.fetchProjectsFromSupabase();
+      if (SH.fetchIdeasFromSupabase) await SH.fetchIdeasFromSupabase();
       renderContribGraph();
-      loadProfile();
+      renderUserProfile();
     });
   </script>
 </body>
