@@ -14,9 +14,9 @@ git checkout -b feat/short-description
 
 4. Make small, focused commits with clear messages. Rebase or squash as appropriate before opening a PR.
 5. Open a pull request against `main` with:
-	- A clear title and description
-	- Screenshots or short verification steps if the change affects UI
-	- Link to any related proposal or issue
+   - A clear title and description
+   - Screenshots or short verification steps if the change affects UI
+   - Link to any related proposal or issue
 
 ## Code style and tools
 

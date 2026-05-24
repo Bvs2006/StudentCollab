@@ -1,45 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin — StudentHub</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../assets/css/style.css" />
-</head>
-<body>
-  <nav class="nav">
-    <div class="nav-brand"><span class="brand-icon">⬡</span><span class="brand-name">StudentHub</span></div>
-    <div class="nav-links">
-      <a href="../index.html" class="nav-link">Home</a>
-      <a href="../pages/projects.html" class="nav-link">Projects</a>
-      <a href="../pages/proposals.html" class="nav-link">Proposals</a>
-      <a href="../pages/ideas.html" class="nav-link">Ideas</a>
-      <a href="../pages/about.html" class="nav-link">About</a>
-      <a href="../pages/profile.html" class="nav-link">Profile</a>
-    </div>
-  </nav>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin — StudentHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="nav-brand">
+        <span class="brand-icon">⬡</span
+        ><span class="brand-name">StudentHub</span>
+      </div>
+      <div class="nav-links">
+        <a href="../index.html" class="nav-link">Home</a>
+        <a href="../pages/projects.html" class="nav-link">Projects</a>
+        <a href="../pages/proposals.html" class="nav-link">Proposals</a>
+        <a href="../pages/ideas.html" class="nav-link">Ideas</a>
+        <a href="../pages/about.html" class="nav-link">About</a>
+        <a href="../pages/profile.html" class="nav-link">Profile</a>
+      </div>
+    </nav>
 
-  <header class="page-header">
-    <h1>Admin Dashboard</h1>
-    <p>Review proposals, monitor user activity, and keep projects and ideas moving.</p>
-  </header>
+    <header class="page-header">
+      <h1>Admin Dashboard</h1>
+      <p>
+        Review proposals, monitor user activity, and keep projects and ideas
+        moving.
+      </p>
+    </header>
 
-  <main class="page-content">
-    <section class="admin-metrics" id="admin-metrics"></section>
-    <section class="panel" style="margin-bottom:1rem">
-      <div class="modal-title">Users</div>
-      <div id="admin-users"></div>
-    </section>
-    <section class="panel">
-      <div class="modal-title">Pending Proposals</div>
-      <div id="admin-proposals"></div>
-    </section>
-  </main>
+    <main class="page-content">
+      <section class="admin-metrics" id="admin-metrics"></section>
+      <section class="panel" style="margin-bottom: 1rem">
+        <div class="modal-title">Users</div>
+        <div id="admin-users"></div>
+      </section>
+      <section class="panel">
+        <div class="modal-title">Pending Proposals</div>
+        <div id="admin-proposals"></div>
+      </section>
+    </main>
 
-  <script src="../assets/js/data.js"></script>
-  <script src="../assets/js/app.js"></script>
-  <script src="../assets/js/admin.js"></script>
-</body>
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/admin.js"></script>
+  </body>
 </html>

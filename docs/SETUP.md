@@ -3,6 +3,7 @@
 Follow these steps to run StudentHub locally for development.
 
 Prerequisites
+
 - Node.js v16+ and npm
 - Git
 
@@ -36,5 +37,6 @@ npm test
 ```
 
 Notes
+
 - Secrets and API keys must not be committed. Use a `.env` file and add it to `.gitignore`.
 - The project uses Supabase for optional persistence; see `utils/supabase` for server helpers.

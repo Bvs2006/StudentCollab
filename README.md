@@ -5,6 +5,7 @@ StudentHub is a lightweight, contributor-friendly frontend prototype for discove
 **This repository is maintained as a community project. Contributions, issues, and pull requests are welcome.**
 
 **Quick links**
+
 - Home: index.html
 - Pages: pages/
 - Styles: assets/css/style.css

@@ -1,244 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StudentHub — Collaborative Project Workspace</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-</head>
-<body>
-
-  <!-- NAV -->
-  <nav class="nav" role="navigation" aria-label="Main navigation">
-    <div class="nav-brand">
-      <span class="brand-icon">⬡</span>
-      <span class="brand-name">StudentHub</span>
-    </div>
-
-    <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">☰</button>
-
-    <div class="nav-links" id="desktop-links">
-      <a href="index.html" class="nav-link active">Home</a>
-      <a href="pages/projects.html" class="nav-link">Projects</a>
-      <a href="pages/proposals.html" class="nav-link">Proposals</a>
-      <a href="pages/ideas.html" class="nav-link">Ideas</a>
-      <a href="pages/about.html" class="nav-link">About</a>
-      <a href="pages/profile.html" class="nav-link">Profile</a>
-    </div>
-
-    <div class="nav-actions">
-      <button class="btn-join" onclick="window.location.href='pages/login.html'">Login</button>
-    </div>
-
-    <!-- Mobile menu (hidden on desktop) -->
-    <div id="mobile-menu" class="mobile-menu" aria-hidden="true">
-      <a href="index.html" class="mobile-link">Home</a>
-      <a href="pages/projects.html" class="mobile-link">Projects</a>
-      <a href="pages/proposals.html" class="mobile-link">Proposals</a>
-      <a href="pages/ideas.html" class="mobile-link">Ideas</a>
-      <a href="pages/about.html" class="mobile-link">About</a>
-      <a href="pages/profile.html" class="mobile-link">Profile</a>
-    </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-noise"></div>
-    <div class="hero-content">
-      <div class="hero-badge">🎓 StudentHub — collaborative learning & product-building</div>
-      <div class="hero-badge">StudentHub - collaborative learning and product-building</div>
-      <h1 class="hero-title">
-        Build student <mark>projects</mark> at every stage of development
-      </h1>
-      <p class="hero-sub">A lightweight workspace where students discover problems worth solving, form multidisciplinary teams, and ship working prototypes — together.</p>
-      <div class="hero-cta">
-        <button class="btn-primary" onclick="window.location.href='pages/login.html'">Get Started - Login</button>
-        <a href="pages/projects.html" class="btn-ghost">Browse Projects</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StudentHub — Collaborative Project Workspace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <div class="nav-brand">
+        <span class="brand-icon">⬡</span>
+        <span class="brand-name">StudentHub</span>
       </div>
-      <div class="github-stats">
-        <div class="github-stat">
-          <strong id="gh-stars">—</strong>
-          <span>Stars</span>
+
+      <button
+        id="nav-toggle"
+        class="nav-toggle"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Open menu"
+      >
+        ☰
+      </button>
+
+      <div class="nav-links" id="desktop-links">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="pages/projects.html" class="nav-link">Projects</a>
+        <a href="pages/proposals.html" class="nav-link">Proposals</a>
+        <a href="pages/ideas.html" class="nav-link">Ideas</a>
+        <a href="pages/about.html" class="nav-link">About</a>
+        <a href="pages/profile.html" class="nav-link">Profile</a>
+      </div>
+
+      <div class="nav-actions">
+        <button
+          class="btn-join"
+          onclick="window.location.href='pages/login.html'"
+        >
+          Login
+        </button>
+      </div>
+
+      <!-- Mobile menu (hidden on desktop) -->
+      <div id="mobile-menu" class="mobile-menu" aria-hidden="true">
+        <a href="index.html" class="mobile-link">Home</a>
+        <a href="pages/projects.html" class="mobile-link">Projects</a>
+        <a href="pages/proposals.html" class="mobile-link">Proposals</a>
+        <a href="pages/ideas.html" class="mobile-link">Ideas</a>
+        <a href="pages/about.html" class="mobile-link">About</a>
+        <a href="pages/profile.html" class="mobile-link">Profile</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-noise"></div>
+      <div class="hero-content">
+        <div class="hero-badge">
+          🎓 StudentHub — collaborative learning & product-building
         </div>
-        <div class="github-stat">
-          <strong id="gh-forks">—</strong>
-          <span>Forks</span>
+        <div class="hero-badge">
+          StudentHub - collaborative learning and product-building
         </div>
-        <div class="github-stat contributors-stat">
-          <div id="gh-contribs"></div>
-          <span>Contributors</span>
+        <h1 class="hero-title">
+          Build student <mark>projects</mark> at every stage of development
+        </h1>
+        <p class="hero-sub">
+          A lightweight workspace where students discover problems worth
+          solving, form multidisciplinary teams, and ship working prototypes —
+          together.
+        </p>
+        <div class="hero-cta">
+          <button
+            class="btn-primary"
+            onclick="window.location.href='pages/login.html'"
+          >
+            Get Started - Login
+          </button>
+          <a href="pages/projects.html" class="btn-ghost">Browse Projects</a>
         </div>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="float-card fc1">
-        <div class="fc-tag">AI / ML</div>
-        <div class="fc-title">Campus Safety Bot</div>
-        <div class="fc-avatars">
-          <span class="av">A</span><span class="av">R</span><span class="av">+4</span>
-        </div>
-      </div>
-      <div class="float-card fc2">
-        <div class="fc-tag">Web Dev</div>
-        <div class="fc-title">Alumni Network App</div>
-        <div class="fc-avatars">
-          <span class="av">S</span><span class="av">M</span><span class="av">+2</span>
-        </div>
-      </div>
-      <div class="float-card fc3">
-        <div class="fc-tag">Hardware</div>
-        <div class="fc-title">Smart Study Desk</div>
-        <div class="fc-avatars">
-          <span class="av">K</span><span class="av">+1</span>
-        </div>
-      </div>
-      <div class="float-card fc4">
-        <div class="fc-tag">Health</div>
-        <div class="fc-title">Wellness Tracker</div>
-        <div class="fc-avatars">
-          <span class="av">J</span><span class="av">L</span><span class="av">+5</span>
+        <div class="github-stats">
+          <div class="github-stat">
+            <strong id="gh-stars">—</strong>
+            <span>Stars</span>
+          </div>
+          <div class="github-stat">
+            <strong id="gh-forks">—</strong>
+            <span>Forks</span>
+          </div>
+          <div class="github-stat contributors-stat">
+            <div id="gh-contribs"></div>
+            <span>Contributors</span>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+      <div class="hero-visual">
+        <div class="float-card fc1">
+          <div class="fc-tag">AI / ML</div>
+          <div class="fc-title">Campus Safety Bot</div>
+          <div class="fc-avatars">
+            <span class="av">A</span><span class="av">R</span
+            ><span class="av">+4</span>
+          </div>
+        </div>
+        <div class="float-card fc2">
+          <div class="fc-tag">Web Dev</div>
+          <div class="fc-title">Alumni Network App</div>
+          <div class="fc-avatars">
+            <span class="av">S</span><span class="av">M</span
+            ><span class="av">+2</span>
+          </div>
+        </div>
+        <div class="float-card fc3">
+          <div class="fc-tag">Hardware</div>
+          <div class="fc-title">Smart Study Desk</div>
+          <div class="fc-avatars">
+            <span class="av">K</span><span class="av">+1</span>
+          </div>
+        </div>
+        <div class="float-card fc4">
+          <div class="fc-tag">Health</div>
+          <div class="fc-title">Wellness Tracker</div>
+          <div class="fc-avatars">
+            <span class="av">J</span><span class="av">L</span
+            ><span class="av">+5</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <!-- MISSION SUMMARY -->
-  <section class="section" aria-labelledby="mission-heading">
-    <div class="section-header">
-      <div>
-        <div class="section-eyebrow">Our Mission</div>
-        <h2 class="section-title" id="mission-heading">Why StudentHub exists</h2>
-      </div>
-    </div>
-    <div class="mission-grid">
-      <div class="mission-card">
-        <div class="mission-icon">01</div>
-        <h3>Learn by doing</h3>
-        <p>Apply coursework to real problems, learn tools and workflows used in industry, and build portfolio-ready projects.</p>
-      </div>
-      <div class="mission-card">
-        <div class="mission-icon">02</div>
-        <h3>Find teammates</h3>
-        <p>Connect with students across disciplines — designers, developers, data scientists, and hardware tinkerers.</p>
-      </div>
-      <div class="mission-card">
-        <div class="mission-icon">03</div>
-        <h3>Ship together</h3>
-        <p>Move from idea → prototype → launch with lightweight collaboration features and visible progress.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURED PROJECTS -->
-  <section class="section">
-    <div class="section-header">
-      <div>
-        <div class="section-eyebrow">🔥 Trending Now</div>
-        <h2 class="section-title">Featured Projects</h2>
-      </div>
-      <a href="pages/projects.html" class="link-all">View all →</a>
-    </div>
-    <div class="project-grid" id="featured-projects"></div>
-  </section>
-
-  <!-- LATEST IDEAS -->
-  <section class="section alt-section">
-    <div class="section-header">
-      <div>
-        <div class="section-eyebrow">💡 Fresh Drops</div>
-        <h2 class="section-title">New Ideas</h2>
-      </div>
-      <a href="pages/ideas.html" class="link-all">See all ideas →</a>
-    </div>
-    <div class="ideas-list" id="home-ideas"></div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="section how-section">
-    <div class="section-header center-header">
-      <div class="section-eyebrow">Simple Process</div>
-      <h2 class="section-title">How it works</h2>
-    </div>
-    <div class="steps-grid">
-      <div class="step-card">
-        <div class="step-num">01</div>
-        <div class="step-icon">💡</div>
-        <h3>Post Your Idea</h3>
-        <p>Share what you want to build. Add tags, describe the problem, mention skills you need.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">02</div>
-        <div class="step-icon">🤝</div>
-        <h3>Find Your Team</h3>
-        <p>Other students upvote, comment, and request to join. Build your dream crew.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">03</div>
-        <div class="step-icon">🚀</div>
-        <h3>Build & Ship</h3>
-        <p>Use the workspace tools to collaborate, track progress, and launch your project.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="cta-band">
-    <div>
-      <h2>Deliver better student projects continuously</h2>
-      <p>Start with an idea, find teammates, and turn project work into a visible portfolio.</p>
-    </div>
-    <div class="cta-band-actions">
-      <a class="btn-primary" href="pages/login.html">Sign up</a>
-      <a class="btn-ghost" href="pages/projects.html">Explore projects</a>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-brand">
-      <span class="brand-icon">⬡</span> StudentHub
-    </div>
-    <p class="footer-sub">A collaborative space for student innovators. Build something worth showing.</p>
-    <div class="footer-links">
-      <a href="index.html">Home</a>
-      <a href="pages/projects.html">Projects</a>
-      <a href="pages/ideas.html">Ideas</a>
-      <a href="pages/profile.html">Profile</a>
-    </div>
-  </footer>
-
-  <script src="assets/js/data.js"></script>
-  <script src="assets/js/app.js"></script>
-  <script src="assets/js/home.js"></script>
-
-  <!-- Onboarding / Profile Modal -->
-  <div class="modal-overlay" id="onboard-modal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="onboard-title">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+    <!-- MISSION SUMMARY -->
+    <section class="section" aria-labelledby="mission-heading">
+      <div class="section-header">
         <div>
-          <div class="modal-title" id="onboard-title">Create your StudentHub profile</div>
-          <div style="color:var(--text3);font-size:0.9rem;margin-top:0.25rem">A quick profile helps others find you and join projects.</div>
+          <div class="section-eyebrow">Our Mission</div>
+          <h2 class="section-title" id="mission-heading">
+            Why StudentHub exists
+          </h2>
         </div>
-        <button class="btn-cancel" onclick="SH.closeModal('onboard-modal')">✕</button>
       </div>
-      <div class="form-group">
-        <label class="form-label">Full name</label>
-        <input id="p-name" class="form-input" placeholder="e.g. Priya Gupta" />
+      <div class="mission-grid">
+        <div class="mission-card">
+          <div class="mission-icon">01</div>
+          <h3>Learn by doing</h3>
+          <p>
+            Apply coursework to real problems, learn tools and workflows used in
+            industry, and build portfolio-ready projects.
+          </p>
+        </div>
+        <div class="mission-card">
+          <div class="mission-icon">02</div>
+          <h3>Find teammates</h3>
+          <p>
+            Connect with students across disciplines — designers, developers,
+            data scientists, and hardware tinkerers.
+          </p>
+        </div>
+        <div class="mission-card">
+          <div class="mission-icon">03</div>
+          <h3>Ship together</h3>
+          <p>
+            Move from idea → prototype → launch with lightweight collaboration
+            features and visible progress.
+          </p>
+        </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Role / Major</label>
-        <input id="p-role" class="form-input" placeholder="e.g. Computer Science / Frontend" />
+    </section>
+
+    <!-- FEATURED PROJECTS -->
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <div class="section-eyebrow">🔥 Trending Now</div>
+          <h2 class="section-title">Featured Projects</h2>
+        </div>
+        <a href="pages/projects.html" class="link-all">View all →</a>
       </div>
-      <div class="form-group">
-        <label class="form-label">Skills (comma separated)</label>
-        <input id="p-skills" class="form-input" placeholder="e.g. React, Python, ML" />
+      <div class="project-grid" id="featured-projects"></div>
+    </section>
+
+    <!-- LATEST IDEAS -->
+    <section class="section alt-section">
+      <div class="section-header">
+        <div>
+          <div class="section-eyebrow">💡 Fresh Drops</div>
+          <h2 class="section-title">New Ideas</h2>
+        </div>
+        <a href="pages/ideas.html" class="link-all">See all ideas →</a>
       </div>
-      <div class="modal-footer">
-        <button class="btn-cancel" onclick="SH.closeModal('onboard-modal')">Cancel</button>
-        <button class="btn-submit" onclick="SH.saveProfileFromForm()">Save profile</button>
+      <div class="ideas-list" id="home-ideas"></div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section how-section">
+      <div class="section-header center-header">
+        <div class="section-eyebrow">Simple Process</div>
+        <h2 class="section-title">How it works</h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-icon">💡</div>
+          <h3>Post Your Idea</h3>
+          <p>
+            Share what you want to build. Add tags, describe the problem,
+            mention skills you need.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-icon">🤝</div>
+          <h3>Find Your Team</h3>
+          <p>
+            Other students upvote, comment, and request to join. Build your
+            dream crew.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-icon">🚀</div>
+          <h3>Build & Ship</h3>
+          <p>
+            Use the workspace tools to collaborate, track progress, and launch
+            your project.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <div>
+        <h2>Deliver better student projects continuously</h2>
+        <p>
+          Start with an idea, find teammates, and turn project work into a
+          visible portfolio.
+        </p>
+      </div>
+      <div class="cta-band-actions">
+        <a class="btn-primary" href="pages/login.html">Sign up</a>
+        <a class="btn-ghost" href="pages/projects.html">Explore projects</a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-brand">
+        <span class="brand-icon">⬡</span> StudentHub
+      </div>
+      <p class="footer-sub">
+        A collaborative space for student innovators. Build something worth
+        showing.
+      </p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="pages/projects.html">Projects</a>
+        <a href="pages/ideas.html">Ideas</a>
+        <a href="pages/profile.html">Profile</a>
+      </div>
+    </footer>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/home.js"></script>
+
+    <!-- Onboarding / Profile Modal -->
+    <div class="modal-overlay" id="onboard-modal" aria-hidden="true">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="onboard-title"
+      >
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+          "
+        >
+          <div>
+            <div class="modal-title" id="onboard-title">
+              Create your StudentHub profile
+            </div>
+            <div
+              style="
+                color: var(--text3);
+                font-size: 0.9rem;
+                margin-top: 0.25rem;
+              "
+            >
+              A quick profile helps others find you and join projects.
+            </div>
+          </div>
+          <button class="btn-cancel" onclick="SH.closeModal('onboard-modal')">
+            ✕
+          </button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Full name</label>
+          <input
+            id="p-name"
+            class="form-input"
+            placeholder="e.g. Priya Gupta"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Role / Major</label>
+          <input
+            id="p-role"
+            class="form-input"
+            placeholder="e.g. Computer Science / Frontend"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Skills (comma separated)</label>
+          <input
+            id="p-skills"
+            class="form-input"
+            placeholder="e.g. React, Python, ML"
+          />
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel" onclick="SH.closeModal('onboard-modal')">
+            Cancel
+          </button>
+          <button class="btn-submit" onclick="SH.saveProfileFromForm()">
+            Save profile
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

@@ -1,245 +1,513 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profile — StudentHub</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../assets/css/style.css" />
-  <style>
-    .activity-item { display: flex; gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
-    .activity-item:last-child { border-bottom: none; }
-    .activity-icon { width: 32px; height: 32px; border-radius: 99px; background: rgba(124,92,252,0.15); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; margin-top: 0.1rem; }
-    .activity-body { flex: 1; }
-    .activity-text { font-size: 0.88rem; color: var(--text2); line-height: 1.4; }
-    .activity-text strong { color: var(--text); font-weight: 600; }
-    .activity-time { font-size: 0.75rem; color: var(--text3); margin-top: 0.2rem; }
-    .edit-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text2); border-radius: var(--radius-sm); padding: 0.4rem 0.9rem; font-family: var(--font-body); font-size: 0.82rem; cursor: pointer; transition: all 0.2s; }
-    .edit-btn:hover { border-color: var(--accent); color: var(--accent2); }
-    .skill-add { background: rgba(124,92,252,0.1); border: 1px dashed var(--accent); color: var(--accent2); border-radius: 99px; padding: 0.25rem 0.7rem; font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
-    .skill-add:hover { background: rgba(124,92,252,0.2); }
-    .joined-project { display: flex; align-items: center; gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid var(--border); }
-    .joined-project:last-child { border-bottom: none; }
-    .jp-dot { width: 8px; height: 8px; border-radius: 99px; background: var(--green); flex-shrink: 0; }
-    .jp-title { font-weight: 600; font-size: 0.9rem; color: var(--text); flex: 1; }
-    .jp-role { font-size: 0.78rem; color: var(--text3); }
-    .contribution-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
-    .contrib-day { width: 100%; aspect-ratio: 1; border-radius: 2px; background: var(--surface2); transition: background 0.2s; cursor: pointer; }
-    .contrib-day:hover { opacity: 0.8; }
-    .contrib-0 { background: var(--surface2); }
-    .contrib-1 { background: rgba(124,92,252,0.25); }
-    .contrib-2 { background: rgba(124,92,252,0.5); }
-    .contrib-3 { background: rgba(124,92,252,0.75); }
-    .contrib-4 { background: var(--accent); }
-  </style>
-</head>
-<body>
-
-  <nav class="nav">
-    <div class="nav-brand">
-      <span class="brand-icon">⬡</span>
-      <span class="brand-name">StudentHub</span>
-    </div>
-    <div class="nav-links">
-      <a href="../index.html" class="nav-link">Home</a>
-      <a href="projects.html" class="nav-link">Projects</a>
-      <a href="proposals.html" class="nav-link">Proposals</a>
-      <a href="ideas.html" class="nav-link">Ideas</a>
-      <a href="about.html" class="nav-link">About</a>
-      <a href="profile.html" class="nav-link active">Profile</a>
-    </div>
-    <button class="btn-post" onclick="SH.openModal('edit-profile-modal')">✏️ Edit Profile</button>
-  </nav>
-
-  <div class="profile-layout">
-    <!-- SIDEBAR PROFILE CARD -->
-    <div>
-      <div class="profile-card" id="profile-card">
-        <div class="profile-avatar" id="profile-av">Y</div>
-        <div class="profile-name" id="profile-name">Your Name</div>
-        <div class="profile-role" id="profile-role">Computer Science · 3rd Year</div>
-        <div style="margin-top:0.75rem;font-size:0.83rem;color:var(--text2)" id="profile-bio">Passionate about building useful things. Open to collaborations in AI and Web Dev.</div>
-        <div class="profile-link-list" id="profile-links"></div>
-
-        <div class="profile-skills" id="profile-skills">
-          <span class="skill-pill">React</span>
-          <span class="skill-pill">Python</span>
-          <span class="skill-pill">Machine Learning</span>
-          <span class="skill-pill">UI Design</span>
-          <span class="skill-pill" style="cursor:pointer" onclick="SH.openModal('edit-profile-modal')">+ Add Skill</span>
-        </div>
-
-        <div class="profile-stats">
-          <div class="pstat">
-            <div class="pstat-n" id="stat-projects">2</div>
-            <div class="pstat-l">Projects</div>
-          </div>
-          <div class="pstat">
-            <div class="pstat-n" id="stat-ideas">5</div>
-            <div class="pstat-l">Ideas</div>
-          </div>
-          <div class="pstat">
-            <div class="pstat-n" id="stat-upvotes">0</div>
-            <div class="pstat-l">Upvotes</div>
-          </div>
-          <div class="pstat">
-            <div class="pstat-n" id="stat-teams">0</div>
-            <div class="pstat-l">Teams</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div class="profile-main">
-
-      <!-- Contribution Graph -->
-      <div class="panel">
-        <div class="panel-title">🟩 Contribution Activity — Last 12 Weeks</div>
-        <div class="contribution-grid" id="contrib-grid"></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;margin-top:0.75rem;font-size:0.75rem;color:var(--text3)">
-          Less <div class="contrib-day contrib-0" style="width:12px;height:12px;display:inline-block"></div>
-          <div class="contrib-day contrib-1" style="width:12px;height:12px;display:inline-block"></div>
-          <div class="contrib-day contrib-2" style="width:12px;height:12px;display:inline-block"></div>
-          <div class="contrib-day contrib-3" style="width:12px;height:12px;display:inline-block"></div>
-          <div class="contrib-day contrib-4" style="width:12px;height:12px;display:inline-block"></div> More
-        </div>
-      </div>
-
-      <!-- Joined Projects -->
-      <div class="panel">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
-          <div class="panel-title" style="margin-bottom:0">🚀 My Projects</div>
-          <a href="projects.html" style="font-size:0.82rem;color:var(--accent2)">Browse more →</a>
-        </div>
-        <div id="profile-projects"></div>
-        <button class="btn-primary" style="margin-top:1.25rem;padding:0.55rem 1.25rem;font-size:0.88rem" onclick="window.open('https://github.com/Bvs2006/StudentCollab/issues', '_blank', 'noopener,noreferrer')">+ Contribute on GitHub</button>
-      </div>
-
-      <!-- Activity Feed -->
-      <div class="panel">
-        <div class="panel-title">📋 Recent Activity</div>
-        <div id="profile-activity"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- EDIT PROFILE MODAL -->
-  <div class="modal-overlay" id="edit-profile-modal" onclick="if(event.target===this)SH.closeModal('edit-profile-modal')">
-    <div class="modal">
-      <div class="modal-title">✏️ Edit Profile</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Full Name</label>
-          <input type="text" class="form-input" id="ep-name" placeholder="Your full name" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Initial (for avatar)</label>
-          <input type="text" class="form-input" id="ep-initial" maxlength="1" placeholder="Y" />
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Course & Year</label>
-        <input type="text" class="form-input" id="ep-role" placeholder="e.g. Computer Science · 3rd Year" />
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input type="email" class="form-input" id="ep-email" placeholder="you@example.com" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">GitHub Profile</label>
-          <input type="text" class="form-input" id="ep-github" placeholder="github.com/username" />
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Bio</label>
-        <textarea class="form-textarea" id="ep-bio" placeholder="Tell the community about yourself..." style="min-height:80px"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Skills (comma separated)</label>
-        <input type="text" class="form-input" id="ep-skills" placeholder="e.g. React, Python, Figma, ML" />
-      </div>
-      <div class="modal-footer">
-        <button class="btn-cancel" onclick="SH.closeModal('edit-profile-modal')">Cancel</button>
-        <button class="btn-submit" onclick="saveProfile()">Save Profile</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="../assets/js/data.js"></script>
-  <script src="../assets/js/app.js"></script>
-  <script>
-    // Contribution graph
-    function renderContribGraph() {
-      const grid = document.getElementById('contrib-grid');
-      const days = 7 * 12; // 12 weeks
-      let html = '';
-      for (let i = 0; i < days; i++) {
-        const level = Math.random() > 0.6 ? Math.floor(Math.random() * 4) + 1 : 0;
-        html += `<div class="contrib-day contrib-${level}" title="Activity"></div>`;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile — StudentHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <style>
+      .activity-item {
+        display: flex;
+        gap: 1rem;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid var(--border);
+        align-items: flex-start;
       }
-      grid.innerHTML = html;
-    }
+      .activity-item:last-child {
+        border-bottom: none;
+      }
+      .activity-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 99px;
+        background: rgba(124, 92, 252, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+        margin-top: 0.1rem;
+      }
+      .activity-body {
+        flex: 1;
+      }
+      .activity-text {
+        font-size: 0.88rem;
+        color: var(--text2);
+        line-height: 1.4;
+      }
+      .activity-text strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .activity-time {
+        font-size: 0.75rem;
+        color: var(--text3);
+        margin-top: 0.2rem;
+      }
+      .edit-btn {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        color: var(--text2);
+        border-radius: var(--radius-sm);
+        padding: 0.4rem 0.9rem;
+        font-family: var(--font-body);
+        font-size: 0.82rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .edit-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent2);
+      }
+      .skill-add {
+        background: rgba(124, 92, 252, 0.1);
+        border: 1px dashed var(--accent);
+        color: var(--accent2);
+        border-radius: 99px;
+        padding: 0.25rem 0.7rem;
+        font-size: 0.78rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .skill-add:hover {
+        background: rgba(124, 92, 252, 0.2);
+      }
+      .joined-project {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .joined-project:last-child {
+        border-bottom: none;
+      }
+      .jp-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 99px;
+        background: var(--green);
+        flex-shrink: 0;
+      }
+      .jp-title {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--text);
+        flex: 1;
+      }
+      .jp-role {
+        font-size: 0.78rem;
+        color: var(--text3);
+      }
+      .contribution-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 3px;
+      }
+      .contrib-day {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 2px;
+        background: var(--surface2);
+        transition: background 0.2s;
+        cursor: pointer;
+      }
+      .contrib-day:hover {
+        opacity: 0.8;
+      }
+      .contrib-0 {
+        background: var(--surface2);
+      }
+      .contrib-1 {
+        background: rgba(124, 92, 252, 0.25);
+      }
+      .contrib-2 {
+        background: rgba(124, 92, 252, 0.5);
+      }
+      .contrib-3 {
+        background: rgba(124, 92, 252, 0.75);
+      }
+      .contrib-4 {
+        background: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="nav-brand">
+        <span class="brand-icon">⬡</span>
+        <span class="brand-name">StudentHub</span>
+      </div>
+      <div class="nav-links">
+        <a href="../index.html" class="nav-link">Home</a>
+        <a href="projects.html" class="nav-link">Projects</a>
+        <a href="proposals.html" class="nav-link">Proposals</a>
+        <a href="ideas.html" class="nav-link">Ideas</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="profile.html" class="nav-link active">Profile</a>
+      </div>
+      <button class="btn-post" onclick="SH.openModal('edit-profile-modal')">
+        ✏️ Edit Profile
+      </button>
+    </nav>
 
-    const sameUser = (item, user) => {
-      if (!item || !user) return false;
-      return item.ownerId === user.id || item.authorId === user.id ||
-        String(item.ownerEmail || item.authorEmail || '').toLowerCase() === String(user.email || '').toLowerCase() ||
-        item.owner === user.name || item.author === user.name;
-    };
+    <div class="profile-layout">
+      <!-- SIDEBAR PROFILE CARD -->
+      <div>
+        <div class="profile-card" id="profile-card">
+          <div class="profile-avatar" id="profile-av">Y</div>
+          <div class="profile-name" id="profile-name">Your Name</div>
+          <div class="profile-role" id="profile-role">
+            Computer Science · 3rd Year
+          </div>
+          <div
+            style="margin-top: 0.75rem; font-size: 0.83rem; color: var(--text2)"
+            id="profile-bio"
+          >
+            Passionate about building useful things. Open to collaborations in
+            AI and Web Dev.
+          </div>
+          <div class="profile-link-list" id="profile-links"></div>
 
-    const githubUrl = (github) => {
-      const value = (github || '').trim().replace(/^@/, '').replace(/^https?:\/\/github.com\//i, '');
-      return value ? `https://github.com/${value}` : '';
-    };
+          <div class="profile-skills" id="profile-skills">
+            <span class="skill-pill">React</span>
+            <span class="skill-pill">Python</span>
+            <span class="skill-pill">Machine Learning</span>
+            <span class="skill-pill">UI Design</span>
+            <span
+              class="skill-pill"
+              style="cursor: pointer"
+              onclick="SH.openModal('edit-profile-modal')"
+              >+ Add Skill</span
+            >
+          </div>
 
-    function renderUserProfile() {
-      const user = SH.requireAuth('user');
-      if (!user) return;
-      const saved = SH.loadProfile() || {};
-      const profile = { ...user, ...saved };
-      const initial = (profile.initial || profile.name || 'U').charAt(0).toUpperCase();
-      const skills = Array.isArray(profile.skills) ? profile.skills : [];
-      const myProjects = (SH.projects || []).filter(p => sameUser(p, user));
-      const myIdeas = (SH.ideas || []).filter(i => sameUser(i, user));
-      const upvotes = myIdeas.reduce((total, idea) => total + (Number(idea.votes) || 0), 0);
-      const teams = new Set(myProjects.map(p => p.id)).size;
-      const gh = githubUrl(profile.github);
+          <div class="profile-stats">
+            <div class="pstat">
+              <div class="pstat-n" id="stat-projects">2</div>
+              <div class="pstat-l">Projects</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-n" id="stat-ideas">5</div>
+              <div class="pstat-l">Ideas</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-n" id="stat-upvotes">0</div>
+              <div class="pstat-l">Upvotes</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-n" id="stat-teams">0</div>
+              <div class="pstat-l">Teams</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      document.getElementById('profile-av').textContent = initial;
-      document.getElementById('profile-name').textContent = profile.name || 'Student';
-      document.getElementById('profile-role').textContent = profile.role && profile.role !== 'user' ? profile.role : (saved.role || 'Student Builder');
-      document.getElementById('profile-bio').textContent = profile.bio || 'Add a short bio so collaborators know what you like building.';
-      document.getElementById('profile-links').innerHTML = `
+      <!-- MAIN CONTENT -->
+      <div class="profile-main">
+        <!-- Contribution Graph -->
+        <div class="panel">
+          <div class="panel-title">
+            🟩 Contribution Activity — Last 12 Weeks
+          </div>
+          <div class="contribution-grid" id="contrib-grid"></div>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              margin-top: 0.75rem;
+              font-size: 0.75rem;
+              color: var(--text3);
+            "
+          >
+            Less
+            <div
+              class="contrib-day contrib-0"
+              style="width: 12px; height: 12px; display: inline-block"
+            ></div>
+            <div
+              class="contrib-day contrib-1"
+              style="width: 12px; height: 12px; display: inline-block"
+            ></div>
+            <div
+              class="contrib-day contrib-2"
+              style="width: 12px; height: 12px; display: inline-block"
+            ></div>
+            <div
+              class="contrib-day contrib-3"
+              style="width: 12px; height: 12px; display: inline-block"
+            ></div>
+            <div
+              class="contrib-day contrib-4"
+              style="width: 12px; height: 12px; display: inline-block"
+            ></div>
+            More
+          </div>
+        </div>
+
+        <!-- Joined Projects -->
+        <div class="panel">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 1.25rem;
+            "
+          >
+            <div class="panel-title" style="margin-bottom: 0">
+              🚀 My Projects
+            </div>
+            <a
+              href="projects.html"
+              style="font-size: 0.82rem; color: var(--accent2)"
+              >Browse more →</a
+            >
+          </div>
+          <div id="profile-projects"></div>
+          <button
+            class="btn-primary"
+            style="
+              margin-top: 1.25rem;
+              padding: 0.55rem 1.25rem;
+              font-size: 0.88rem;
+            "
+            onclick="window.open('https://github.com/Bvs2006/StudentCollab/issues', '_blank', 'noopener,noreferrer')"
+          >
+            + Contribute on GitHub
+          </button>
+        </div>
+
+        <!-- Activity Feed -->
+        <div class="panel">
+          <div class="panel-title">📋 Recent Activity</div>
+          <div id="profile-activity"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDIT PROFILE MODAL -->
+    <div
+      class="modal-overlay"
+      id="edit-profile-modal"
+      onclick="if(event.target===this)SH.closeModal('edit-profile-modal')"
+    >
+      <div class="modal">
+        <div class="modal-title">✏️ Edit Profile</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input
+              type="text"
+              class="form-input"
+              id="ep-name"
+              placeholder="Your full name"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Initial (for avatar)</label>
+            <input
+              type="text"
+              class="form-input"
+              id="ep-initial"
+              maxlength="1"
+              placeholder="Y"
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Course & Year</label>
+          <input
+            type="text"
+            class="form-input"
+            id="ep-role"
+            placeholder="e.g. Computer Science · 3rd Year"
+          />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-input"
+              id="ep-email"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">GitHub Profile</label>
+            <input
+              type="text"
+              class="form-input"
+              id="ep-github"
+              placeholder="github.com/username"
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Bio</label>
+          <textarea
+            class="form-textarea"
+            id="ep-bio"
+            placeholder="Tell the community about yourself..."
+            style="min-height: 80px"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Skills (comma separated)</label>
+          <input
+            type="text"
+            class="form-input"
+            id="ep-skills"
+            placeholder="e.g. React, Python, Figma, ML"
+          />
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn-cancel"
+            onclick="SH.closeModal('edit-profile-modal')"
+          >
+            Cancel
+          </button>
+          <button class="btn-submit" onclick="saveProfile()">
+            Save Profile
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script>
+      // Contribution graph
+      function renderContribGraph() {
+        const grid = document.getElementById('contrib-grid');
+        const days = 7 * 12; // 12 weeks
+        let html = '';
+        for (let i = 0; i < days; i++) {
+          const level =
+            Math.random() > 0.6 ? Math.floor(Math.random() * 4) + 1 : 0;
+          html += `<div class="contrib-day contrib-${level}" title="Activity"></div>`;
+        }
+        grid.innerHTML = html;
+      }
+
+      const sameUser = (item, user) => {
+        if (!item || !user) return false;
+        return (
+          item.ownerId === user.id ||
+          item.authorId === user.id ||
+          String(item.ownerEmail || item.authorEmail || '').toLowerCase() ===
+            String(user.email || '').toLowerCase() ||
+          item.owner === user.name ||
+          item.author === user.name
+        );
+      };
+
+      const githubUrl = (github) => {
+        const value = (github || '')
+          .trim()
+          .replace(/^@/, '')
+          .replace(/^https?:\/\/github.com\//i, '');
+        return value ? `https://github.com/${value}` : '';
+      };
+
+      function renderUserProfile() {
+        const user = SH.requireAuth('user');
+        if (!user) return;
+        const saved = SH.loadProfile() || {};
+        const profile = { ...user, ...saved };
+        const initial = (profile.initial || profile.name || 'U')
+          .charAt(0)
+          .toUpperCase();
+        const skills = Array.isArray(profile.skills) ? profile.skills : [];
+        const myProjects = (SH.projects || []).filter((p) => sameUser(p, user));
+        const myIdeas = (SH.ideas || []).filter((i) => sameUser(i, user));
+        const upvotes = myIdeas.reduce(
+          (total, idea) => total + (Number(idea.votes) || 0),
+          0
+        );
+        const teams = new Set(myProjects.map((p) => p.id)).size;
+        const gh = githubUrl(profile.github);
+
+        document.getElementById('profile-av').textContent = initial;
+        document.getElementById('profile-name').textContent =
+          profile.name || 'Student';
+        document.getElementById('profile-role').textContent =
+          profile.role && profile.role !== 'user'
+            ? profile.role
+            : saved.role || 'Student Builder';
+        document.getElementById('profile-bio').textContent =
+          profile.bio ||
+          'Add a short bio so collaborators know what you like building.';
+        document.getElementById('profile-links').innerHTML = `
         <span>${SH.escapeHtml(profile.email || user.email)}</span>
-        ${gh ? `<a href="${gh}" target="_blank" rel="noopener noreferrer">${gh}</a>` : '<span>Add your GitHub profile to show your work.</span>'}
+        ${
+          gh
+            ? `<a href="${gh}" target="_blank" rel="noopener noreferrer">${gh}</a>`
+            : '<span>Add your GitHub profile to show your work.</span>'
+        }
       `;
-      document.getElementById('profile-skills').innerHTML =
-        (skills.length ? skills.map(s => `<span class="skill-pill">${SH.escapeHtml(s)}</span>`).join('') : '<span class="skill-pill">Add skills</span>') +
-        `<span class="skill-pill" style="cursor:pointer" onclick="SH.openModal('edit-profile-modal')">+ Add Skill</span>`;
-      document.getElementById('stat-projects').textContent = myProjects.length;
-      document.getElementById('stat-ideas').textContent = myIdeas.length;
-      document.getElementById('stat-upvotes').textContent = upvotes;
-      document.getElementById('stat-teams').textContent = teams;
+        document.getElementById('profile-skills').innerHTML =
+          (skills.length
+            ? skills
+                .map(
+                  (s) => `<span class="skill-pill">${SH.escapeHtml(s)}</span>`
+                )
+                .join('')
+            : '<span class="skill-pill">Add skills</span>') +
+          `<span class="skill-pill" style="cursor:pointer" onclick="SH.openModal('edit-profile-modal')">+ Add Skill</span>`;
+        document.getElementById('stat-projects').textContent =
+          myProjects.length;
+        document.getElementById('stat-ideas').textContent = myIdeas.length;
+        document.getElementById('stat-upvotes').textContent = upvotes;
+        document.getElementById('stat-teams').textContent = teams;
 
-      document.getElementById('profile-projects').innerHTML = myProjects.length ? myProjects.map(project => `
+        document.getElementById('profile-projects').innerHTML =
+          myProjects.length
+            ? myProjects
+                .map(
+                  (project) => `
         <div class="joined-project">
-          <div class="jp-dot" style="background:${project.status === 'progress' ? 'var(--yellow)' : 'var(--green)'}"></div>
+          <div class="jp-dot" style="background:${
+            project.status === 'progress' ? 'var(--yellow)' : 'var(--green)'
+          }"></div>
           <div style="flex:1">
             <div class="jp-title">${SH.escapeHtml(project.title)}</div>
-            <div class="jp-role">${SH.escapeHtml((project.lookingFor || []).join(', ') || 'Project owner')}</div>
+            <div class="jp-role">${SH.escapeHtml(
+              (project.lookingFor || []).join(', ') || 'Project owner'
+            )}</div>
           </div>
           ${SH.statusBadge(project.status)}
         </div>
-      `).join('') : `<div class="empty-state"><div class="empty-icon">+</div><h3>No projects yet</h3><p>Create a project from the Projects page.</p></div>`;
+      `
+                )
+                .join('')
+            : `<div class="empty-state"><div class="empty-icon">+</div><h3>No projects yet</h3><p>Create a project from the Projects page.</p></div>`;
 
-      const activity = [
-        ...myProjects.map(p => ({ icon: 'P', text: `Created project <strong>${SH.escapeHtml(p.title)}</strong>`, time: p.created || 'Recently' })),
-        ...myIdeas.map(i => ({ icon: 'I', text: `Posted idea <strong>${SH.escapeHtml(i.title)}</strong>`, time: i.time || 'Recently' }))
-      ];
-      document.getElementById('profile-activity').innerHTML = activity.length ? activity.map(item => `
+        const activity = [
+          ...myProjects.map((p) => ({
+            icon: 'P',
+            text: `Created project <strong>${SH.escapeHtml(p.title)}</strong>`,
+            time: p.created || 'Recently',
+          })),
+          ...myIdeas.map((i) => ({
+            icon: 'I',
+            text: `Posted idea <strong>${SH.escapeHtml(i.title)}</strong>`,
+            time: i.time || 'Recently',
+          })),
+        ];
+        document.getElementById('profile-activity').innerHTML = activity.length
+          ? activity
+              .map(
+                (item) => `
         <div class="activity-item">
           <div class="activity-icon">${item.icon}</div>
           <div class="activity-body">
@@ -247,44 +515,57 @@
             <div class="activity-time">${SH.escapeHtml(item.time)}</div>
           </div>
         </div>
-      `).join('') : `<div class="empty-state"><div class="empty-icon">.</div><h3>No activity yet</h3><p>Your projects and ideas will appear here after you post them.</p></div>`;
+      `
+              )
+              .join('')
+          : `<div class="empty-state"><div class="empty-icon">.</div><h3>No activity yet</h3><p>Your projects and ideas will appear here after you post them.</p></div>`;
 
-      document.getElementById('ep-name').value = profile.name || '';
-      document.getElementById('ep-initial').value = initial;
-      document.getElementById('ep-role').value = saved.role || 'Student Builder';
-      document.getElementById('ep-email').value = profile.email || user.email || '';
-      document.getElementById('ep-github').value = profile.github || '';
-      document.getElementById('ep-bio').value = profile.bio || '';
-      document.getElementById('ep-skills').value = skills.join(', ');
-    }
+        document.getElementById('ep-name').value = profile.name || '';
+        document.getElementById('ep-initial').value = initial;
+        document.getElementById('ep-role').value =
+          saved.role || 'Student Builder';
+        document.getElementById('ep-email').value =
+          profile.email || user.email || '';
+        document.getElementById('ep-github').value = profile.github || '';
+        document.getElementById('ep-bio').value = profile.bio || '';
+        document.getElementById('ep-skills').value = skills.join(', ');
+      }
 
-    function saveProfile() {
-      const user = SH.requireAuth('user');
-      if (!user) return;
-      const name = document.getElementById('ep-name').value.trim();
-      const initial = document.getElementById('ep-initial').value.trim();
-      const role = document.getElementById('ep-role').value.trim();
-      const email = document.getElementById('ep-email').value.trim();
-      const github = document.getElementById('ep-github').value.trim().replace(/^https?:\/\/github.com\//i, '').replace(/^@/, '');
-      const bio = document.getElementById('ep-bio').value.trim();
-      const skills = document.getElementById('ep-skills').value.split(',').map(s => s.trim()).filter(Boolean);
-      const profile = { name, initial, role, email, github, bio, skills };
-      SH.saveProfile(profile);
-      SH.updateCurrentUser({ name, email, github, bio, skills });
-      SH.closeModal('edit-profile-modal');
-      SH.toast('Profile updated');
-      renderUserProfile();
-      SH.renderNavProfile();
-    }
+      function saveProfile() {
+        const user = SH.requireAuth('user');
+        if (!user) return;
+        const name = document.getElementById('ep-name').value.trim();
+        const initial = document.getElementById('ep-initial').value.trim();
+        const role = document.getElementById('ep-role').value.trim();
+        const email = document.getElementById('ep-email').value.trim();
+        const github = document
+          .getElementById('ep-github')
+          .value.trim()
+          .replace(/^https?:\/\/github.com\//i, '')
+          .replace(/^@/, '');
+        const bio = document.getElementById('ep-bio').value.trim();
+        const skills = document
+          .getElementById('ep-skills')
+          .value.split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
+        const profile = { name, initial, role, email, github, bio, skills };
+        SH.saveProfile(profile);
+        SH.updateCurrentUser({ name, email, github, bio, skills });
+        SH.closeModal('edit-profile-modal');
+        SH.toast('Profile updated');
+        renderUserProfile();
+        SH.renderNavProfile();
+      }
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      const user = SH.requireAuth('user');
-      if (!user) return;
-      if (SH.fetchProjectsFromSupabase) await SH.fetchProjectsFromSupabase();
-      if (SH.fetchIdeasFromSupabase) await SH.fetchIdeasFromSupabase();
-      renderContribGraph();
-      renderUserProfile();
-    });
-  </script>
-</body>
+      document.addEventListener('DOMContentLoaded', async () => {
+        const user = SH.requireAuth('user');
+        if (!user) return;
+        if (SH.fetchProjectsFromSupabase) await SH.fetchProjectsFromSupabase();
+        if (SH.fetchIdeasFromSupabase) await SH.fetchIdeasFromSupabase();
+        renderContribGraph();
+        renderUserProfile();
+      });
+    </script>
+  </body>
 </html>
