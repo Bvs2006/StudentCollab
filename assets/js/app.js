@@ -552,9 +552,57 @@ SH.clearProfile = () => {
   SH.toast('Logged out');
 };
 
+SH.themeKey = 'sh_theme';
+
+SH.getPreferredTheme = () => {
+  const stored = localStorage.getItem(SH.themeKey);
+  if (stored === 'light' || stored === 'dark') return stored;
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light';
+};
+
+SH.setTheme = (theme) => {
+  const nextTheme = theme === 'dark' ? 'dark' : 'light';
+  document.documentElement.dataset.theme = nextTheme;
+  localStorage.setItem(SH.themeKey, nextTheme);
+
+  const toggle = document.getElementById('theme-toggle');
+  if (!toggle) return;
+  const isDark = nextTheme === 'dark';
+  toggle.setAttribute('aria-pressed', String(isDark));
+  toggle.setAttribute(
+    'aria-label',
+    `Switch to ${isDark ? 'light' : 'dark'} mode`
+  );
+  toggle.querySelector('.theme-toggle-thumb').textContent = isDark ? 'D' : 'L';
+  toggle.querySelector('.theme-toggle-label').textContent = isDark
+    ? 'Dark mode'
+    : 'Light mode';
+};
+
+SH.renderThemeToggle = () => {
+  if (document.getElementById('theme-toggle')) return;
+  const toggle = document.createElement('button');
+  toggle.id = 'theme-toggle';
+  toggle.className = 'theme-toggle';
+  toggle.type = 'button';
+  toggle.innerHTML = `
+    <span class="theme-toggle-track" aria-hidden="true">
+      <span class="theme-toggle-thumb">L</span>
+    </span>
+    <span class="theme-toggle-label">Light mode</span>
+  `;
+  toggle.addEventListener('click', () => {
+    const current = document.documentElement.dataset.theme;
+    SH.setTheme(current === 'dark' ? 'light' : 'dark');
+  });
+  document.body.appendChild(toggle);
+};
+
 SH.applyTheme = () => {
-  document.documentElement.dataset.theme = 'light';
-  document.getElementById('theme-toggle')?.remove();
+  SH.renderThemeToggle();
+  SH.setTheme(SH.getPreferredTheme());
 };
 
 SH.renderNavProfile = () => {
