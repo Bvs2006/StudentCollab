@@ -6,7 +6,7 @@
   const load = () => JSON.parse(localStorage.getItem(KEY) || '[]');
 
   const renderList = (filterOwn = false) => {
-    const list = load();
+    const list = SH.filterByActiveOrg(load());
     const container = document.getElementById('proposals-list');
     if (!container) return;
     const html = list
@@ -77,6 +77,7 @@
       skills,
       status: 'pending',
       userId: user.id,
+      orgId: SH.getActiveOrgId(),
       created: new Date().toISOString(),
     };
     list.unshift(item);

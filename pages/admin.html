@@ -11,17 +11,21 @@
     />
     <link rel="stylesheet" href="../assets/css/style.css" />
   </head>
-  <body>
+  <body class="admin-page">
     <nav class="nav">
       <div class="nav-brand">
-        <span class="brand-icon">⬡</span
+        <span class="brand-icon">S</span
         ><span class="brand-name">StudentHub</span>
       </div>
       <div class="nav-links">
         <a href="../index.html" class="nav-link">Home</a>
+        <a href="../pages/opportunities.html" class="nav-link">Opportunities</a>
         <a href="../pages/projects.html" class="nav-link">Projects</a>
         <a href="../pages/proposals.html" class="nav-link">Proposals</a>
         <a href="../pages/ideas.html" class="nav-link">Ideas</a>
+        <a href="../pages/dsa.html" class="nav-link">DSA Prep</a>
+        <a href="../pages/interviews.html" class="nav-link">Interviews</a>
+        <a href="../pages/learninglab.html" class="nav-link">LearningLab</a>
         <a href="../pages/about.html" class="nav-link">About</a>
         <a href="../pages/profile.html" class="nav-link">Profile</a>
       </div>
@@ -30,16 +34,138 @@
     <header class="page-header">
       <h1>Admin Dashboard</h1>
       <p>
-        Review proposals, monitor user activity, and keep projects and ideas
-        moving.
+        Review organization requests, manage workspace events, and keep student
+        features moving.
       </p>
     </header>
 
     <main class="page-content">
       <section class="admin-metrics" id="admin-metrics"></section>
+      <section class="panel" id="admin-org-requests-panel" style="margin-bottom: 1rem">
+        <div class="modal-title">Organization Requests</div>
+        <div id="admin-org-requests"></div>
+      </section>
       <section class="panel" style="margin-bottom: 1rem">
         <div class="modal-title">Users</div>
         <div id="admin-users"></div>
+      </section>
+      <section class="panel" style="margin-bottom: 1rem">
+        <div class="modal-title">Organisation Students</div>
+        <p class="auth-helper">
+          Add college email records here. Students can create their account with
+          the same college email and will be linked to this organisation.
+        </p>
+        <form id="student-roster-form" class="admin-event-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Student name</label>
+              <input class="form-input" id="student-name" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">College email</label>
+              <input class="form-input" id="student-email" type="email" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Roll number</label>
+              <input class="form-input" id="student-roll" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Course / branch</label>
+              <input class="form-input" id="student-course" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Year</label>
+              <input class="form-input" id="student-year" placeholder="2nd year" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Bulk paste</label>
+              <textarea
+                class="form-textarea"
+                id="student-bulk"
+                placeholder="Optional: one student per line as name,email,roll,course,year"
+              ></textarea>
+            </div>
+          </div>
+          <button class="btn-submit" type="submit">Save Student Data</button>
+        </form>
+        <div id="admin-students" style="margin-top: 1rem"></div>
+      </section>
+      <section class="panel" style="margin-bottom: 1rem">
+        <div class="modal-title">Create LearningLab Event</div>
+        <form id="event-form" class="admin-event-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Event title</label>
+              <input class="form-input" id="event-title" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Host</label>
+              <input
+                class="form-input"
+                id="event-host"
+                placeholder="StudentHub Team"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Date</label>
+              <input class="form-input" id="event-date" type="date" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Time</label>
+              <input class="form-input" id="event-time" placeholder="7:00 PM" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Mode</label>
+              <select class="form-select" id="event-mode">
+                <option>Google Meet</option>
+                <option>Offline</option>
+                <option>YouTube Live</option>
+                <option>Hybrid</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Level</label>
+              <select class="form-select" id="event-level">
+                <option>Beginner</option>
+                <option>Intermediate</option>
+                <option>Advanced</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Google Form registration link</label>
+            <input
+              class="form-input"
+              id="event-form-url"
+              placeholder="https://forms.google.com/..."
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea
+              class="form-textarea"
+              id="event-description"
+              placeholder="What students will learn, prerequisites, and outcome."
+              required
+            ></textarea>
+          </div>
+          <button class="btn-submit" type="submit">Create Event</button>
+        </form>
+        <div id="admin-events" style="margin-top: 1rem"></div>
+      </section>
+      <section class="panel" style="margin-bottom: 1rem">
+        <div class="modal-title">Project Moderation</div>
+        <div id="admin-projects"></div>
       </section>
       <section class="panel">
         <div class="modal-title">Pending Proposals</div>

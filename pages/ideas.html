@@ -224,24 +224,28 @@
       }
     </style>
   </head>
-  <body>
+  <body class="ideas-page">
     <nav class="nav">
       <div class="nav-brand">
-        <span class="brand-icon">⬡</span>
+        <span class="brand-icon">S</span>
         <span class="brand-name">StudentHub</span>
       </div>
       <div class="nav-links">
         <a href="../index.html" class="nav-link">Home</a>
+        <a href="opportunities.html" class="nav-link">Opportunities</a>
         <a href="projects.html" class="nav-link">Projects</a>
         <a href="proposals.html" class="nav-link">Proposals</a>
         <a href="ideas.html" class="nav-link active">Ideas</a>
+        <a href="dsa.html" class="nav-link">DSA Prep</a>
+        <a href="interviews.html" class="nav-link">Interviews</a>
+        <a href="learninglab.html" class="nav-link">LearningLab</a>
         <a href="about.html" class="nav-link">About</a>
         <a href="profile.html" class="nav-link">Profile</a>
       </div>
     </nav>
 
     <div class="page-header">
-      <h1>💡 Idea Hub</h1>
+      <h1>Idea Hub</h1>
       <p>
         Share early concepts, get feedback, and refine the next thing the
         community could build. This page is for ideas only.
@@ -276,18 +280,18 @@
       <div>
         <div class="ideas-controls">
           <button class="sort-btn active" onclick="sortIdeas('votes', this)">
-            🔥 Top
+            Top
           </button>
           <button class="sort-btn" onclick="sortIdeas('new', this)">
-            ✨ New
+            New
           </button>
           <button class="sort-btn" onclick="sortIdeas('comments', this)">
-            💬 Most Discussed
+            Most Discussed
           </button>
           <input
             type="text"
             class="ideas-search"
-            placeholder="🔍 Search ideas..."
+            placeholder="Search ideas..."
             oninput="searchIdeas(this.value)"
           />
         </div>
@@ -309,11 +313,11 @@
         "
       >
         <div class="sidebar-card">
-          <div class="sidebar-title">🏆 Trending Ideas</div>
+          <div class="sidebar-title">Trending Ideas</div>
           <div id="trending-list"></div>
         </div>
         <div class="sidebar-card">
-          <div class="sidebar-title">🏷️ Browse by Tag</div>
+          <div class="sidebar-title">Browse by Tag</div>
           <div class="tag-cloud" id="tag-cloud"></div>
         </div>
         <div
@@ -461,7 +465,7 @@
       let ideaSearch = '';
 
       function getSortedIdeas() {
-        let list = [...SH.ideas];
+        let list = SH.filterByActiveOrg([...(SH.ideas || [])]);
         if (ideaSearch) {
           const q = ideaSearch.toLowerCase();
           list = list.filter(
@@ -489,8 +493,13 @@
         noIdeas.style.display = 'none';
         container.innerHTML = list
           .map(
-            (i) => `
-        <div class="idea-mini-card" onclick="openIdeaDetail(${i.id})">
+            (i) => {
+              const idArg = JSON.stringify(String(i.id));
+              const deleteButton = SH.canManageItem(i)
+                ? `<button class="mini-link-btn danger" onclick="event.stopPropagation();SH.deleteIdea(${idArg})">Delete</button>`
+                : '';
+              return `
+        <div class="idea-mini-card" onclick="openIdeaDetail(${idArg})">
           <div class="idea-mini-title">${i.title}</div>
           <div class="idea-mini-desc">${i.desc}</div>
           <div class="pc-tags">${i.tags
@@ -501,31 +510,36 @@
             <span class="idea-mini-votes">
               <button class="vote-btn ${
                 i.voted ? 'voted' : ''
-              }" onclick="event.stopPropagation();SH.voteIdea(${
-              i.id
-            }, this)">▲</button>
+              }" onclick="event.stopPropagation();SH.voteIdea(${idArg}, this)">▲</button>
               <span class="vote-count" id="vote-${i.id}">${i.votes}</span>
             </span>
           </div>
+          ${deleteButton ? `<div class="idea-mini-actions">${deleteButton}</div>` : ''}
         </div>
-      `
+      `;
+            }
           )
           .join('');
       }
 
       function renderTrending() {
-        const top = [...SH.ideas].sort((a, b) => b.votes - a.votes).slice(0, 5);
+        const top = SH.filterByActiveOrg([...(SH.ideas || [])])
+          .sort((a, b) => b.votes - a.votes)
+          .slice(0, 5);
         document.getElementById('trending-list').innerHTML = top
           .map(
-            (idea, i) => `
-        <div class="trending-item" onclick="openIdeaDetail(${idea.id})">
+            (idea, i) => {
+              const idArg = JSON.stringify(String(idea.id));
+              return `
+        <div class="trending-item" onclick="openIdeaDetail(${idArg})">
           <div class="ti-rank">${i + 1}</div>
           <div class="ti-body">
             <div class="ti-title">${idea.title}</div>
             <div class="ti-votes">▲ ${idea.votes} votes</div>
           </div>
         </div>
-      `
+      `;
+            }
           )
           .join('');
       }
@@ -540,7 +554,7 @@
       }
 
       function openIdeaDetail(id) {
-        const idea = SH.ideas.find((i) => i.id === id);
+        const idea = SH.ideas.find((i) => String(i.id) === String(id));
         if (!idea) return;
         let overlay = document.getElementById('idea-detail-modal');
         if (!overlay) {
@@ -557,6 +571,10 @@
 
         const linkedinUrl = normalizeLinkedInUrl(idea.linkedin || '');
         const inner = document.getElementById('idea-detail-inner');
+        const idArg = JSON.stringify(String(idea.id));
+        const deleteButton = SH.canManageItem(idea)
+          ? `<button class="btn-cancel danger" onclick="SH.deleteIdea(${idArg})">Delete Idea</button>`
+          : '';
         inner.innerHTML = `
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem">
           <div>
@@ -578,12 +596,13 @@
         <div style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap;margin-bottom:1.2rem">
           <button class="vote-btn ${
             idea.voted ? 'voted' : ''
-          }" onclick="SH.voteIdea(${idea.id}, this)">▲</button>
+          }" onclick="SH.voteIdea(${idArg}, this)">▲</button>
           <span class="vote-count" id="vote-${idea.id}">${idea.votes}</span>
           <span class="idea-time">votes</span>
         </div>
         <div class="modal-footer" style="margin-top:0">
           <button class="btn-cancel" onclick="SH.closeModal('idea-detail-modal')">Close</button>
+          ${deleteButton}
           ${
             linkedinUrl
               ? `<button class="btn-submit" onclick="window.open('${linkedinUrl}', '_blank', 'noopener,noreferrer')">Connect on LinkedIn</button>`
@@ -660,6 +679,7 @@
           comments: 0,
           voted: true,
           linkedin,
+          orgId: SH.getActiveOrgId(),
         };
 
         try {

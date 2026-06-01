@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DSA Prep - StudentHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body class="dsa-page">
+    <nav class="nav">
+      <div class="nav-brand">
+        <span class="brand-icon">S</span>
+        <span class="brand-name">StudentHub</span>
+      </div>
+      <div class="nav-links">
+        <a href="../index.html" class="nav-link">Home</a>
+        <a href="opportunities.html" class="nav-link">Opportunities</a>
+        <a href="projects.html" class="nav-link">Projects</a>
+        <a href="proposals.html" class="nav-link">Proposals</a>
+        <a href="ideas.html" class="nav-link">Ideas</a>
+        <a href="dsa.html" class="nav-link active">DSA Prep</a>
+        <a href="interviews.html" class="nav-link">Interviews</a>
+        <a href="learninglab.html" class="nav-link">LearningLab</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="profile.html" class="nav-link">Profile</a>
+      </div>
+    </nav>
+
+    <header class="page-header dsa-hero">
+      <div class="projects-eyebrow">DSA practice room</div>
+      <h1>Build problem-solving skill with a clear DSA path</h1>
+      <p>
+        Practice with classmates, ask for help when stuck, join topic rooms,
+        and prepare for coding rounds together.
+      </p>
+      <div class="dsa-hero-actions">
+        <a class="btn-submit" href="#peer-help">Ask for help</a>
+        <a class="btn-cancel" href="#study-rooms">Join a room</a>
+        <a class="btn-cancel" href="#roadmap">View roadmap</a>
+      </div>
+    </header>
+
+    <main class="page-content dsa-content">
+      <section class="dsa-stats" aria-label="DSA progress summary">
+        <article>
+          <span>Track</span>
+          <strong>8 weeks</strong>
+        </article>
+        <article>
+          <span>Core topics</span>
+          <strong>12</strong>
+        </article>
+        <article>
+          <span>Daily target</span>
+          <strong>3 problems</strong>
+        </article>
+        <article>
+          <span>Peer help</span>
+          <strong id="dsa-help-count">0 posts</strong>
+        </article>
+      </section>
+
+      <section class="dsa-grid" id="peer-help">
+        <article class="dsa-panel dsa-focus">
+          <div class="section-eyebrow">Peer help board</div>
+          <h2>Ask classmates when you are stuck</h2>
+          <p>
+            Post the topic, problem link, and where you are blocked. Other
+            students can use this board to pair up and explain the pattern.
+          </p>
+          <form class="dsa-help-form" id="dsa-help-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Topic</label>
+                <select class="form-select" id="dsa-help-topic">
+                  <option>Arrays and strings</option>
+                  <option>Recursion</option>
+                  <option>Stacks and queues</option>
+                  <option>Linked lists</option>
+                  <option>Trees</option>
+                  <option>Graphs</option>
+                  <option>Dynamic programming</option>
+                  <option>Interview mock</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Level</label>
+                <select class="form-select" id="dsa-help-level">
+                  <option>Beginner</option>
+                  <option>Intermediate</option>
+                  <option>Advanced</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Problem or goal</label>
+              <input
+                class="form-input"
+                id="dsa-help-title"
+                placeholder="e.g. Need help with two-sum variations"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">What are you stuck on?</label>
+              <textarea
+                class="form-textarea"
+                id="dsa-help-note"
+                placeholder="Share your approach, failed case, or what explanation you need."
+                required
+              ></textarea>
+            </div>
+            <button class="btn-submit" type="submit">Post help request</button>
+          </form>
+        </article>
+
+        <article class="dsa-panel">
+          <div class="section-eyebrow">Live requests</div>
+          <h2>Students helping students</h2>
+          <div class="dsa-help-list" id="dsa-help-list"></div>
+        </article>
+      </section>
+
+      <section class="dsa-panel" id="study-rooms">
+        <div class="section-eyebrow">Study rooms</div>
+        <h2>Join a topic room</h2>
+        <div class="dsa-room-grid">
+          <article>
+            <span>Room A</span>
+            <h3>Arrays sprint</h3>
+            <p>Two pointers, sliding window, prefix sums.</p>
+            <button class="mini-link-btn" onclick="joinDsaRoom('Arrays sprint')">
+              Join room
+            </button>
+          </article>
+          <article>
+            <span>Room B</span>
+            <h3>Graph clinic</h3>
+            <p>BFS, DFS, visited states, shortest path basics.</p>
+            <button class="mini-link-btn" onclick="joinDsaRoom('Graph clinic')">
+              Join room
+            </button>
+          </article>
+          <article>
+            <span>Room C</span>
+            <h3>DP support</h3>
+            <p>Memoization, tabulation, state design, transitions.</p>
+            <button class="mini-link-btn" onclick="joinDsaRoom('DP support')">
+              Join room
+            </button>
+          </article>
+          <article>
+            <span>Room D</span>
+            <h3>Mock interview</h3>
+            <p>Pair up for timed problem solving and explanation practice.</p>
+            <button class="mini-link-btn" onclick="joinDsaRoom('Mock interview')">
+              Join room
+            </button>
+          </article>
+        </div>
+        <div class="dsa-room-status" id="dsa-room-status">
+          Pick a room to save your current DSA study focus.
+        </div>
+      </section>
+
+      <section class="dsa-grid" id="daily-plan">
+        <article class="dsa-panel dsa-focus">
+          <div class="section-eyebrow">Daily plan</div>
+          <h2>Today's practice</h2>
+          <p>
+            Keep the session small: one warm-up, one pattern problem, one
+            review. Mark each step when done.
+          </p>
+          <div class="dsa-checklist" id="dsa-checklist">
+            <label>
+              <input type="checkbox" data-dsa-task="warmup" />
+              <span>Solve one easy warm-up problem</span>
+            </label>
+            <label>
+              <input type="checkbox" data-dsa-task="pattern" />
+              <span>Solve one medium pattern problem</span>
+            </label>
+            <label>
+              <input type="checkbox" data-dsa-task="review" />
+              <span>Write notes for mistakes and edge cases</span>
+            </label>
+          </div>
+          <div class="dsa-progress">
+            <div><span id="dsa-progress-text">0/3 complete</span></div>
+            <div class="dsa-progress-bar"><span id="dsa-progress-bar"></span></div>
+          </div>
+        </article>
+
+        <article class="dsa-panel">
+          <div class="section-eyebrow">Practice links</div>
+          <h2>Open a problem set</h2>
+          <div class="dsa-link-list">
+            <a
+              href="https://leetcode.com/problemset/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >LeetCode problem set</a
+            >
+            <a
+              href="https://www.geeksforgeeks.org/explore?page=1&sortBy=submissions"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GeeksforGeeks practice</a
+            >
+            <a
+              href="https://www.hackerrank.com/domains/data-structures"
+              target="_blank"
+              rel="noopener noreferrer"
+              >HackerRank data structures</a
+            >
+            <a
+              href="https://www.codingninjas.com/studio/problems"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Coding Ninjas problems</a
+            >
+          </div>
+        </article>
+      </section>
+
+      <section class="dsa-panel" id="roadmap">
+        <div class="section-eyebrow">Roadmap</div>
+        <h2>Topic order for students</h2>
+        <div class="dsa-roadmap">
+          <article>
+            <span>01</span>
+            <h3>Arrays and strings</h3>
+            <p>Two pointers, sliding window, prefix sums, frequency maps.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Recursion and backtracking</h3>
+            <p>Subsets, permutations, recursion trees, pruning choices.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Stacks and queues</h3>
+            <p>Monotonic stack, next greater element, BFS-ready queues.</p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3>Linked lists</h3>
+            <p>Fast-slow pointers, reversing, cycle detection, merging.</p>
+          </article>
+          <article>
+            <span>05</span>
+            <h3>Trees and BST</h3>
+            <p>DFS, BFS, height, LCA, traversal patterns, validation.</p>
+          </article>
+          <article>
+            <span>06</span>
+            <h3>Graphs</h3>
+            <p>BFS, DFS, topological sort, shortest path, DSU basics.</p>
+          </article>
+          <article>
+            <span>07</span>
+            <h3>Dynamic programming</h3>
+            <p>1D DP, 2D DP, knapsack, LIS, memoization to tabulation.</p>
+          </article>
+          <article>
+            <span>08</span>
+            <h3>Interview revision</h3>
+            <p>Mixed timed sets, explain approach, complexity, edge cases.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="dsa-grid">
+        <article class="dsa-panel">
+          <div class="section-eyebrow">Pair practice</div>
+          <h2>How two students should solve together</h2>
+          <ol class="dsa-steps">
+            <li>One student explains the brute-force idea.</li>
+            <li>The other student asks about constraints and edge cases.</li>
+            <li>Both choose the pattern before coding.</li>
+            <li>One codes while the other dry-runs examples.</li>
+            <li>Swap roles on the next problem.</li>
+          </ol>
+        </article>
+
+        <article class="dsa-panel">
+          <div class="section-eyebrow">Interview prep</div>
+          <h2>Weekly mock routine</h2>
+          <ul class="dsa-steps">
+            <li>Monday to Thursday: 3 topic problems per day.</li>
+            <li>Friday: one 45-minute timed medium problem.</li>
+            <li>Saturday: revise failed problems and notes.</li>
+            <li>Sunday: mock interview with a friend or teammate.</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script>
+      const dsaTaskKey = 'sh_dsa_daily_tasks';
+      const dsaHelpKey = 'sh_dsa_help_requests';
+      const dsaRoomKey = 'sh_dsa_room';
+
+      function loadDsaHelpRequests() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(dsaHelpKey) || '[]');
+          return Array.isArray(saved) ? SH.filterByActiveOrg(saved) : [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveDsaHelpRequests(items) {
+        localStorage.setItem(dsaHelpKey, JSON.stringify(items));
+      }
+
+      function renderDsaHelpRequests() {
+        const list = loadDsaHelpRequests();
+        const container = document.getElementById('dsa-help-list');
+        document.getElementById('dsa-help-count').textContent =
+          `${list.length} post${list.length === 1 ? '' : 's'}`;
+        container.innerHTML = list.length
+          ? list
+              .map(
+                (item) => `
+                  <article class="dsa-help-card">
+                    <div>
+                      <span>${SH.escapeHtml(item.topic)} · ${SH.escapeHtml(
+                  item.level
+                )}</span>
+                      <h3>${SH.escapeHtml(item.title)}</h3>
+                      <p>${SH.escapeHtml(item.note)}</p>
+                      <small>Posted by ${SH.escapeHtml(item.author)}</small>
+                    </div>
+                    <button class="mini-link-btn outline" onclick="SH.toast('Marked interest. Coordinate with this student in your class group.')">
+                      I can help
+                    </button>
+                  </article>
+                `
+              )
+              .join('')
+          : `
+              <div class="empty-state dsa-empty">
+                <div class="empty-icon">+</div>
+                <h3>No help requests yet</h3>
+                <p>Post the first stuck problem and invite classmates to explain it.</p>
+              </div>
+            `;
+      }
+
+      function joinDsaRoom(room) {
+        localStorage.setItem(`${dsaRoomKey}_${SH.getActiveOrgId()}`, room);
+        document.getElementById('dsa-room-status').textContent =
+          `Current room: ${room}. Invite a classmate and solve one problem together.`;
+        SH.toast(`Joined ${room}`);
+      }
+
+      function updateDsaProgress() {
+        const boxes = Array.from(document.querySelectorAll('[data-dsa-task]'));
+        const done = boxes.filter((box) => box.checked).length;
+        const total = boxes.length;
+        const progress = total ? Math.round((done / total) * 100) : 0;
+        document.getElementById('dsa-progress-text').textContent =
+          `${done}/${total} complete`;
+        document.getElementById('dsa-progress-bar').style.width = `${progress}%`;
+        const state = Object.fromEntries(
+          boxes.map((box) => [box.dataset.dsaTask, box.checked])
+        );
+        localStorage.setItem(`${dsaTaskKey}_${SH.getActiveOrgId()}`, JSON.stringify(state));
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        let saved = {};
+        try {
+          saved = JSON.parse(
+            localStorage.getItem(`${dsaTaskKey}_${SH.getActiveOrgId()}`) || '{}'
+          );
+        } catch (e) {
+          saved = {};
+        }
+        document.querySelectorAll('[data-dsa-task]').forEach((box) => {
+          box.checked = Boolean(saved[box.dataset.dsaTask]);
+          box.addEventListener('change', updateDsaProgress);
+        });
+        document
+          .getElementById('dsa-help-form')
+          .addEventListener('submit', (event) => {
+            event.preventDefault();
+            const user = SH.currentUser?.();
+            const request = {
+              id: Date.now(),
+              topic: document.getElementById('dsa-help-topic').value,
+              level: document.getElementById('dsa-help-level').value,
+              title: document.getElementById('dsa-help-title').value.trim(),
+              note: document.getElementById('dsa-help-note').value.trim(),
+              author: user?.name || 'Student',
+              orgId: SH.getActiveOrgId(),
+            };
+            if (!request.title || !request.note) {
+              SH.toast('Add a problem and note first');
+              return;
+            }
+            const list = JSON.parse(localStorage.getItem(dsaHelpKey) || '[]');
+            list.unshift(request);
+            saveDsaHelpRequests(list);
+            event.target.reset();
+            renderDsaHelpRequests();
+            SH.toast('DSA help request posted');
+          });
+        const room = localStorage.getItem(`${dsaRoomKey}_${SH.getActiveOrgId()}`);
+        if (room) {
+          document.getElementById('dsa-room-status').textContent =
+            `Current room: ${room}. Invite a classmate and solve one problem together.`;
+        }
+        updateDsaProgress();
+        renderDsaHelpRequests();
+      });
+    </script>
+  </body>
+</html>

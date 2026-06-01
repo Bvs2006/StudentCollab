@@ -3,265 +3,366 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StudentHub — Collaborative Project Workspace</title>
+    <title>StudentHub - Organisation Student Workspace</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
-  <body>
-    <!-- NAV -->
+  <body class="startupage-home">
     <nav class="nav" role="navigation" aria-label="Main navigation">
-      <div class="nav-brand">
-        <span class="brand-icon">⬡</span>
+      <a class="nav-brand" href="index.html" aria-label="StudentHub home">
+        <span class="brand-icon">S</span>
         <span class="brand-name">StudentHub</span>
-      </div>
-
-      <button
-        id="nav-toggle"
-        class="nav-toggle"
-        aria-expanded="false"
-        aria-controls="mobile-menu"
-        aria-label="Open menu"
-      >
-        ☰
-      </button>
+      </a>
 
       <div class="nav-links" id="desktop-links">
         <a href="index.html" class="nav-link active">Home</a>
-        <a href="pages/projects.html" class="nav-link">Projects</a>
-        <a href="pages/proposals.html" class="nav-link">Proposals</a>
-        <a href="pages/ideas.html" class="nav-link">Ideas</a>
         <a href="pages/about.html" class="nav-link">About</a>
-        <a href="pages/profile.html" class="nav-link">Profile</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="pages/organizations.html" class="nav-link">Organisations</a>
       </div>
 
       <div class="nav-actions">
-        <button
-          class="btn-join"
-          onclick="window.location.href='pages/login.html'"
-        >
+        <button class="btn-join" onclick="window.location.href='pages/login.html'">
           Login
         </button>
+        <a class="btn-primary nav-signup" href="pages/login.html">Join with college email</a>
       </div>
 
-      <!-- Mobile menu (hidden on desktop) -->
-      <div id="mobile-menu" class="mobile-menu" aria-hidden="true">
-        <a href="index.html" class="mobile-link">Home</a>
-        <a href="pages/projects.html" class="mobile-link">Projects</a>
-        <a href="pages/proposals.html" class="mobile-link">Proposals</a>
-        <a href="pages/ideas.html" class="mobile-link">Ideas</a>
-        <a href="pages/about.html" class="mobile-link">About</a>
-        <a href="pages/profile.html" class="mobile-link">Profile</a>
-      </div>
     </nav>
 
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-noise"></div>
-      <div class="hero-content">
-        <div class="hero-badge">
-          🎓 StudentHub — collaborative learning & product-building
+    <main>
+      <section class="sp-hero">
+        <div class="sp-hero-inner">
+          <p class="sp-kicker">StudentHub/workspace</p>
+          <h1>
+            Organisation verified student workspace
+            <span>for projects, prep, events, and interviews.</span>
+          </h1>
+          <p class="sp-subtitle">
+            Organisations add student records, students login with college
+            email, and each workspace gets its own projects, DSA prep,
+            LearningLab events, and alumni interview requests.
+          </p>
+          <div class="sp-hero-actions" aria-label="Primary actions">
+            <a class="sp-cta" href="pages/login.html">Student login</a>
+            <a class="btn-ghost sp-secondary-cta" href="pages/login.html?role=org_admin">
+              Organisation login
+            </a>
+          </div>
+          <div class="sp-hero-preview" aria-label="StudentHub workspace preview">
+            <div class="sp-preview-card main">
+              <div>
+                <span class="sp-live">Verified workspace</span>
+                <h3>Aditya University CSE</h3>
+                <p>Student roster, events, projects, DSA rooms, and interviews.</p>
+              </div>
+              <div class="sp-preview-progress">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+            <div class="sp-preview-card">
+              <strong>12</strong>
+              <span>Roster students</span>
+            </div>
+            <div class="sp-preview-card">
+              <strong>4</strong>
+              <span>Org events</span>
+            </div>
+          </div>
+          <div class="sp-proof">
+            <div class="sp-avatar-row" aria-hidden="true">
+              <span>CS</span>
+              <span>AI</span>
+              <span>UX</span>
+              <span>ML</span>
+              <span>OS</span>
+            </div>
+            <div>
+              <strong>Students, organisations, alumni, and mentors</strong>
+              <small>One verified workspace per organisation</small>
+            </div>
+          </div>
+          <div class="github-stats sp-home-stats" aria-label="StudentHub GitHub stats">
+            <div class="github-stat">
+              <strong id="gh-stars">-</strong>
+              <span>Stars</span>
+            </div>
+            <div class="github-stat">
+              <strong id="gh-forks">-</strong>
+              <span>Forks</span>
+            </div>
+            <div class="github-stat contributors-stat">
+              <div id="gh-contribs"></div>
+              <span>Contributors</span>
+            </div>
+          </div>
         </div>
-        <div class="hero-badge">
-          StudentHub - collaborative learning and product-building
+      </section>
+
+      <section class="sp-intro">
+        <div class="sp-section-heading">
+          <h2>A controlled workspace for every organisation</h2>
+          <p>
+            StudentHub gives each approved organisation its own admin, student
+            roster, events, projects, prep rooms, and interview workflow.
+          </p>
         </div>
-        <h1 class="hero-title">
-          Build student <mark>projects</mark> at every stage of development
-        </h1>
-        <p class="hero-sub">
-          A lightweight workspace where students discover problems worth
-          solving, form multidisciplinary teams, and ship working prototypes —
-          together.
+        <p class="sp-intro-copy">
+          Stop mixing college data in public forms and chat groups. Upload the
+          official student list, let students register with their college email,
+          and keep every feature scoped to the right organisation.
         </p>
-        <div class="hero-cta">
-          <button
-            class="btn-primary"
-            onclick="window.location.href='pages/login.html'"
-          >
-            Get Started - Login
-          </button>
-          <a href="pages/projects.html" class="btn-ghost">Browse Projects</a>
-        </div>
-        <div class="github-stats">
-          <div class="github-stat">
-            <strong id="gh-stars">—</strong>
-            <span>Stars</span>
-          </div>
-          <div class="github-stat">
-            <strong id="gh-forks">—</strong>
-            <span>Forks</span>
-          </div>
-          <div class="github-stat contributors-stat">
-            <div id="gh-contribs"></div>
-            <span>Contributors</span>
-          </div>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="float-card fc1">
-          <div class="fc-tag">AI / ML</div>
-          <div class="fc-title">Campus Safety Bot</div>
-          <div class="fc-avatars">
-            <span class="av">A</span><span class="av">R</span
-            ><span class="av">+4</span>
-          </div>
-        </div>
-        <div class="float-card fc2">
-          <div class="fc-tag">Web Dev</div>
-          <div class="fc-title">Alumni Network App</div>
-          <div class="fc-avatars">
-            <span class="av">S</span><span class="av">M</span
-            ><span class="av">+2</span>
-          </div>
-        </div>
-        <div class="float-card fc3">
-          <div class="fc-tag">Hardware</div>
-          <div class="fc-title">Smart Study Desk</div>
-          <div class="fc-avatars">
-            <span class="av">K</span><span class="av">+1</span>
-          </div>
-        </div>
-        <div class="float-card fc4">
-          <div class="fc-tag">Health</div>
-          <div class="fc-title">Wellness Tracker</div>
-          <div class="fc-avatars">
-            <span class="av">J</span><span class="av">L</span
-            ><span class="av">+5</span>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- MISSION SUMMARY -->
-    <section class="section" aria-labelledby="mission-heading">
-      <div class="section-header">
-        <div>
-          <div class="section-eyebrow">Our Mission</div>
-          <h2 class="section-title" id="mission-heading">
-            Why StudentHub exists
-          </h2>
+      <section class="sp-audiences">
+        <div class="sp-section-heading">
+          <h2>Two clear account types</h2>
         </div>
-      </div>
-      <div class="mission-grid">
-        <div class="mission-card">
-          <div class="mission-icon">01</div>
-          <h3>Learn by doing</h3>
-          <p>
-            Apply coursework to real problems, learn tools and workflows used in
-            industry, and build portfolio-ready projects.
-          </p>
-        </div>
-        <div class="mission-card">
-          <div class="mission-icon">02</div>
-          <h3>Find teammates</h3>
-          <p>
-            Connect with students across disciplines — designers, developers,
-            data scientists, and hardware tinkerers.
-          </p>
-        </div>
-        <div class="mission-card">
-          <div class="mission-icon">03</div>
-          <h3>Ship together</h3>
-          <p>
-            Move from idea → prototype → launch with lightweight collaboration
-            features and visible progress.
-          </p>
-        </div>
-      </div>
-    </section>
 
-    <!-- FEATURED PROJECTS -->
-    <section class="section">
-      <div class="section-header">
-        <div>
-          <div class="section-eyebrow">🔥 Trending Now</div>
-          <h2 class="section-title">Featured Projects</h2>
-        </div>
-        <a href="pages/projects.html" class="link-all">View all →</a>
-      </div>
-      <div class="project-grid" id="featured-projects"></div>
-    </section>
+        <div class="sp-audience-grid">
+          <article class="sp-profile-stack">
+            <div class="empty-state sp-empty-card">
+              <div class="empty-icon">+</div>
+              <h3>Student account</h3>
+              <p>Students join with the college email provided by their organisation.</p>
+              <a class="btn-ghost empty-action" href="pages/login.html">Student login</a>
+            </div>
+          </article>
 
-    <!-- LATEST IDEAS -->
-    <section class="section alt-section">
-      <div class="section-header">
-        <div>
-          <div class="section-eyebrow">💡 Fresh Drops</div>
-          <h2 class="section-title">New Ideas</h2>
+          <article class="sp-audience-copy">
+            <span>For students</span>
+            <h3>Use only student features inside your organisation</h3>
+            <ul>
+              <li>Login with your college email after your organisation adds you</li>
+              <li>Access projects, ideas, proposals, DSA prep, interviews, and events</li>
+              <li>See only content from your active organisation workspace</li>
+            </ul>
+            <a href="pages/login.html">Continue as student</a>
+          </article>
         </div>
-        <a href="pages/ideas.html" class="link-all">See all ideas →</a>
-      </div>
-      <div class="ideas-list" id="home-ideas"></div>
-    </section>
 
-    <!-- HOW IT WORKS -->
-    <section class="section how-section">
-      <div class="section-header center-header">
-        <div class="section-eyebrow">Simple Process</div>
-        <h2 class="section-title">How it works</h2>
-      </div>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-num">01</div>
-          <div class="step-icon">💡</div>
-          <h3>Post Your Idea</h3>
+        <div class="sp-audience-grid flip">
+          <article class="sp-audience-copy">
+            <span>For organisations</span>
+            <h3>Approve a workspace and manage student data</h3>
+            <ul>
+              <li>Request an organisation workspace from the global admin</li>
+              <li>Add student name, college email, roll number, course, and year</li>
+              <li>Manage events, feature data, projects, and student activity</li>
+            </ul>
+            <a href="pages/login.html?role=org_admin">Continue as organisation</a>
+          </article>
+
+          <article class="sp-startup-cards">
+            <div class="empty-state sp-empty-card">
+              <div class="empty-icon">+</div>
+              <h3>Organisation account</h3>
+              <p>Approved organisation admins get a separate management dashboard.</p>
+              <a class="btn-ghost empty-action" href="pages/organizations.html">Request workspace</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sp-steps" id="features">
+        <div class="sp-section-heading">
+          <h2>How StudentHub works</h2>
+          <p>Approve the organisation, add student records, then unlock student features.</p>
+        </div>
+        <div class="sp-step-grid">
+          <article>
+            <span>1</span>
+            <h3>Organisation requests access</h3>
+            <p>
+              A representative requests a workspace and the global admin
+              approves it.
+            </p>
+          </article>
+          <article>
+            <span>2</span>
+            <h3>Admin adds student data</h3>
+            <p>
+              Organisation admins add student names, college emails, roll
+              numbers, courses, and years.
+            </p>
+          </article>
+          <article>
+            <span>3</span>
+            <h3>Students login and collaborate</h3>
+            <p>
+              Students login with their college email and use only the student
+              features for that organisation.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="sp-dynamic-section" aria-labelledby="college-heading">
+        <div class="sp-section-heading">
+          <span class="sp-live">Colleges join</span>
+          <h2 id="college-heading">How colleges join and manage feedback</h2>
           <p>
-            Share what you want to build. Add tags, describe the problem,
-            mention skills you need.
+            A college, department, or student organisation requests a workspace.
+            After approval, its organisation admin can upload verified student
+            data, manage features, and understand what students need.
           </p>
         </div>
-        <div class="step-card">
-          <div class="step-num">02</div>
-          <div class="step-icon">🤝</div>
-          <h3>Find Your Team</h3>
-          <p>
-            Other students upvote, comment, and request to join. Build your
-            dream crew.
-          </p>
+        <div class="sp-step-grid">
+          <article>
+            <span>01</span>
+            <h3>Request workspace</h3>
+            <p>Organisation representatives request access and explain who the workspace is for.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Admin approval</h3>
+            <p>The global admin approves the request and promotes the requester as organisation admin.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Upload students</h3>
+            <p>The organisation adds student names, college emails, roll numbers, courses, and year.</p>
+          </article>
         </div>
-        <div class="step-card">
-          <div class="step-num">03</div>
-          <div class="step-icon">🚀</div>
-          <h3>Build & Ship</h3>
-          <p>
-            Use the workspace tools to collaborate, track progress, and launch
-            your project.
-          </p>
+        <div class="sp-audience-grid" style="margin-top: 1rem">
+          <article class="sp-audience-copy">
+            <span>College feedback</span>
+            <h3>Colleges get a clearer view of student activity</h3>
+            <ul>
+              <li>See what students are building and where they need help</li>
+              <li>Track event interest, interview requests, and project activity</li>
+              <li>Use one verified workspace instead of scattered forms and groups</li>
+            </ul>
+          </article>
+          <article class="sp-startup-cards">
+            <div class="empty-state sp-empty-card">
+              <div class="empty-icon">"</div>
+              <h3>College feedback example</h3>
+              <p>
+                "We can manage students, events, projects, and interview prep
+                from one organisation dashboard."
+              </p>
+            </div>
+          </article>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="cta-band">
+      <section class="sp-dynamic-section sp-dynamic-alt" aria-labelledby="student-feedback-heading">
+        <div class="sp-section-heading">
+          <span class="sp-live">Student feedback</span>
+          <h2 id="student-feedback-heading">Built around what students need every day</h2>
+          <p>
+            Students get one place to discover projects, ask DSA doubts, book
+            alumni mock interviews, join LearningLab events, and share ideas
+            without losing everything in chat groups.
+          </p>
+        </div>
+        <div class="sp-audience-grid">
+          <article class="sp-audience-copy">
+            <span>Student voice</span>
+            <h3>Feedback stays connected to the right workspace</h3>
+            <ul>
+              <li>Students can share project ideas and collaboration needs</li>
+              <li>DSA help requests stay visible to peers in the same organisation</li>
+              <li>Interview requests and event participation are easier to track</li>
+            </ul>
+          </article>
+          <article class="sp-startup-cards">
+            <div class="empty-state sp-empty-card">
+              <div class="empty-icon">"</div>
+              <h3>Student feedback example</h3>
+              <p>
+                "I can find my college projects, DSA help, and interview prep
+                in one place instead of asking in multiple groups."
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sp-dynamic-section" id="features-overview">
+        <div class="sp-section-heading">
+          <span class="sp-live">Features</span>
+          <h2>Everything is scoped to the organisation</h2>
+          <p>
+            StudentHub separates student features and organisation features, so
+            each user sees only the tools meant for their role.
+          </p>
+        </div>
+        <div class="sp-step-grid">
+          <article>
+            <span>S</span>
+            <h3>Student tools</h3>
+            <p>Projects, proposals, ideas, DSA prep, LearningLab events, alumni interviews, and profile.</p>
+          </article>
+          <article>
+            <span>O</span>
+            <h3>Organisation tools</h3>
+            <p>Student roster, event creation, feature moderation, project review, and workspace controls.</p>
+          </article>
+          <article>
+            <span>A</span>
+            <h3>Admin approval</h3>
+            <p>Organisation requests go through a global admin before becoming active workspaces.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="sp-compare">
+        <div class="sp-section-heading">
+          <h2>How StudentHub helps</h2>
+          <p>
+            The website gives colleges structure, gives students access, and
+            keeps collaboration data organised.
+          </p>
+        </div>
+        <div class="sp-compare-table">
+          <div class="sp-compare-row head">
+            <span>Area</span>
+            <strong>For colleges</strong>
+            <strong>For students</strong>
+            <strong>Result</strong>
+          </div>
+          <div class="sp-compare-row">
+            <span>Verified access</span><b>Upload student data</b><b>Login with college email</b><b>Clean membership</b>
+          </div>
+          <div class="sp-compare-row">
+            <span>Projects</span><b>Review workspace activity</b><b>Join and contribute</b><b>Visible collaboration</b>
+          </div>
+          <div class="sp-compare-row">
+            <span>Feedback</span><b>See student needs</b><b>Post doubts and ideas</b><b>Better support</b>
+          </div>
+          <div class="sp-compare-row">
+            <span>Events</span><b>Create LearningLab meets</b><b>Discover sessions</b><b>More participation</b>
+          </div>
+          <div class="sp-compare-row">
+            <span>Interview prep</span><b>Track requests</b><b>Book alumni mocks</b><b>Career readiness</b>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="sp-footer">
       <div>
-        <h2>Deliver better student projects continuously</h2>
-        <p>
-          Start with an idea, find teammates, and turn project work into a
-          visible portfolio.
-        </p>
+        <a class="nav-brand" href="index.html">
+          <span class="brand-icon">S</span>
+          <span class="brand-name">StudentHub</span>
+        </a>
+        <p>The verified organisation workspace for student collaboration.</p>
       </div>
-      <div class="cta-band-actions">
-        <a class="btn-primary" href="pages/login.html">Sign up</a>
-        <a class="btn-ghost" href="pages/projects.html">Explore projects</a>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-      <div class="footer-brand">
-        <span class="brand-icon">⬡</span> StudentHub
-      </div>
-      <p class="footer-sub">
-        A collaborative space for student innovators. Build something worth
-        showing.
-      </p>
-      <div class="footer-links">
-        <a href="index.html">Home</a>
+      <div class="sp-footer-links">
+        <a href="pages/opportunities.html">Opportunities</a>
         <a href="pages/projects.html">Projects</a>
         <a href="pages/ideas.html">Ideas</a>
-        <a href="pages/profile.html">Profile</a>
+        <a href="pages/dsa.html">DSA Prep</a>
+        <a href="pages/interviews.html">Interviews</a>
+        <a href="pages/learninglab.html">LearningLab</a>
+        <a href="pages/about.html">About</a>
       </div>
     </footer>
 
@@ -269,7 +370,6 @@
     <script src="assets/js/app.js"></script>
     <script src="assets/js/home.js"></script>
 
-    <!-- Onboarding / Profile Modal -->
     <div class="modal-overlay" id="onboard-modal" aria-hidden="true">
       <div
         class="modal"
@@ -277,30 +377,18 @@
         aria-modal="true"
         aria-labelledby="onboard-title"
       >
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-          "
-        >
+        <div class="sp-modal-head">
           <div>
             <div class="modal-title" id="onboard-title">
               Create your StudentHub profile
             </div>
-            <div
-              style="
-                color: var(--text3);
-                font-size: 0.9rem;
-                margin-top: 0.25rem;
-              "
-            >
-              A quick profile helps others find you and join projects.
+            <div class="sp-modal-subtitle">
+              Add your skills, links, and project interests after your college
+              email is verified.
             </div>
           </div>
           <button class="btn-cancel" onclick="SH.closeModal('onboard-modal')">
-            ✕
+            X
           </button>
         </div>
         <div class="form-group">

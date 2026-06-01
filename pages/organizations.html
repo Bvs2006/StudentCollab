@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Organizations - StudentHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body class="organizations-page">
+    <nav class="nav">
+      <div class="nav-brand">
+        <span class="brand-icon">S</span><span class="brand-name">StudentHub</span>
+      </div>
+      <div class="nav-links">
+        <a href="../index.html" class="nav-link">Home</a>
+        <a href="organizations.html" class="nav-link active">Organizations</a>
+        <a href="projects.html" class="nav-link">Projects</a>
+        <a href="proposals.html" class="nav-link">Proposals</a>
+        <a href="ideas.html" class="nav-link">Ideas</a>
+        <a href="dsa.html" class="nav-link">DSA Prep</a>
+        <a href="interviews.html" class="nav-link">Interviews</a>
+        <a href="learninglab.html" class="nav-link">LearningLab</a>
+        <a href="profile.html" class="nav-link">Profile</a>
+      </div>
+    </nav>
+
+    <header class="page-header organizations-hero">
+      <div class="projects-eyebrow">Organization workspace</div>
+      <h1>Run StudentHub for your campus or club.</h1>
+      <p>
+        Request an organization workspace, wait for global admin approval, then
+        manage projects, events, DSA prep, and interviews for your own students.
+      </p>
+    </header>
+
+    <main class="page-content organizations-content">
+      <section class="org-grid">
+        <article class="panel">
+          <div class="section-eyebrow">Current workspace</div>
+          <h2 id="active-org-name">StudentHub</h2>
+          <p id="active-org-description">
+            Your active workspace controls what you see across the app.
+          </p>
+          <div id="org-switcher" class="org-switcher"></div>
+        </article>
+
+        <article class="panel">
+          <div class="section-eyebrow">Request access</div>
+          <h2>Create an organization request</h2>
+          <form id="org-request-form" class="admin-event-form">
+            <div class="form-group">
+              <label class="form-label">Organization name</label>
+              <input
+                class="form-input"
+                id="org-name"
+                placeholder="Example: Aditya University"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">What will this workspace manage?</label>
+              <textarea
+                class="form-textarea"
+                id="org-description"
+                placeholder="Mention department, club, student community, events, or placement programs."
+              ></textarea>
+            </div>
+            <button class="btn-submit" type="submit">Send Request</button>
+          </form>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="section-eyebrow">Request status</div>
+        <h2>Your organization requests</h2>
+        <div id="my-org-requests"></div>
+      </section>
+    </main>
+
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script>
+      function renderOrganizations() {
+        const user = SH.requireAuth();
+        if (!user) return;
+        const activeOrg = SH.getActiveOrg();
+        document.getElementById('active-org-name').textContent = activeOrg.name;
+        document.getElementById('active-org-description').textContent =
+          activeOrg.description ||
+          'Your active workspace controls projects, events, prep rooms, and interview requests.';
+
+        const switcher = document.getElementById('org-switcher');
+        const orgs = SH.loadOrganizations().filter(
+          (org) => user.role === 'admin' || (user.orgIds || []).includes(org.id)
+        );
+        switcher.innerHTML = orgs.length
+          ? orgs
+              .map(
+                (org) => `
+          <button class="org-chip ${
+            org.id === SH.getActiveOrgId() ? 'active' : ''
+          }" data-org-id="${org.id}">
+            ${SH.escapeHtml(org.name)}
+          </button>
+        `
+              )
+              .join('')
+          : `<p class="auth-helper">You do not have an approved organization yet. Submit a request and the global admin can approve it.</p>`;
+        switcher.querySelectorAll('[data-org-id]').forEach((button) => {
+          button.addEventListener('click', () => {
+            SH.setActiveOrg(button.dataset.orgId);
+            SH.toast('Workspace switched');
+            renderOrganizations();
+            SH.renderSidebar && SH.renderSidebar();
+          });
+        });
+
+        const requests = SH.loadOrgRequests().filter(
+          (request) =>
+            request.requesterId === user.id ||
+            String(request.requesterEmail || '').toLowerCase() ===
+              String(user.email || '').toLowerCase()
+        );
+        const requestNode = document.getElementById('my-org-requests');
+        requestNode.innerHTML = requests.length
+          ? requests
+              .map(
+                (request) => `
+          <div class="joined-project">
+            <div class="jp-dot"></div>
+            <div style="flex:1">
+              <div class="jp-title">${SH.escapeHtml(request.name)}</div>
+              <div class="jp-role">${SH.escapeHtml(
+                request.description || 'No description provided.'
+              )}</div>
+            </div>
+            <span class="role-badge">${SH.escapeHtml(request.status)}</span>
+          </div>
+        `
+              )
+              .join('')
+          : `<div class="empty-state"><div class="empty-icon">+</div><h3>No requests yet</h3><p>Submit your organization request above.</p></div>`;
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        document
+          .getElementById('org-request-form')
+          .addEventListener('submit', (event) => {
+            event.preventDefault();
+            const result = SH.submitOrgRequest({
+              name: document.getElementById('org-name').value,
+              description: document.getElementById('org-description').value,
+            });
+            SH.toast(
+              result.ok
+                ? 'Organization request sent to admin'
+                : result.message
+            );
+            if (!result.ok) return;
+            event.target.reset();
+            renderOrganizations();
+          });
+        renderOrganizations();
+      });
+    </script>
+  </body>
+</html>

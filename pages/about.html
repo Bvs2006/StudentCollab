@@ -11,59 +11,97 @@
     />
     <link rel="stylesheet" href="../assets/css/style.css" />
   </head>
-  <body>
+  <body class="about-page">
     <nav class="nav" role="navigation" aria-label="Main navigation">
       <div class="nav-brand">
-        <span class="brand-icon">SH</span>
+        <span class="brand-icon">S</span>
         <span class="brand-name">StudentHub</span>
       </div>
       <div class="nav-links">
         <a href="../index.html" class="nav-link">Home</a>
+        <a href="opportunities.html" class="nav-link">Opportunities</a>
         <a href="projects.html" class="nav-link">Projects</a>
         <a href="proposals.html" class="nav-link">Proposals</a>
         <a href="ideas.html" class="nav-link">Ideas</a>
+        <a href="dsa.html" class="nav-link">DSA Prep</a>
+        <a href="interviews.html" class="nav-link">Interviews</a>
+        <a href="learninglab.html" class="nav-link">LearningLab</a>
         <a href="about.html" class="nav-link active">About</a>
         <a href="profile.html" class="nav-link">Profile</a>
       </div>
     </nav>
 
-    <header class="page-header">
+    <header class="page-header about-hero">
+      <div class="projects-eyebrow">Built by students</div>
       <h1>About StudentHub</h1>
       <p>
-        StudentHub is built to help students turn ideas into projects, find
-        collaborators, and maintain a visible portfolio of work.
+        StudentHub helps college students publish projects, find teammates,
+        review work, and build public proof of what they create.
       </p>
     </header>
 
     <main class="page-content">
+      <section class="about-overview" aria-label="Program overview">
+        <div class="about-stat">
+          <strong>Peer-led</strong>
+          <span>No formal mentors required. Students help students.</span>
+        </div>
+        <div class="about-stat">
+          <strong>Issue-first</strong>
+          <span>Every project can guide newcomers with clear first tasks.</span>
+        </div>
+        <div class="about-stat">
+          <strong>Portfolio-ready</strong>
+          <span>Contributions, demos, and project work stay visible.</span>
+        </div>
+      </section>
+
       <section class="about-section" aria-labelledby="developers-heading">
         <div class="section-header">
           <div>
-            <div class="section-eyebrow">Developers</div>
+            <div class="section-eyebrow">Contribution Members</div>
             <h2 class="section-title" id="developers-heading">
-              Built by student-focused developers
+              People building StudentHub
             </h2>
           </div>
         </div>
-        <div class="developer-grid">
-          <article class="developer-card">
-            <div class="developer-avatar" aria-hidden="true">VB</div>
-            <div class="developer-info">
-              <div class="role-badge">First Developer</div>
-              <h3>Venkata Srujith Bellamkonda</h3>
-              <p class="developer-role">Full Stack Developer</p>
-              <p>
-                Developed StudentHub to help students share ideas, create
-                projects, and collaborate through a clean project workspace.
-              </p>
-              <a
-                class="btn-primary developer-link"
-                href="https://www.linkedin.com/in/venkata-srujith-bellamkonda-b78626336/"
-                target="_blank"
-                rel="noopener noreferrer"
-                >View LinkedIn</a
-              >
+        <div class="member-grid">
+          <article class="member-card">
+            <div class="member-avatar" aria-hidden="true">VB</div>
+            <div class="role-badge">Core Builder</div>
+            <h3>Venkata Srujith Bellamkonda</h3>
+            <p>Full Stack Developer</p>
+            <span>
+              Built the core StudentHub experience for projects, ideas,
+              profiles, events, and peer collaboration.
+            </span>
+            <div class="member-tags">
+              <span>Frontend</span>
+              <span>Backend</span>
+              <span>Product</span>
             </div>
+            <a
+              class="mini-link-btn"
+              href="https://www.linkedin.com/in/venkata-srujith-bellamkonda-b78626336/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >LinkedIn</a
+            >
+          </article>
+          <article class="member-card add-member-card">
+            <div class="member-avatar" aria-hidden="true">+</div>
+            <div class="role-badge">Open Slot</div>
+            <h3>Contributor</h3>
+            <p>Design, code, testing, docs</p>
+            <span>
+              Future contributors can be added here as cards when they help
+              improve StudentHub.
+            </span>
+            <div class="member-tags">
+              <span>Open</span>
+              <span>Peer-led</span>
+            </div>
+            <a class="mini-link-btn outline" href="projects.html">Contribute</a>
           </article>
         </div>
       </section>

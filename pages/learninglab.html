@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LearningLab — StudentHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body class="learninglab-page">
+    <nav class="nav">
+      <div class="nav-brand">
+        <span class="brand-icon">S</span>
+        <span class="brand-name">StudentHub</span>
+      </div>
+      <div class="nav-links">
+        <a href="../index.html" class="nav-link">Home</a>
+        <a href="opportunities.html" class="nav-link">Opportunities</a>
+        <a href="projects.html" class="nav-link">Projects</a>
+        <a href="proposals.html" class="nav-link">Proposals</a>
+        <a href="ideas.html" class="nav-link">Ideas</a>
+        <a href="dsa.html" class="nav-link">DSA Prep</a>
+        <a href="interviews.html" class="nav-link">Interviews</a>
+        <a href="learninglab.html" class="nav-link active">LearningLab</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="profile.html" class="nav-link">Profile</a>
+      </div>
+    </nav>
+
+    <header class="learning-hero">
+      <div class="projects-eyebrow">LearningLab Meet</div>
+      <h1>Workshops, meetups, and peer learning events</h1>
+      <p>
+        Discover live sessions, check the calendar, and register for events
+        created by the StudentHub admin team.
+      </p>
+    </header>
+
+    <main class="learning-shell">
+      <section class="learning-main">
+        <div class="learning-toolbar">
+          <div>
+            <div class="section-eyebrow">Upcoming events</div>
+            <h2 id="events-heading">LearningLab calendar</h2>
+          </div>
+          <div class="learning-tabs" aria-label="Event filters">
+            <button class="learning-tab active" onclick="setEventFilter('upcoming', this)">
+              Upcoming
+            </button>
+            <button class="learning-tab" onclick="setEventFilter('past', this)">
+              Past
+            </button>
+            <button class="learning-tab" onclick="setEventFilter('all', this)">
+              All
+            </button>
+          </div>
+        </div>
+
+        <div class="learning-layout">
+          <div class="event-list" id="event-list"></div>
+          <aside class="calendar-panel">
+            <div class="calendar-head">
+              <button class="calendar-nav" onclick="shiftCalendar(-1)">‹</button>
+              <strong id="calendar-title">Month</strong>
+              <button class="calendar-nav" onclick="shiftCalendar(1)">›</button>
+            </div>
+            <div class="calendar-grid calendar-weekdays">
+              <span>S</span><span>M</span><span>T</span><span>W</span
+              ><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div class="calendar-grid" id="calendar-grid"></div>
+          </aside>
+        </div>
+      </section>
+
+      <aside class="event-detail-panel" id="event-detail-panel">
+        <div class="event-empty">
+          <h3>Select an event</h3>
+          <p>Click any event to view details and open its registration form.</p>
+        </div>
+      </aside>
+    </main>
+
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script>
+      const EVENT_KEY = 'sh_learninglab_events';
+      let eventFilter = 'upcoming';
+      let selectedEventId = null;
+      let calendarCursor = new Date();
+
+      const loadEvents = () => {
+        try {
+          const stored = JSON.parse(localStorage.getItem(EVENT_KEY) || '[]');
+          return Array.isArray(stored) ? stored : [];
+        } catch (e) {
+          return [];
+        }
+      };
+
+      const saveEvents = (events) => {
+        localStorage.setItem(EVENT_KEY, JSON.stringify(events));
+      };
+
+      const formatEventDate = (date) =>
+        new Date(`${date}T00:00:00`).toLocaleDateString('en-US', {
+          weekday: 'short',
+          month: 'short',
+          day: 'numeric',
+        });
+
+      const isPast = (event) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return new Date(`${event.date}T00:00:00`) < today;
+      };
+
+      const filteredEvents = () => {
+        const events = SH.filterByActiveOrg(loadEvents()).sort((a, b) =>
+          a.date.localeCompare(b.date)
+        );
+        if (eventFilter === 'upcoming') return events.filter((event) => !isPast(event));
+        if (eventFilter === 'past') return events.filter(isPast);
+        return events;
+      };
+
+      function setEventFilter(filter, btn) {
+        eventFilter = filter;
+        document
+          .querySelectorAll('.learning-tab')
+          .forEach((node) => node.classList.remove('active'));
+        btn.classList.add('active');
+        renderEvents();
+      }
+
+      function shiftCalendar(delta) {
+        calendarCursor = new Date(
+          calendarCursor.getFullYear(),
+          calendarCursor.getMonth() + delta,
+          1
+        );
+        renderCalendar();
+      }
+
+      function selectEvent(id) {
+        selectedEventId = id;
+        renderEvents();
+        renderEventDetail();
+      }
+
+      function renderEvents() {
+        const list = filteredEvents();
+        const container = document.getElementById('event-list');
+        container.innerHTML = list.length
+          ? list
+              .map(
+                (event) => `
+          <button class="event-card ${
+            selectedEventId === event.id ? 'active' : ''
+          }" onclick="selectEvent('${event.id}')">
+            <span class="event-date">${formatEventDate(event.date)}</span>
+            <span class="event-body">
+              <strong>${SH.escapeHtml(event.title)}</strong>
+              <small>${SH.escapeHtml(event.time)} · ${SH.escapeHtml(
+                  event.mode
+                )} · ${SH.escapeHtml(event.level)}</small>
+              <em>By ${SH.escapeHtml(event.host)}</em>
+            </span>
+          </button>
+        `
+              )
+              .join('')
+          : `<div class="empty-state"><div class="empty-icon">.</div><h3>No events</h3><p>Check another filter or ask admin to add a LearningLab meet.</p></div>`;
+
+        if (!selectedEventId && list[0]) selectedEventId = list[0].id;
+        renderEventDetail();
+        renderCalendar();
+      }
+
+      function renderCalendar() {
+        const events = SH.filterByActiveOrg(loadEvents());
+        const grid = document.getElementById('calendar-grid');
+        const title = document.getElementById('calendar-title');
+        const year = calendarCursor.getFullYear();
+        const month = calendarCursor.getMonth();
+        title.textContent = calendarCursor.toLocaleDateString('en-US', {
+          month: 'long',
+          year: 'numeric',
+        });
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const cells = [];
+        for (let i = 0; i < firstDay; i++) cells.push('<span></span>');
+        for (let day = 1; day <= daysInMonth; day++) {
+          const iso = `${year}-${String(month + 1).padStart(2, '0')}-${String(
+            day
+          ).padStart(2, '0')}`;
+          const event = events.find((item) => item.date === iso);
+          cells.push(
+            `<button class="calendar-day ${
+              event ? 'has-event' : ''
+            }" onclick="${event ? `selectEvent('${event.id}')` : ''}">${day}</button>`
+          );
+        }
+        grid.innerHTML = cells.join('');
+      }
+
+      function renderEventDetail() {
+        const panel = document.getElementById('event-detail-panel');
+        const event = SH.filterByActiveOrg(loadEvents()).find(
+          (item) => item.id === selectedEventId
+        );
+        if (!event) {
+          panel.innerHTML = `<div class="event-empty"><h3>Select an event</h3><p>Click any event to view details and register.</p></div>`;
+          return;
+        }
+        panel.innerHTML = `
+          <div class="event-detail-card">
+            <div class="event-detail-date">${formatEventDate(event.date)}</div>
+            <h2>${SH.escapeHtml(event.title)}</h2>
+            <p>${SH.escapeHtml(event.description)}</p>
+            <div class="event-meta-grid">
+              <div><span>Time</span><strong>${SH.escapeHtml(event.time)}</strong></div>
+              <div><span>Mode</span><strong>${SH.escapeHtml(event.mode)}</strong></div>
+              <div><span>Level</span><strong>${SH.escapeHtml(event.level)}</strong></div>
+              <div><span>Host</span><strong>${SH.escapeHtml(event.host)}</strong></div>
+            </div>
+            <div class="registration-box">
+              <span>Registration</span>
+              <p>Use the official form to reserve your seat for this LearningLab meet.</p>
+              <button class="btn-submit" onclick="window.open('${SH.escapeHtml(
+                event.formUrl
+              )}', '_blank', 'noopener,noreferrer')">Open Google Form</button>
+            </div>
+          </div>
+        `;
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        renderEvents();
+      });
+    </script>
+  </body>
+</html>

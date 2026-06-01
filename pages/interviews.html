@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alumni Interviews - StudentHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body class="interviews-page">
+    <nav class="nav">
+      <div class="nav-brand">
+        <span class="brand-icon">S</span>
+        <span class="brand-name">StudentHub</span>
+      </div>
+      <div class="nav-links">
+        <a href="../index.html" class="nav-link">Home</a>
+        <a href="opportunities.html" class="nav-link">Opportunities</a>
+        <a href="projects.html" class="nav-link">Projects</a>
+        <a href="proposals.html" class="nav-link">Proposals</a>
+        <a href="ideas.html" class="nav-link">Ideas</a>
+        <a href="dsa.html" class="nav-link">DSA Prep</a>
+        <a href="interviews.html" class="nav-link active">Interviews</a>
+        <a href="learninglab.html" class="nav-link">LearningLab</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="profile.html" class="nav-link">Profile</a>
+      </div>
+    </nav>
+
+    <header class="page-header interviews-hero">
+      <div class="projects-eyebrow">Paid alumni mock interviews</div>
+      <h1>Practice with alumni before real placements</h1>
+      <p>
+        Book paid mock interviews with alumni who have cleared technical,
+        project, HR, and internship rounds. Get structured feedback and a
+        preparation plan after each session.
+      </p>
+      <div class="interview-hero-actions">
+        <a class="btn-submit" href="#book-interview">Book interview</a>
+        <a class="btn-cancel" href="#alumni-panel">View alumni</a>
+      </div>
+    </header>
+
+    <main class="page-content interviews-content">
+      <section class="interview-stats" aria-label="Interview feature summary">
+        <article><span>Session length</span><strong>45 min</strong></article>
+        <article><span>Starting from</span><strong>₹199</strong></article>
+        <article><span>Formats</span><strong>4 tracks</strong></article>
+        <article><span>Deliverable</span><strong>Feedback</strong></article>
+      </section>
+
+      <section class="interview-grid" id="alumni-panel">
+        <article class="interview-panel">
+          <div class="section-eyebrow">Alumni interviewers</div>
+          <h2>Choose the kind of mentor you need</h2>
+          <div class="alumni-grid">
+            <article class="alumni-card">
+              <div class="alumni-avatar">AS</div>
+              <div>
+                <h3>Ananya Sharma</h3>
+                <p>SDE Intern alum · DSA and coding rounds</p>
+                <span>₹249/session</span>
+              </div>
+            </article>
+            <article class="alumni-card">
+              <div class="alumni-avatar">RK</div>
+              <div>
+                <h3>Rahul Kumar</h3>
+                <p>Product engineering alum · Projects and system design basics</p>
+                <span>₹299/session</span>
+              </div>
+            </article>
+            <article class="alumni-card">
+              <div class="alumni-avatar">NP</div>
+              <div>
+                <h3>Nisha Patel</h3>
+                <p>Research intern alum · Resume and internship interviews</p>
+                <span>₹199/session</span>
+              </div>
+            </article>
+          </div>
+        </article>
+
+        <article class="interview-panel">
+          <div class="section-eyebrow">What you get</div>
+          <h2>Session outcome</h2>
+          <ul class="interview-list">
+            <li>Live mock interview with an alumni student.</li>
+            <li>Score for communication, approach, correctness, and confidence.</li>
+            <li>Written feedback with next practice topics.</li>
+            <li>Optional second round after improvement.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="interview-panel" id="book-interview">
+        <div class="section-eyebrow">Booking request</div>
+        <h2>Request a paid alumni mock interview</h2>
+        <form class="interview-form" id="interview-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Interview track</label>
+              <select class="form-select" id="interview-track">
+                <option>DSA coding round</option>
+                <option>Project explanation round</option>
+                <option>HR and communication round</option>
+                <option>Internship interview round</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Budget</label>
+              <select class="form-select" id="interview-budget">
+                <option>₹199</option>
+                <option>₹249</option>
+                <option>₹299</option>
+                <option>₹399</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Preferred date</label>
+              <input class="form-input" id="interview-date" type="date" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Preferred time</label>
+              <input
+                class="form-input"
+                id="interview-time"
+                placeholder="e.g. 7:00 PM"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">What should the alumni focus on?</label>
+            <textarea
+              class="form-textarea"
+              id="interview-note"
+              placeholder="Mention weak topics, target company, resume/project links, or interview fear."
+              required
+            ></textarea>
+          </div>
+          <button class="btn-submit" type="submit">Submit booking request</button>
+        </form>
+      </section>
+
+      <section class="interview-panel">
+        <div class="section-eyebrow">Your requests</div>
+        <h2>Pending interview bookings</h2>
+        <div class="interview-request-list" id="interview-request-list"></div>
+      </section>
+    </main>
+
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script>
+      const interviewKey = 'sh_alumni_interview_requests';
+
+      function loadInterviewRequests() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(interviewKey) || '[]');
+          return Array.isArray(saved) ? SH.filterByActiveOrg(saved) : [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveInterviewRequests(items) {
+        localStorage.setItem(interviewKey, JSON.stringify(items));
+      }
+
+      function renderInterviewRequests() {
+        const list = loadInterviewRequests();
+        const container = document.getElementById('interview-request-list');
+        container.innerHTML = list.length
+          ? list
+              .map(
+                (item) => `
+                  <article class="interview-request-card">
+                    <div>
+                      <span>${SH.escapeHtml(item.track)} · ${SH.escapeHtml(
+                  item.budget
+                )}</span>
+                      <h3>${SH.escapeHtml(item.date)} at ${SH.escapeHtml(
+                  item.time
+                )}</h3>
+                      <p>${SH.escapeHtml(item.note)}</p>
+                    </div>
+                    <strong>Pending alumni match</strong>
+                  </article>
+                `
+              )
+              .join('')
+          : `
+              <div class="empty-state interview-empty">
+                <div class="empty-icon">+</div>
+                <h3>No interview requests yet</h3>
+                <p>Submit a booking request and an alumni student can pick it up.</p>
+              </div>
+            `;
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        document
+          .getElementById('interview-form')
+          .addEventListener('submit', (event) => {
+            event.preventDefault();
+            const request = {
+              id: Date.now(),
+              track: document.getElementById('interview-track').value,
+              budget: document.getElementById('interview-budget').value,
+              date: document.getElementById('interview-date').value,
+              time: document.getElementById('interview-time').value.trim(),
+              note: document.getElementById('interview-note').value.trim(),
+              orgId: SH.getActiveOrgId(),
+            };
+            if (!request.date || !request.time || !request.note) {
+              SH.toast('Add date, time, and focus area first');
+              return;
+            }
+            const list = JSON.parse(localStorage.getItem(interviewKey) || '[]');
+            list.unshift(request);
+            saveInterviewRequests(list);
+            event.target.reset();
+            renderInterviewRequests();
+            SH.toast('Interview booking request submitted');
+          });
+        renderInterviewRequests();
+      });
+    </script>
+  </body>
+</html>

@@ -11,37 +11,51 @@
     />
     <link rel="stylesheet" href="../assets/css/style.css" />
   </head>
-  <body>
+  <body class="projects-page">
     <nav class="nav">
       <div class="nav-brand">
-        <span class="brand-icon">⬡</span>
+        <span class="brand-icon">S</span>
         <span class="brand-name">StudentHub</span>
       </div>
       <div class="nav-links">
         <a href="../index.html" class="nav-link">Home</a>
+        <a href="opportunities.html" class="nav-link">Opportunities</a>
         <a href="projects.html" class="nav-link active">Projects</a>
         <a href="proposals.html" class="nav-link">Proposals</a>
         <a href="ideas.html" class="nav-link">Ideas</a>
+        <a href="dsa.html" class="nav-link">DSA Prep</a>
+        <a href="interviews.html" class="nav-link">Interviews</a>
+        <a href="learninglab.html" class="nav-link">LearningLab</a>
         <a href="about.html" class="nav-link">About</a>
         <a href="profile.html" class="nav-link">Profile</a>
       </div>
     </nav>
 
-    <div class="page-header">
-      <h1>Student Projects</h1>
+    <div class="page-header projects-hero">
+      <div class="projects-eyebrow">Student project directory</div>
+      <h1>Find Your Next <mark>College Project</mark></h1>
+      <p>
+        Browse approved student projects, filter by skills, and join teams
+        that match your interests.
+      </p>
       <button
         class="btn-post page-action-btn"
         onclick="SH.openProtectedModal('new-project-modal')"
       >
         + New Project
       </button>
-      <p>
-        Browse active collaborations — open the GitHub repo, contribute
-        directly, or view a live demo.
-      </p>
+      <div class="program-board hero-board" id="program-board"></div>
     </div>
 
-    <div class="filter-bar">
+    <section class="project-filter-panel">
+      <div class="filter-panel-head">
+        <div>
+          <div class="section-eyebrow">Explore projects</div>
+          <h2>Filter by status and skills</h2>
+        </div>
+        <span id="project-count">0 projects</span>
+      </div>
+      <div class="filter-bar">
       <button
         class="filter-btn active"
         data-filter="All"
@@ -54,14 +68,14 @@
         data-filter="open"
         onclick="filterProjects(this, 'open')"
       >
-        🟢 Open
+        Open
       </button>
       <button
         class="filter-btn"
         data-filter="progress"
         onclick="filterProjects(this, 'progress')"
       >
-        🟡 In Progress
+        In Progress
       </button>
       <button
         class="filter-btn"
@@ -108,10 +122,11 @@
       <input
         type="text"
         class="search-input"
-        placeholder="🔍 Search projects..."
+        placeholder="Search projects..."
         oninput="searchProjects(this.value)"
       />
-    </div>
+      </div>
+    </section>
 
     <div class="page-content">
       <div class="project-grid" id="projects-grid"></div>
@@ -129,7 +144,7 @@
       onclick="if(event.target===this)SH.closeModal('new-project-modal')"
     >
       <div class="modal">
-        <div class="modal-title">🚀 Start a New Project</div>
+        <div class="modal-title">Start a Student Project</div>
         <div class="form-group">
           <label class="form-label">Project Title *</label>
           <input
@@ -215,12 +230,58 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Roles Needed (comma separated)</label>
+          <label class="form-label">Peer Roles Needed (comma separated)</label>
           <input
             type="text"
             class="form-input"
             id="np-roles"
             placeholder="e.g. Frontend Dev, ML Engineer, UI Designer"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contributor Level</label>
+          <select class="form-select" id="np-difficulty">
+            <option value="Beginner friendly">Beginner friendly</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Student Maintainer</label>
+            <input
+              type="text"
+              class="form-input"
+              id="np-maintainer"
+              placeholder="e.g. Aditi Sharma"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Peer Sync</label>
+            <input
+              type="text"
+              class="form-input"
+              id="np-meeting"
+              placeholder="e.g. Saturdays, 7 PM on Meet"
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">First Good Issue / Next Step</label>
+          <input
+            type="text"
+            class="form-input"
+            id="np-next-step"
+            placeholder="e.g. Comment on a good-first-issue with your approach"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Collaboration Link</label>
+          <input
+            type="text"
+            class="form-input"
+            id="np-contact"
+            placeholder="Discord, WhatsApp, Slack, or email"
           />
         </div>
         <div class="form-group">
@@ -247,13 +308,14 @@
     </div>
 
     <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/aditya-projects.js"></script>
     <script src="../assets/js/app.js"></script>
     <script>
       let activeFilter = 'All';
       let searchQuery = '';
 
       function renderProjects() {
-        let list = SH.projects;
+        let list = SH.filterByActiveOrg(SH.projects || []);
         if (activeFilter !== 'All') {
           list = list.filter(
             (p) => p.status === activeFilter || p.tags.includes(activeFilter)
@@ -265,11 +327,16 @@
             (p) =>
               p.title.toLowerCase().includes(q) ||
               p.desc.toLowerCase().includes(q) ||
+              (p.maintainer || '').toLowerCase().includes(q) ||
+              (p.difficulty || '').toLowerCase().includes(q) ||
+              (p.lookingFor || []).some((r) => r.toLowerCase().includes(q)) ||
               p.tags.some((t) => t.toLowerCase().includes(q))
           );
         }
         const grid = document.getElementById('projects-grid');
         const noRes = document.getElementById('no-results');
+        const count = document.getElementById('project-count');
+        if (count) count.textContent = `${list.length} project${list.length === 1 ? '' : 's'}`;
         if (list.length === 0) {
           grid.innerHTML = '';
           noRes.style.display = 'block';
@@ -291,6 +358,40 @@
       function searchProjects(q) {
         searchQuery = q;
         renderProjects();
+      }
+
+      function renderProgramBoard() {
+        const board = document.getElementById('program-board');
+        if (!board) return;
+        const requests = SH.loadJoinRequests ? SH.loadJoinRequests() : [];
+        const user = SH.currentUser && SH.currentUser();
+        const myRequests = user
+          ? requests.filter((r) => r.userEmail === user.email).length
+          : 0;
+        const scopedProjects = SH.filterByActiveOrg(SH.projects || []);
+        const goodFirst = scopedProjects.filter((p) =>
+          String(p.difficulty || '').toLowerCase().includes('beginner')
+        ).length;
+        const openProjects = scopedProjects.filter((p) => p.status === 'open')
+          .length;
+        board.innerHTML = `
+          <div class="program-card">
+            <span>Open projects</span>
+            <strong>${openProjects}</strong>
+          </div>
+          <div class="program-card">
+            <span>Beginner ready</span>
+            <strong>${goodFirst}</strong>
+          </div>
+          <div class="program-card">
+            <span>Peer reviews</span>
+            <strong>${requests.length}</strong>
+          </div>
+          <div class="program-card">
+            <span>Your join requests</span>
+            <strong>${myRequests}</strong>
+          </div>
+        `;
       }
 
       async function submitProject() {
@@ -328,6 +429,18 @@
           contributeUrl: SH.contributeUrl,
           repoUrl: repoUrl || undefined,
           demoUrl: undefined,
+          difficulty: document.getElementById('np-difficulty').value,
+          maintainer:
+            document.getElementById('np-maintainer').value.trim() ||
+            user.name ||
+            'Student maintainer',
+          meeting: document.getElementById('np-meeting').value.trim(),
+          nextStep: document.getElementById('np-next-step').value.trim(),
+          contact:
+            document.getElementById('np-contact').value.trim() ||
+            user.email ||
+            '',
+          orgId: SH.getActiveOrgId(),
         };
         // Try to enrich project with a demo URL from the provided GitHub repo
         try {
@@ -352,17 +465,26 @@
 
         SH.projects.unshift(newProject);
         SH.closeModal('new-project-modal');
+        renderProgramBoard();
         renderProjects();
         SH.toast(
           '🎉 Project created! ' +
             (newProject.demoUrl
               ? 'Demo detected and linked.'
-              : 'Share the GitHub repo to collect contributions.')
+              : 'Share the GitHub repo to collect peer contributions.')
         );
         // Reset form
-        ['np-title', 'np-desc', 'np-details', 'np-roles', 'np-repo'].forEach(
-          (id) => (document.getElementById(id).value = '')
-        );
+        [
+          'np-title',
+          'np-desc',
+          'np-details',
+          'np-roles',
+          'np-repo',
+          'np-maintainer',
+          'np-meeting',
+          'np-next-step',
+          'np-contact',
+        ].forEach((id) => (document.getElementById(id).value = ''));
       }
 
       document.addEventListener('DOMContentLoaded', async () => {
@@ -370,6 +492,10 @@
         if (window.SH && SH.fetchProjectsFromSupabase) {
           await SH.fetchProjectsFromSupabase();
         }
+        if (window.SH && SH.importAdityaProjects) {
+          SH.importAdityaProjects();
+        }
+        renderProgramBoard();
         renderProjects();
       });
     </script>

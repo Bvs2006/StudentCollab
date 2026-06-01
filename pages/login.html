@@ -11,27 +11,12 @@
     />
     <link rel="stylesheet" href="../assets/css/style.css" />
   </head>
-  <body>
-    <nav class="nav">
-      <div class="nav-brand">
-        <span class="brand-icon">SH</span
-        ><span class="brand-name">StudentHub</span>
-      </div>
-      <div class="nav-links">
-        <a href="../index.html" class="nav-link">Home</a>
-        <a href="projects.html" class="nav-link">Projects</a>
-        <a href="proposals.html" class="nav-link">Proposals</a>
-        <a href="ideas.html" class="nav-link">Ideas</a>
-        <a href="about.html" class="nav-link">About</a>
-        <a href="profile.html" class="nav-link">Profile</a>
-      </div>
-    </nav>
-
+  <body class="login-page">
     <header class="page-header">
       <h1>Login to StudentHub</h1>
       <p>
-        Use a student account for your workspace, or the admin account for
-        review and moderation.
+        Choose a student account for learning and collaboration, or an
+        organisation account for approved workspace management.
       </p>
     </header>
 
@@ -45,18 +30,18 @@
               type="button"
               onclick="setLoginRole('user')"
             >
-              User Login
+              Student
             </button>
             <button
               class="sort-btn"
-              id="admin-tab"
+              id="org-tab"
               type="button"
-              onclick="setLoginRole('admin')"
+              onclick="setLoginRole('org_admin')"
             >
-              Admin Login
+              Organisation
             </button>
           </div>
-          <div class="modal-title" id="login-title">User Login</div>
+          <div class="modal-title" id="login-title">Student Login</div>
           <form id="login-form">
             <div class="form-group">
               <label class="form-label">Email</label>
@@ -64,12 +49,21 @@
                 class="form-input"
                 id="login-email"
                 type="email"
-                placeholder="you@example.com"
+                placeholder="name@college.edu"
                 required
               />
             </div>
             <div class="form-group">
-              <label class="form-label">Password</label>
+              <div class="auth-label-row">
+                <label class="form-label">Password</label>
+                <button
+                  class="auth-text-btn"
+                  type="button"
+                  onclick="toggleForgotPassword()"
+                >
+                  Forgot password?
+                </button>
+              </div>
               <input
                 class="form-input"
                 id="login-password"
@@ -85,10 +79,53 @@
           <div class="auth-note" id="admin-note" style="display: none">
             Default admin: admin@studenthub.local / admin123
           </div>
+          <div class="auth-note" id="org-note" style="display: none">
+            Organisation login is for approved organisation admins. To create a
+            new organisation, login as a student and send a request from the
+            Organizations page.
+          </div>
+
+          <form id="forgot-form" class="forgot-panel" style="display: none">
+            <div class="modal-title">Reset Password</div>
+            <p class="auth-helper">
+              Enter the college email for your student account and choose a new
+              password.
+            </p>
+            <div class="form-group">
+              <label class="form-label">College email</label>
+              <input
+                class="form-input"
+                id="forgot-email"
+                type="email"
+                placeholder="name@college.edu"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">New password</label>
+              <input
+                class="form-input"
+                id="forgot-password"
+                type="password"
+                placeholder="At least 6 characters"
+                required
+              />
+            </div>
+            <div class="modal-footer">
+              <button class="btn-submit" type="submit">Update Password</button>
+              <button
+                class="btn-cancel"
+                type="button"
+                onclick="toggleForgotPassword(false)"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
         </div>
 
         <div class="panel auth-panel" id="register-panel">
-          <div class="modal-title">Create User Account</div>
+          <div class="modal-title">Create Student Account</div>
           <form id="register-form">
             <div class="form-row">
               <div class="form-group">
@@ -101,7 +138,7 @@
                 />
               </div>
               <div class="form-group">
-                <label class="form-label">Course / role</label>
+                <label class="form-label">Course / interest</label>
                 <input
                   class="form-input"
                   id="reg-course"
@@ -111,12 +148,12 @@
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label">Email</label>
+                <label class="form-label">College email</label>
                 <input
                   class="form-input"
                   id="reg-email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="name@college.edu"
                   required
                 />
               </div>
@@ -172,27 +209,45 @@
       function nextUrlFor(user) {
         const redirect = params.get('redirect');
         if (redirect) return redirect;
-        return user.role === 'admin' ? 'admin.html' : 'profile.html';
+        return user.role === 'admin' || user.role === 'org_admin'
+          ? 'admin.html'
+          : 'profile.html';
       }
 
       function setLoginRole(role) {
         loginRole = role;
+        document.getElementById('user-tab')?.classList.toggle('active', role === 'user');
         document
-          .getElementById('user-tab')
-          .classList.toggle('active', role === 'user');
-        document
-          .getElementById('admin-tab')
-          .classList.toggle('active', role === 'admin');
+          .getElementById('org-tab')
+          ?.classList.toggle('active', role === 'org_admin');
         document.getElementById('login-title').textContent =
-          role === 'admin' ? 'Admin Login' : 'User Login';
+          role === 'admin'
+            ? 'Admin Login'
+            : role === 'org_admin'
+            ? 'Organisation Login'
+            : 'Student Login';
         document.getElementById('register-panel').style.display =
-          role === 'admin' ? 'none' : 'block';
+          role === 'user' ? 'block' : 'none';
         document.getElementById('admin-note').style.display =
           role === 'admin' ? 'block' : 'none';
+        document.getElementById('org-note').style.display =
+          role === 'org_admin' ? 'block' : 'none';
         document.getElementById('login-email').value =
           role === 'admin' ? 'admin@studenthub.local' : '';
         document.getElementById('login-password').value =
           role === 'admin' ? 'admin123' : '';
+        toggleForgotPassword(false);
+      }
+
+      function toggleForgotPassword(force) {
+        const panel = document.getElementById('forgot-form');
+        const shouldShow =
+          typeof force === 'boolean' ? force : panel.style.display === 'none';
+        panel.style.display = shouldShow && loginRole !== 'admin' ? 'block' : 'none';
+        if (shouldShow) {
+          document.getElementById('forgot-email').value =
+            document.getElementById('login-email').value;
+        }
       }
 
       document
@@ -237,7 +292,25 @@
           window.location.href = nextUrlFor(result.user);
         });
 
+      document
+        .getElementById('forgot-form')
+        .addEventListener('submit', (event) => {
+          event.preventDefault();
+          const result = SH.resetPassword(
+            document.getElementById('forgot-email').value,
+            document.getElementById('forgot-password').value
+          );
+          SH.toast(result.message);
+          if (!result.ok) return;
+          document.getElementById('login-email').value =
+            document.getElementById('forgot-email').value;
+          document.getElementById('login-password').value = '';
+          event.target.reset();
+          toggleForgotPassword(false);
+        });
+
       if (params.get('role') === 'admin') setLoginRole('admin');
+      if (params.get('role') === 'org_admin') setLoginRole('org_admin');
     </script>
   </body>
 </html>
