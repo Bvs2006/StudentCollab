@@ -224,18 +224,19 @@
       document.addEventListener('DOMContentLoaded', () => {
         const tabs = document.querySelectorAll('.opportunity-status-tabs span');
         const cards = document.querySelectorAll('.internship-card');
-        tabs.forEach(tab => {
+        tabs.forEach((tab) => {
           tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
+            tabs.forEach((t) => t.classList.remove('active'));
             tab.classList.add('active');
             const filter = tab.getAttribute('data-filter');
-            cards.forEach(card => {
+            cards.forEach((card) => {
               const statusEl = card.querySelector('.opp-status');
               let status = '';
               if (statusEl) {
                 if (statusEl.classList.contains('open')) status = 'open';
                 else if (statusEl.classList.contains('watch')) status = 'watch';
-                else if (statusEl.classList.contains('closed')) status = 'closed';
+                else if (statusEl.classList.contains('closed'))
+                  status = 'closed';
               }
               if (filter === 'all' || status === filter) {
                 card.style.display = 'flex';

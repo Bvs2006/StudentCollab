@@ -204,7 +204,9 @@
                     </div>
                     <strong>${
                       item.status === 'completed'
-                        ? `✓ Completed (by ${SH.escapeHtml(item.alumnus || 'Alumnus')})`
+                        ? `✓ Completed (by ${SH.escapeHtml(
+                            item.alumnus || 'Alumnus'
+                          )})`
                         : item.alumnus
                         ? `● Matched: ${SH.escapeHtml(item.alumnus)}`
                         : '○ Pending alumni match'

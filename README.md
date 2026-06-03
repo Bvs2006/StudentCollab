@@ -20,20 +20,20 @@ Each organisation gets its own scoped workspace. Students log in with their **co
 
 ## 🚀 Features
 
-| Feature | Description |
-|---|---|
-| 🏗️ **Projects** | Browse, filter, create, and join peer projects with skill-tag matching |
-| 💡 **Ideas Board** | Pitch early-stage concepts and collect collaborators |
-| 📋 **Proposals** | Submit structured project proposals; admins review and accept |
-| 🔐 **Auth & Roles** | College-email login; Student, Org Admin, and Global Admin roles |
-| 🏢 **Organisations** | Scoped multi-tenant workspaces per organisation |
-| 🧠 **DSA Prep** | Post help requests for algorithms/data structures; peers respond |
-| 🎤 **Alumni Interviews** | Book mock interviews with alumni mentors |
-| 📅 **LearningLab Events** | Discover and register for workshops and study sessions |
-| 🎯 **Opportunities** | Internship board with filterable status tabs (Open / Watchlist / Closed) |
-| 🛡️ **Admin Dashboard** | Full moderation: proposals, projects, events, students, DSA & interview queues |
-| 🌙 **Dark / Light Mode** | CSS custom-property theme system, switchable at runtime |
-| 📱 **Responsive** | Mobile-friendly layouts on every page |
+| Feature                   | Description                                                                    |
+| ------------------------- | ------------------------------------------------------------------------------ |
+| 🏗️ **Projects**           | Browse, filter, create, and join peer projects with skill-tag matching         |
+| 💡 **Ideas Board**        | Pitch early-stage concepts and collect collaborators                           |
+| 📋 **Proposals**          | Submit structured project proposals; admins review and accept                  |
+| 🔐 **Auth & Roles**       | College-email login; Student, Org Admin, and Global Admin roles                |
+| 🏢 **Organisations**      | Scoped multi-tenant workspaces per organisation                                |
+| 🧠 **DSA Prep**           | Post help requests for algorithms/data structures; peers respond               |
+| 🎤 **Alumni Interviews**  | Book mock interviews with alumni mentors                                       |
+| 📅 **LearningLab Events** | Discover and register for workshops and study sessions                         |
+| 🎯 **Opportunities**      | Internship board with filterable status tabs (Open / Watchlist / Closed)       |
+| 🛡️ **Admin Dashboard**    | Full moderation: proposals, projects, events, students, DSA & interview queues |
+| 🌙 **Dark / Light Mode**  | CSS custom-property theme system, switchable at runtime                        |
+| 📱 **Responsive**         | Mobile-friendly layouts on every page                                          |
 
 ---
 
@@ -60,15 +60,15 @@ pages/
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-|---|---|
-| **UI** | Vanilla HTML5 + CSS3 (custom properties, glassmorphism, animations) |
-| **Logic** | Vanilla JavaScript (ES2020), modular IIFE pattern |
-| **Fonts** | Google Fonts — Syne (display) + DM Sans (body) |
+| Layer       | Technology                                                           |
+| ----------- | -------------------------------------------------------------------- |
+| **UI**      | Vanilla HTML5 + CSS3 (custom properties, glassmorphism, animations)  |
+| **Logic**   | Vanilla JavaScript (ES2020), modular IIFE pattern                    |
+| **Fonts**   | Google Fonts — Syne (display) + DM Sans (body)                       |
 | **Storage** | `localStorage` for offline-first data; Supabase ready for cloud sync |
-| **Auth** | Supabase Auth (optional) — falls back gracefully to localStorage |
-| **Tooling** | ESLint · Prettier · Jest · Husky · lint-staged |
-| **CI** | GitHub Actions (lint + test on every push/PR) |
+| **Auth**    | Supabase Auth (optional) — falls back gracefully to localStorage     |
+| **Tooling** | ESLint · Prettier · Jest · Husky · lint-staged                       |
+| **CI**      | GitHub Actions (lint + test on every push/PR)                        |
 
 ---
 
@@ -96,12 +96,12 @@ npm run start
 
 ### Available Scripts
 
-| Script | Description |
-|---|---|
-| `npm run start` | Serve site locally with `serve` |
-| `npm run lint` | Run ESLint over `assets/js/` |
-| `npm run format` | Auto-format all files with Prettier |
-| `npm run test` | Run Jest unit tests |
+| Script            | Description                                          |
+| ----------------- | ---------------------------------------------------- |
+| `npm run start`   | Serve site locally with `serve`                      |
+| `npm run lint`    | Run ESLint over `assets/js/`                         |
+| `npm run format`  | Auto-format all files with Prettier                  |
+| `npm run test`    | Run Jest unit tests                                  |
 | `npm run prepare` | Install Husky git hooks (auto-runs on `npm install`) |
 
 ---
@@ -128,11 +128,11 @@ SUPABASE_ANON_KEY=your-anon-key
 
 When running without Supabase (localStorage mode), you can use the built-in seed accounts:
 
-| Role | Email | Password |
-|---|---|---|
-| Global Admin | `admin@studenthub.local` | `admin123` |
-| Org Admin | `org@adityauniversity.edu` | `admin123` |
-| Student | `student@adityauniversity.edu` | `student123` |
+| Role         | Email                          | Password     |
+| ------------ | ------------------------------ | ------------ |
+| Global Admin | `admin@studenthub.local`       | `admin123`   |
+| Org Admin    | `org@adityauniversity.edu`     | `admin123`   |
+| Student      | `student@adityauniversity.edu` | `student123` |
 
 ---
 
@@ -194,12 +194,12 @@ CI runs automatically on every push and pull request via GitHub Actions. See [`.
 
 StudentHub is a **zero-build static site** and deploys to any platform:
 
-| Platform | Command / Steps |
-|---|---|
-| **GitHub Pages** | Push to `gh-pages` branch or configure in repo settings |
-| **Netlify** | Drag-and-drop the repo folder, or connect GitHub repo |
-| **Vercel** | `vercel --prod` from the project root |
-| **Cloudflare Pages** | Connect repo, no build command needed |
+| Platform             | Command / Steps                                         |
+| -------------------- | ------------------------------------------------------- |
+| **GitHub Pages**     | Push to `gh-pages` branch or configure in repo settings |
+| **Netlify**          | Drag-and-drop the repo folder, or connect GitHub repo   |
+| **Vercel**           | `vercel --prod` from the project root                   |
+| **Cloudflare Pages** | Connect repo, no build command needed                   |
 
 ---
 
@@ -208,6 +208,7 @@ StudentHub is a **zero-build static site** and deploys to any platform:
 We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a PR.
 
 **Quick contribution checklist:**
+
 - [ ] Create a feature branch: `git checkout -b feat/short-description`
 - [ ] Run `npm run lint` and `npm run format` before committing
 - [ ] Add/update tests in `__tests__/` for any logic changes
