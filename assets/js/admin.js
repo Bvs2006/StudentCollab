@@ -484,6 +484,186 @@
       .forEach((s) => s.addEventListener('change', statusChange));
   };
 
+  const loadDsaHelp = () => {
+    try {
+      return JSON.parse(localStorage.getItem('sh_dsa_help_requests') || '[]');
+    } catch (e) {
+      return [];
+    }
+  };
+  const saveDsaHelp = (arr) =>
+    localStorage.setItem('sh_dsa_help_requests', JSON.stringify(arr));
+
+  const loadInterviews = () => {
+    try {
+      return JSON.parse(
+        localStorage.getItem('sh_alumni_interview_requests') || '[]'
+      );
+    } catch (e) {
+      return [];
+    }
+  };
+  const saveInterviews = (arr) =>
+    localStorage.setItem('sh_alumni_interview_requests', JSON.stringify(arr));
+
+  const resolveDsaHelp = (id) => {
+    const list = loadDsaHelp();
+    const next = list.filter((item) => String(item.id) !== String(id));
+    saveDsaHelp(next);
+    SH.toast('DSA Help Request resolved');
+    renderDsaHelpRequests();
+    renderOverview();
+  };
+
+  const renderDsaHelpRequests = () => {
+    const list = scopeItems(loadDsaHelp());
+    const container = document.getElementById('admin-dsa-help-requests');
+    if (!container) return;
+    if (!list.length) {
+      container.innerHTML = `<div class="empty-state"><div class="empty-icon">.</div><h3>No DSA help requests</h3><p>Classroom DSA doubts will appear here.</p></div>`;
+      return;
+    }
+    container.innerHTML = list
+      .map(
+        (item) => `
+        <div class="joined-project" style="flex-wrap: wrap; gap: 0.75rem;">
+          <div class="jp-dot" style="background: var(--red);"></div>
+          <div style="flex: 1; min-width: 250px;">
+            <div class="jp-title">${SH.escapeHtml(item.title)}</div>
+            <div class="jp-role">${SH.escapeHtml(item.topic)} · ${SH.escapeHtml(
+          item.level
+        )} · by ${SH.escapeHtml(item.author || 'Student')}</div>
+            <p style="margin: 0.35rem 0 0; color: var(--text2); font-size: 0.85rem;">${SH.escapeHtml(
+              item.note
+            )}</p>
+          </div>
+          <button class="mini-link-btn danger" data-dsa-resolve="${
+            item.id
+          }">Mark Resolved</button>
+        </div>
+      `
+      )
+      .join('');
+
+    container.querySelectorAll('[data-dsa-resolve]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        resolveDsaHelp(btn.dataset.dsaResolve);
+      });
+    });
+  };
+
+  const assignMentor = (id, mentorName) => {
+    const list = loadInterviews();
+    const idx = list.findIndex((item) => String(item.id) === String(id));
+    if (idx === -1) return;
+    list[idx].alumnus = mentorName;
+    list[idx].status = 'matched';
+    saveInterviews(list);
+    SH.toast('Alumni mentor assigned and booking confirmed');
+    renderInterviewRequests();
+  };
+
+  const completeInterview = (id) => {
+    const list = loadInterviews();
+    const idx = list.findIndex((item) => String(item.id) === String(id));
+    if (idx === -1) return;
+    list[idx].status = 'completed';
+    saveInterviews(list);
+    SH.toast('Interview session marked as Completed');
+    renderInterviewRequests();
+  };
+
+  const renderInterviewRequests = () => {
+    const list = scopeItems(loadInterviews());
+    const container = document.getElementById('admin-interview-requests');
+    if (!container) return;
+    if (!list.length) {
+      container.innerHTML = `<div class="empty-state"><div class="empty-icon">.</div><h3>No mock interview bookings</h3><p>Student mock interview requests will appear here.</p></div>`;
+      return;
+    }
+    container.innerHTML = list
+      .map(
+        (item) => `
+        <div style="border: 1px solid var(--border); padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem; background: var(--surface)">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div>
+              <div style="font-weight: 800; font-size: 0.95rem;">${SH.escapeHtml(
+                item.track
+              )}</div>
+              <div style="color: var(--text3); font-size: 0.82rem; margin-top: 0.25rem;">
+                by ${SH.escapeHtml(item.author || 'Student')} (${SH.escapeHtml(
+          item.authorEmail || ''
+        )}) · budget: ${SH.escapeHtml(item.budget)}
+              </div>
+              <div style="font-weight: 600; font-size: 0.85rem; margin-top: 0.25rem; color: var(--text2)">
+                Requested: ${SH.escapeHtml(item.date)} at ${SH.escapeHtml(
+          item.time
+        )}
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <span class="role-badge" style="background: ${
+                item.status === 'completed'
+                  ? 'var(--green)'
+                  : item.alumnus
+                  ? 'var(--yellow)'
+                  : 'var(--text3)'
+              }; color: #fff;">
+                ${SH.escapeHtml(item.status || 'pending')}
+              </span>
+            </div>
+          </div>
+          <p style="margin: 0.65rem 0; color: var(--text2); font-size: 0.88rem; line-height: 1.5;">
+            Focus area: ${SH.escapeHtml(item.note)}
+          </p>
+          <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin-top: 0.5rem;">
+            ${
+              item.status !== 'completed'
+                ? `
+                  <input id="mentor-input-${
+                    item.id
+                  }" class="form-input" style="max-width: 200px; padding: 0.35rem;" placeholder="Alumni mentor name" value="${SH.escapeHtml(
+                    item.alumnus || ''
+                  )}" />
+                  <button class="mini-link-btn" data-confirm-match="${
+                    item.id
+                  }">Confirm Match</button>
+                  ${
+                    item.alumnus
+                      ? `<button class="mini-link-btn outline" data-complete-booking="${item.id}">Mark Completed</button>`
+                      : ''
+                  }
+                `
+                : `<span style="font-size: 0.82rem; color: var(--text3);">Completed by: <strong>${SH.escapeHtml(
+                    item.alumnus
+                  )}</strong></span>`
+            }
+          </div>
+        </div>
+      `
+      )
+      .join('');
+
+    container.querySelectorAll('[data-confirm-match]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.confirmMatch;
+        const input = document.getElementById(`mentor-input-${id}`);
+        const name = input ? input.value.trim() : '';
+        if (!name) {
+          SH.toast('Please enter the alumnus mentor name');
+          return;
+        }
+        assignMentor(id, name);
+      });
+    });
+
+    container.querySelectorAll('[data-complete-booking]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        completeInterview(btn.dataset.completeBooking);
+      });
+    });
+  };
+
   const render = () => {
     if (!SH.requireAuth(['admin', 'org_admin'])) return;
     renderOverview();
@@ -492,6 +672,8 @@
     renderEvents();
     renderProjects();
     renderProposals();
+    renderDsaHelpRequests();
+    renderInterviewRequests();
   };
 
   document.addEventListener('DOMContentLoaded', () => {

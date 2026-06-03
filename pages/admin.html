@@ -41,7 +41,11 @@
 
     <main class="page-content">
       <section class="admin-metrics" id="admin-metrics"></section>
-      <section class="panel" id="admin-org-requests-panel" style="margin-bottom: 1rem">
+      <section
+        class="panel"
+        id="admin-org-requests-panel"
+        style="margin-bottom: 1rem"
+      >
         <div class="modal-title">Organization Requests</div>
         <div id="admin-org-requests"></div>
       </section>
@@ -63,7 +67,12 @@
             </div>
             <div class="form-group">
               <label class="form-label">College email</label>
-              <input class="form-input" id="student-email" type="email" required />
+              <input
+                class="form-input"
+                id="student-email"
+                type="email"
+                required
+              />
             </div>
           </div>
           <div class="form-row">
@@ -79,7 +88,11 @@
           <div class="form-row">
             <div class="form-group">
               <label class="form-label">Year</label>
-              <input class="form-input" id="student-year" placeholder="2nd year" />
+              <input
+                class="form-input"
+                id="student-year"
+                placeholder="2nd year"
+              />
             </div>
             <div class="form-group">
               <label class="form-label">Bulk paste</label>
@@ -119,7 +132,12 @@
             </div>
             <div class="form-group">
               <label class="form-label">Time</label>
-              <input class="form-input" id="event-time" placeholder="7:00 PM" required />
+              <input
+                class="form-input"
+                id="event-time"
+                placeholder="7:00 PM"
+                required
+              />
             </div>
           </div>
           <div class="form-row">
@@ -167,9 +185,23 @@
         <div class="modal-title">Project Moderation</div>
         <div id="admin-projects"></div>
       </section>
-      <section class="panel">
+      <section class="panel" style="margin-bottom: 1rem">
         <div class="modal-title">Pending Proposals</div>
         <div id="admin-proposals"></div>
+      </section>
+      <section class="panel" style="margin-bottom: 1rem">
+        <div class="modal-title">DSA Help Requests</div>
+        <p class="auth-helper">
+          Students posting stuck problems on the DSA Prep page will appear here. Help coordinate matching or mark resolved once done.
+        </p>
+        <div id="admin-dsa-help-requests"></div>
+      </section>
+      <section class="panel" style="margin-bottom: 1rem">
+        <div class="modal-title">Alumni Mock Interview Bookings</div>
+        <p class="auth-helper">
+          Confirm or complete mock interview sessions booked by students with alumni.
+        </p>
+        <div id="admin-interview-requests"></div>
       </section>
     </main>
 

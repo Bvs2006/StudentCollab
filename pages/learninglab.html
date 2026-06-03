@@ -48,7 +48,10 @@
             <h2 id="events-heading">LearningLab calendar</h2>
           </div>
           <div class="learning-tabs" aria-label="Event filters">
-            <button class="learning-tab active" onclick="setEventFilter('upcoming', this)">
+            <button
+              class="learning-tab active"
+              onclick="setEventFilter('upcoming', this)"
+            >
               Upcoming
             </button>
             <button class="learning-tab" onclick="setEventFilter('past', this)">
@@ -64,7 +67,9 @@
           <div class="event-list" id="event-list"></div>
           <aside class="calendar-panel">
             <div class="calendar-head">
-              <button class="calendar-nav" onclick="shiftCalendar(-1)">‹</button>
+              <button class="calendar-nav" onclick="shiftCalendar(-1)">
+                ‹
+              </button>
               <strong id="calendar-title">Month</strong>
               <button class="calendar-nav" onclick="shiftCalendar(1)">›</button>
             </div>
@@ -123,7 +128,8 @@
         const events = SH.filterByActiveOrg(loadEvents()).sort((a, b) =>
           a.date.localeCompare(b.date)
         );
-        if (eventFilter === 'upcoming') return events.filter((event) => !isPast(event));
+        if (eventFilter === 'upcoming')
+          return events.filter((event) => !isPast(event));
         if (eventFilter === 'past') return events.filter(isPast);
         return events;
       };
@@ -203,7 +209,9 @@
           cells.push(
             `<button class="calendar-day ${
               event ? 'has-event' : ''
-            }" onclick="${event ? `selectEvent('${event.id}')` : ''}">${day}</button>`
+            }" onclick="${
+              event ? `selectEvent('${event.id}')` : ''
+            }">${day}</button>`
           );
         }
         grid.innerHTML = cells.join('');
@@ -224,10 +232,18 @@
             <h2>${SH.escapeHtml(event.title)}</h2>
             <p>${SH.escapeHtml(event.description)}</p>
             <div class="event-meta-grid">
-              <div><span>Time</span><strong>${SH.escapeHtml(event.time)}</strong></div>
-              <div><span>Mode</span><strong>${SH.escapeHtml(event.mode)}</strong></div>
-              <div><span>Level</span><strong>${SH.escapeHtml(event.level)}</strong></div>
-              <div><span>Host</span><strong>${SH.escapeHtml(event.host)}</strong></div>
+              <div><span>Time</span><strong>${SH.escapeHtml(
+                event.time
+              )}</strong></div>
+              <div><span>Mode</span><strong>${SH.escapeHtml(
+                event.mode
+              )}</strong></div>
+              <div><span>Level</span><strong>${SH.escapeHtml(
+                event.level
+              )}</strong></div>
+              <div><span>Host</span><strong>${SH.escapeHtml(
+                event.host
+              )}</strong></div>
             </div>
             <div class="registration-box">
               <span>Registration</span>

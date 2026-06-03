@@ -35,8 +35,8 @@
       <div class="projects-eyebrow">Student project directory</div>
       <h1>Find Your Next <mark>College Project</mark></h1>
       <p>
-        Browse approved student projects, filter by skills, and join teams
-        that match your interests.
+        Browse approved student projects, filter by skills, and join teams that
+        match your interests.
       </p>
       <button
         class="btn-post page-action-btn"
@@ -56,75 +56,75 @@
         <span id="project-count">0 projects</span>
       </div>
       <div class="filter-bar">
-      <button
-        class="filter-btn active"
-        data-filter="All"
-        onclick="filterProjects(this, 'All')"
-      >
-        All
-      </button>
-      <button
-        class="filter-btn"
-        data-filter="open"
-        onclick="filterProjects(this, 'open')"
-      >
-        Open
-      </button>
-      <button
-        class="filter-btn"
-        data-filter="progress"
-        onclick="filterProjects(this, 'progress')"
-      >
-        In Progress
-      </button>
-      <button
-        class="filter-btn"
-        data-filter="AI/ML"
-        onclick="filterProjects(this, 'AI/ML')"
-      >
-        AI/ML
-      </button>
-      <button
-        class="filter-btn"
-        data-filter="Web Dev"
-        onclick="filterProjects(this, 'Web Dev')"
-      >
-        Web Dev
-      </button>
-      <button
-        class="filter-btn"
-        data-filter="Mobile"
-        onclick="filterProjects(this, 'Mobile')"
-      >
-        Mobile
-      </button>
-      <button
-        class="filter-btn"
-        data-filter="Hardware"
-        onclick="filterProjects(this, 'Hardware')"
-      >
-        Hardware
-      </button>
-      <button
-        class="filter-btn"
-        data-filter="Health"
-        onclick="filterProjects(this, 'Health')"
-      >
-        Health
-      </button>
-      <button
-        class="filter-btn"
-        data-filter="Education"
-        onclick="filterProjects(this, 'Education')"
-      >
-        Education
-      </button>
-      <input
-        type="text"
-        class="search-input"
-        placeholder="Search projects..."
-        oninput="searchProjects(this.value)"
-      />
+        <button
+          class="filter-btn active"
+          data-filter="All"
+          onclick="filterProjects(this, 'All')"
+        >
+          All
+        </button>
+        <button
+          class="filter-btn"
+          data-filter="open"
+          onclick="filterProjects(this, 'open')"
+        >
+          Open
+        </button>
+        <button
+          class="filter-btn"
+          data-filter="progress"
+          onclick="filterProjects(this, 'progress')"
+        >
+          In Progress
+        </button>
+        <button
+          class="filter-btn"
+          data-filter="AI/ML"
+          onclick="filterProjects(this, 'AI/ML')"
+        >
+          AI/ML
+        </button>
+        <button
+          class="filter-btn"
+          data-filter="Web Dev"
+          onclick="filterProjects(this, 'Web Dev')"
+        >
+          Web Dev
+        </button>
+        <button
+          class="filter-btn"
+          data-filter="Mobile"
+          onclick="filterProjects(this, 'Mobile')"
+        >
+          Mobile
+        </button>
+        <button
+          class="filter-btn"
+          data-filter="Hardware"
+          onclick="filterProjects(this, 'Hardware')"
+        >
+          Hardware
+        </button>
+        <button
+          class="filter-btn"
+          data-filter="Health"
+          onclick="filterProjects(this, 'Health')"
+        >
+          Health
+        </button>
+        <button
+          class="filter-btn"
+          data-filter="Education"
+          onclick="filterProjects(this, 'Education')"
+        >
+          Education
+        </button>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search projects..."
+          oninput="searchProjects(this.value)"
+        />
       </div>
     </section>
 
@@ -336,7 +336,10 @@
         const grid = document.getElementById('projects-grid');
         const noRes = document.getElementById('no-results');
         const count = document.getElementById('project-count');
-        if (count) count.textContent = `${list.length} project${list.length === 1 ? '' : 's'}`;
+        if (count)
+          count.textContent = `${list.length} project${
+            list.length === 1 ? '' : 's'
+          }`;
         if (list.length === 0) {
           grid.innerHTML = '';
           noRes.style.display = 'block';
@@ -370,10 +373,13 @@
           : 0;
         const scopedProjects = SH.filterByActiveOrg(SH.projects || []);
         const goodFirst = scopedProjects.filter((p) =>
-          String(p.difficulty || '').toLowerCase().includes('beginner')
+          String(p.difficulty || '')
+            .toLowerCase()
+            .includes('beginner')
         ).length;
-        const openProjects = scopedProjects.filter((p) => p.status === 'open')
-          .length;
+        const openProjects = scopedProjects.filter(
+          (p) => p.status === 'open'
+        ).length;
         board.innerHTML = `
           <div class="program-card">
             <span>Open projects</span>

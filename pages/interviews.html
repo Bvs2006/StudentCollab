@@ -70,7 +70,9 @@
               <div class="alumni-avatar">RK</div>
               <div>
                 <h3>Rahul Kumar</h3>
-                <p>Product engineering alum · Projects and system design basics</p>
+                <p>
+                  Product engineering alum · Projects and system design basics
+                </p>
                 <span>₹299/session</span>
               </div>
             </article>
@@ -90,7 +92,9 @@
           <h2>Session outcome</h2>
           <ul class="interview-list">
             <li>Live mock interview with an alumni student.</li>
-            <li>Score for communication, approach, correctness, and confidence.</li>
+            <li>
+              Score for communication, approach, correctness, and confidence.
+            </li>
             <li>Written feedback with next practice topics.</li>
             <li>Optional second round after improvement.</li>
           </ul>
@@ -124,7 +128,12 @@
           <div class="form-row">
             <div class="form-group">
               <label class="form-label">Preferred date</label>
-              <input class="form-input" id="interview-date" type="date" required />
+              <input
+                class="form-input"
+                id="interview-date"
+                type="date"
+                required
+              />
             </div>
             <div class="form-group">
               <label class="form-label">Preferred time</label>
@@ -145,7 +154,9 @@
               required
             ></textarea>
           </div>
-          <button class="btn-submit" type="submit">Submit booking request</button>
+          <button class="btn-submit" type="submit">
+            Submit booking request
+          </button>
         </form>
       </section>
 
@@ -191,7 +202,13 @@
                 )}</h3>
                       <p>${SH.escapeHtml(item.note)}</p>
                     </div>
-                    <strong>Pending alumni match</strong>
+                    <strong>${
+                      item.status === 'completed'
+                        ? `✓ Completed (by ${SH.escapeHtml(item.alumnus || 'Alumnus')})`
+                        : item.alumnus
+                        ? `● Matched: ${SH.escapeHtml(item.alumnus)}`
+                        : '○ Pending alumni match'
+                    }</strong>
                   </article>
                 `
               )
@@ -210,6 +227,7 @@
           .getElementById('interview-form')
           .addEventListener('submit', (event) => {
             event.preventDefault();
+            const user = SH.currentUser?.();
             const request = {
               id: Date.now(),
               track: document.getElementById('interview-track').value,
@@ -217,7 +235,11 @@
               date: document.getElementById('interview-date').value,
               time: document.getElementById('interview-time').value.trim(),
               note: document.getElementById('interview-note').value.trim(),
+              author: user?.name || 'Student',
+              authorEmail: user?.email || '',
               orgId: SH.getActiveOrgId(),
+              status: 'pending',
+              alumnus: '',
             };
             if (!request.date || !request.time || !request.note) {
               SH.toast('Add date, time, and focus area first');

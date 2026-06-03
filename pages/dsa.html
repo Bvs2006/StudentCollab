@@ -35,8 +35,8 @@
       <div class="projects-eyebrow">DSA practice room</div>
       <h1>Build problem-solving skill with a clear DSA path</h1>
       <p>
-        Practice with classmates, ask for help when stuck, join topic rooms,
-        and prepare for coding rounds together.
+        Practice with classmates, ask for help when stuck, join topic rooms, and
+        prepare for coding rounds together.
       </p>
       <div class="dsa-hero-actions">
         <a class="btn-submit" href="#peer-help">Ask for help</a>
@@ -134,7 +134,10 @@
             <span>Room A</span>
             <h3>Arrays sprint</h3>
             <p>Two pointers, sliding window, prefix sums.</p>
-            <button class="mini-link-btn" onclick="joinDsaRoom('Arrays sprint')">
+            <button
+              class="mini-link-btn"
+              onclick="joinDsaRoom('Arrays sprint')"
+            >
               Join room
             </button>
           </article>
@@ -158,7 +161,10 @@
             <span>Room D</span>
             <h3>Mock interview</h3>
             <p>Pair up for timed problem solving and explanation practice.</p>
-            <button class="mini-link-btn" onclick="joinDsaRoom('Mock interview')">
+            <button
+              class="mini-link-btn"
+              onclick="joinDsaRoom('Mock interview')"
+            >
               Join room
             </button>
           </article>
@@ -192,7 +198,9 @@
           </div>
           <div class="dsa-progress">
             <div><span id="dsa-progress-text">0/3 complete</span></div>
-            <div class="dsa-progress-bar"><span id="dsa-progress-bar"></span></div>
+            <div class="dsa-progress-bar">
+              <span id="dsa-progress-bar"></span>
+            </div>
           </div>
         </article>
 
@@ -324,8 +332,9 @@
       function renderDsaHelpRequests() {
         const list = loadDsaHelpRequests();
         const container = document.getElementById('dsa-help-list');
-        document.getElementById('dsa-help-count').textContent =
-          `${list.length} post${list.length === 1 ? '' : 's'}`;
+        document.getElementById('dsa-help-count').textContent = `${
+          list.length
+        } post${list.length === 1 ? '' : 's'}`;
         container.innerHTML = list.length
           ? list
               .map(
@@ -357,8 +366,9 @@
 
       function joinDsaRoom(room) {
         localStorage.setItem(`${dsaRoomKey}_${SH.getActiveOrgId()}`, room);
-        document.getElementById('dsa-room-status').textContent =
-          `Current room: ${room}. Invite a classmate and solve one problem together.`;
+        document.getElementById(
+          'dsa-room-status'
+        ).textContent = `Current room: ${room}. Invite a classmate and solve one problem together.`;
         SH.toast(`Joined ${room}`);
       }
 
@@ -367,13 +377,19 @@
         const done = boxes.filter((box) => box.checked).length;
         const total = boxes.length;
         const progress = total ? Math.round((done / total) * 100) : 0;
-        document.getElementById('dsa-progress-text').textContent =
-          `${done}/${total} complete`;
-        document.getElementById('dsa-progress-bar').style.width = `${progress}%`;
+        document.getElementById(
+          'dsa-progress-text'
+        ).textContent = `${done}/${total} complete`;
+        document.getElementById(
+          'dsa-progress-bar'
+        ).style.width = `${progress}%`;
         const state = Object.fromEntries(
           boxes.map((box) => [box.dataset.dsaTask, box.checked])
         );
-        localStorage.setItem(`${dsaTaskKey}_${SH.getActiveOrgId()}`, JSON.stringify(state));
+        localStorage.setItem(
+          `${dsaTaskKey}_${SH.getActiveOrgId()}`,
+          JSON.stringify(state)
+        );
       }
 
       document.addEventListener('DOMContentLoaded', () => {
@@ -414,10 +430,13 @@
             renderDsaHelpRequests();
             SH.toast('DSA help request posted');
           });
-        const room = localStorage.getItem(`${dsaRoomKey}_${SH.getActiveOrgId()}`);
+        const room = localStorage.getItem(
+          `${dsaRoomKey}_${SH.getActiveOrgId()}`
+        );
         if (room) {
-          document.getElementById('dsa-room-status').textContent =
-            `Current room: ${room}. Invite a classmate and solve one problem together.`;
+          document.getElementById(
+            'dsa-room-status'
+          ).textContent = `Current room: ${room}. Invite a classmate and solve one problem together.`;
         }
         updateDsaProgress();
         renderDsaHelpRequests();

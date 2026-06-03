@@ -14,7 +14,8 @@
   <body class="organizations-page">
     <nav class="nav">
       <div class="nav-brand">
-        <span class="brand-icon">S</span><span class="brand-name">StudentHub</span>
+        <span class="brand-icon">S</span
+        ><span class="brand-name">StudentHub</span>
       </div>
       <div class="nav-links">
         <a href="../index.html" class="nav-link">Home</a>
@@ -157,9 +158,7 @@
               description: document.getElementById('org-description').value,
             });
             SH.toast(
-              result.ok
-                ? 'Organization request sent to admin'
-                : result.message
+              result.ok ? 'Organization request sent to admin' : result.message
             );
             if (!result.ok) return;
             event.target.reset();

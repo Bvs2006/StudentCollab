@@ -282,9 +282,7 @@
           <button class="sort-btn active" onclick="sortIdeas('votes', this)">
             Top
           </button>
-          <button class="sort-btn" onclick="sortIdeas('new', this)">
-            New
-          </button>
+          <button class="sort-btn" onclick="sortIdeas('new', this)">New</button>
           <button class="sort-btn" onclick="sortIdeas('comments', this)">
             Most Discussed
           </button>
@@ -492,13 +490,12 @@
         }
         noIdeas.style.display = 'none';
         container.innerHTML = list
-          .map(
-            (i) => {
-              const idArg = JSON.stringify(String(i.id));
-              const deleteButton = SH.canManageItem(i)
-                ? `<button class="mini-link-btn danger" onclick="event.stopPropagation();SH.deleteIdea(${idArg})">Delete</button>`
-                : '';
-              return `
+          .map((i) => {
+            const idArg = JSON.stringify(String(i.id));
+            const deleteButton = SH.canManageItem(i)
+              ? `<button class="mini-link-btn danger" onclick="event.stopPropagation();SH.deleteIdea(${idArg})">Delete</button>`
+              : '';
+            return `
         <div class="idea-mini-card" onclick="openIdeaDetail(${idArg})">
           <div class="idea-mini-title">${i.title}</div>
           <div class="idea-mini-desc">${i.desc}</div>
@@ -514,11 +511,14 @@
               <span class="vote-count" id="vote-${i.id}">${i.votes}</span>
             </span>
           </div>
-          ${deleteButton ? `<div class="idea-mini-actions">${deleteButton}</div>` : ''}
+          ${
+            deleteButton
+              ? `<div class="idea-mini-actions">${deleteButton}</div>`
+              : ''
+          }
         </div>
       `;
-            }
-          )
+          })
           .join('');
       }
 
@@ -527,10 +527,9 @@
           .sort((a, b) => b.votes - a.votes)
           .slice(0, 5);
         document.getElementById('trending-list').innerHTML = top
-          .map(
-            (idea, i) => {
-              const idArg = JSON.stringify(String(idea.id));
-              return `
+          .map((idea, i) => {
+            const idArg = JSON.stringify(String(idea.id));
+            return `
         <div class="trending-item" onclick="openIdeaDetail(${idArg})">
           <div class="ti-rank">${i + 1}</div>
           <div class="ti-body">
@@ -539,8 +538,7 @@
           </div>
         </div>
       `;
-            }
-          )
+          })
           .join('');
       }
 

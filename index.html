@@ -26,12 +26,16 @@
       </div>
 
       <div class="nav-actions">
-        <button class="btn-join" onclick="window.location.href='pages/login.html'">
+        <button
+          class="btn-join"
+          onclick="window.location.href='pages/login.html'"
+        >
           Login
         </button>
-        <a class="btn-primary nav-signup" href="pages/login.html">Join with college email</a>
+        <a class="btn-primary nav-signup" href="pages/login.html"
+          >Join with college email</a
+        >
       </div>
-
     </nav>
 
     <main>
@@ -49,16 +53,24 @@
           </p>
           <div class="sp-hero-actions" aria-label="Primary actions">
             <a class="sp-cta" href="pages/login.html">Student login</a>
-            <a class="btn-ghost sp-secondary-cta" href="pages/login.html?role=org_admin">
+            <a
+              class="btn-ghost sp-secondary-cta"
+              href="pages/login.html?role=org_admin"
+            >
               Organisation login
             </a>
           </div>
-          <div class="sp-hero-preview" aria-label="StudentHub workspace preview">
+          <div
+            class="sp-hero-preview"
+            aria-label="StudentHub workspace preview"
+          >
             <div class="sp-preview-card main">
               <div>
                 <span class="sp-live">Verified workspace</span>
                 <h3>Aditya University CSE</h3>
-                <p>Student roster, events, projects, DSA rooms, and interviews.</p>
+                <p>
+                  Student roster, events, projects, DSA rooms, and interviews.
+                </p>
               </div>
               <div class="sp-preview-progress">
                 <span></span><span></span><span></span>
@@ -86,7 +98,10 @@
               <small>One verified workspace per organisation</small>
             </div>
           </div>
-          <div class="github-stats sp-home-stats" aria-label="StudentHub GitHub stats">
+          <div
+            class="github-stats sp-home-stats"
+            aria-label="StudentHub GitHub stats"
+          >
             <div class="github-stat">
               <strong id="gh-stars">-</strong>
               <span>Stars</span>
@@ -118,6 +133,33 @@
         </p>
       </section>
 
+      <section class="sp-intro" style="padding-top: 0;">
+        <div class="sp-section-heading">
+          <h2>Featured Campus Projects</h2>
+          <p>
+            Browse student projects, filter by skills, and join peer teams that match your interests.
+          </p>
+        </div>
+        <div class="project-grid" id="featured-projects" style="margin-top: 2rem;"></div>
+        <div style="text-align: center; margin-top: 2.5rem;">
+          <a class="btn-primary" href="pages/projects.html">Explore all projects</a>
+        </div>
+      </section>
+
+      <section class="sp-intro" style="padding-top: 0;">
+        <div class="sp-section-heading">
+          <h2>Trending Ideas</h2>
+          <p>
+            Check out early concepts and collaborate to turn them into active projects.
+          </p>
+        </div>
+        <div class="project-grid" id="home-ideas" style="margin-top: 2rem;"></div>
+        <div style="text-align: center; margin-top: 2.5rem;">
+          <a class="btn-primary" href="pages/ideas.html">Explore all ideas</a>
+        </div>
+      </section>
+
+
       <section class="sp-audiences">
         <div class="sp-section-heading">
           <h2>Two clear account types</h2>
@@ -128,8 +170,13 @@
             <div class="empty-state sp-empty-card">
               <div class="empty-icon">+</div>
               <h3>Student account</h3>
-              <p>Students join with the college email provided by their organisation.</p>
-              <a class="btn-ghost empty-action" href="pages/login.html">Student login</a>
+              <p>
+                Students join with the college email provided by their
+                organisation.
+              </p>
+              <a class="btn-ghost empty-action" href="pages/login.html"
+                >Student login</a
+              >
             </div>
           </article>
 
@@ -137,8 +184,13 @@
             <span>For students</span>
             <h3>Use only student features inside your organisation</h3>
             <ul>
-              <li>Login with your college email after your organisation adds you</li>
-              <li>Access projects, ideas, proposals, DSA prep, interviews, and events</li>
+              <li>
+                Login with your college email after your organisation adds you
+              </li>
+              <li>
+                Access projects, ideas, proposals, DSA prep, interviews, and
+                events
+              </li>
               <li>See only content from your active organisation workspace</li>
             </ul>
             <a href="pages/login.html">Continue as student</a>
@@ -151,18 +203,29 @@
             <h3>Approve a workspace and manage student data</h3>
             <ul>
               <li>Request an organisation workspace from the global admin</li>
-              <li>Add student name, college email, roll number, course, and year</li>
-              <li>Manage events, feature data, projects, and student activity</li>
+              <li>
+                Add student name, college email, roll number, course, and year
+              </li>
+              <li>
+                Manage events, feature data, projects, and student activity
+              </li>
             </ul>
-            <a href="pages/login.html?role=org_admin">Continue as organisation</a>
+            <a href="pages/login.html?role=org_admin"
+              >Continue as organisation</a
+            >
           </article>
 
           <article class="sp-startup-cards">
             <div class="empty-state sp-empty-card">
               <div class="empty-icon">+</div>
               <h3>Organisation account</h3>
-              <p>Approved organisation admins get a separate management dashboard.</p>
-              <a class="btn-ghost empty-action" href="pages/organizations.html">Request workspace</a>
+              <p>
+                Approved organisation admins get a separate management
+                dashboard.
+              </p>
+              <a class="btn-ghost empty-action" href="pages/organizations.html"
+                >Request workspace</a
+              >
             </div>
           </article>
         </div>
@@ -171,7 +234,10 @@
       <section class="sp-steps" id="features">
         <div class="sp-section-heading">
           <h2>How StudentHub works</h2>
-          <p>Approve the organisation, add student records, then unlock student features.</p>
+          <p>
+            Approve the organisation, add student records, then unlock student
+            features.
+          </p>
         </div>
         <div class="sp-step-grid">
           <article>
@@ -215,17 +281,26 @@
           <article>
             <span>01</span>
             <h3>Request workspace</h3>
-            <p>Organisation representatives request access and explain who the workspace is for.</p>
+            <p>
+              Organisation representatives request access and explain who the
+              workspace is for.
+            </p>
           </article>
           <article>
             <span>02</span>
             <h3>Admin approval</h3>
-            <p>The global admin approves the request and promotes the requester as organisation admin.</p>
+            <p>
+              The global admin approves the request and promotes the requester
+              as organisation admin.
+            </p>
           </article>
           <article>
             <span>03</span>
             <h3>Upload students</h3>
-            <p>The organisation adds student names, college emails, roll numbers, courses, and year.</p>
+            <p>
+              The organisation adds student names, college emails, roll numbers,
+              courses, and year.
+            </p>
           </article>
         </div>
         <div class="sp-audience-grid" style="margin-top: 1rem">
@@ -234,8 +309,12 @@
             <h3>Colleges get a clearer view of student activity</h3>
             <ul>
               <li>See what students are building and where they need help</li>
-              <li>Track event interest, interview requests, and project activity</li>
-              <li>Use one verified workspace instead of scattered forms and groups</li>
+              <li>
+                Track event interest, interview requests, and project activity
+              </li>
+              <li>
+                Use one verified workspace instead of scattered forms and groups
+              </li>
             </ul>
           </article>
           <article class="sp-startup-cards">
@@ -251,10 +330,15 @@
         </div>
       </section>
 
-      <section class="sp-dynamic-section sp-dynamic-alt" aria-labelledby="student-feedback-heading">
+      <section
+        class="sp-dynamic-section sp-dynamic-alt"
+        aria-labelledby="student-feedback-heading"
+      >
         <div class="sp-section-heading">
           <span class="sp-live">Student feedback</span>
-          <h2 id="student-feedback-heading">Built around what students need every day</h2>
+          <h2 id="student-feedback-heading">
+            Built around what students need every day
+          </h2>
           <p>
             Students get one place to discover projects, ask DSA doubts, book
             alumni mock interviews, join LearningLab events, and share ideas
@@ -267,8 +351,12 @@
             <h3>Feedback stays connected to the right workspace</h3>
             <ul>
               <li>Students can share project ideas and collaboration needs</li>
-              <li>DSA help requests stay visible to peers in the same organisation</li>
-              <li>Interview requests and event participation are easier to track</li>
+              <li>
+                DSA help requests stay visible to peers in the same organisation
+              </li>
+              <li>
+                Interview requests and event participation are easier to track
+              </li>
             </ul>
           </article>
           <article class="sp-startup-cards">
@@ -276,8 +364,8 @@
               <div class="empty-icon">"</div>
               <h3>Student feedback example</h3>
               <p>
-                "I can find my college projects, DSA help, and interview prep
-                in one place instead of asking in multiple groups."
+                "I can find my college projects, DSA help, and interview prep in
+                one place instead of asking in multiple groups."
               </p>
             </div>
           </article>
@@ -297,17 +385,26 @@
           <article>
             <span>S</span>
             <h3>Student tools</h3>
-            <p>Projects, proposals, ideas, DSA prep, LearningLab events, alumni interviews, and profile.</p>
+            <p>
+              Projects, proposals, ideas, DSA prep, LearningLab events, alumni
+              interviews, and profile.
+            </p>
           </article>
           <article>
             <span>O</span>
             <h3>Organisation tools</h3>
-            <p>Student roster, event creation, feature moderation, project review, and workspace controls.</p>
+            <p>
+              Student roster, event creation, feature moderation, project
+              review, and workspace controls.
+            </p>
           </article>
           <article>
             <span>A</span>
             <h3>Admin approval</h3>
-            <p>Organisation requests go through a global admin before becoming active workspaces.</p>
+            <p>
+              Organisation requests go through a global admin before becoming
+              active workspaces.
+            </p>
           </article>
         </div>
       </section>
@@ -328,23 +425,27 @@
             <strong>Result</strong>
           </div>
           <div class="sp-compare-row">
-            <span>Verified access</span><b>Upload student data</b><b>Login with college email</b><b>Clean membership</b>
+            <span>Verified access</span><b>Upload student data</b
+            ><b>Login with college email</b><b>Clean membership</b>
           </div>
           <div class="sp-compare-row">
-            <span>Projects</span><b>Review workspace activity</b><b>Join and contribute</b><b>Visible collaboration</b>
+            <span>Projects</span><b>Review workspace activity</b
+            ><b>Join and contribute</b><b>Visible collaboration</b>
           </div>
           <div class="sp-compare-row">
-            <span>Feedback</span><b>See student needs</b><b>Post doubts and ideas</b><b>Better support</b>
+            <span>Feedback</span><b>See student needs</b
+            ><b>Post doubts and ideas</b><b>Better support</b>
           </div>
           <div class="sp-compare-row">
-            <span>Events</span><b>Create LearningLab meets</b><b>Discover sessions</b><b>More participation</b>
+            <span>Events</span><b>Create LearningLab meets</b
+            ><b>Discover sessions</b><b>More participation</b>
           </div>
           <div class="sp-compare-row">
-            <span>Interview prep</span><b>Track requests</b><b>Book alumni mocks</b><b>Career readiness</b>
+            <span>Interview prep</span><b>Track requests</b
+            ><b>Book alumni mocks</b><b>Career readiness</b>
           </div>
         </div>
       </section>
-
     </main>
 
     <footer class="sp-footer">

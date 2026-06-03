@@ -31,10 +31,37 @@ SH.supabaseHeaders = () => ({
   'Content-Type': 'application/json',
 });
 
+SH.fetchWithTimeout = async (url, options = {}, timeoutMs = 3500) => {
+  const controller =
+    typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timer = controller
+    ? window.setTimeout(() => controller.abort(), timeoutMs)
+    : null;
+  try {
+    return await fetch(url, {
+      ...options,
+      signal: controller ? controller.signal : options.signal,
+    });
+  } finally {
+    if (timer) window.clearTimeout(timer);
+  }
+};
+
+SH.readLocalArray = (key, fallback = []) => {
+  try {
+    const value = JSON.parse(localStorage.getItem(key) || '[]');
+    return Array.isArray(value) ? value : fallback;
+  } catch (e) {
+    return fallback;
+  }
+};
+
 SH.fetchProjectsFromSupabase = async () => {
   try {
     const url = `${SH.SUPABASE_URL}/rest/v1/projects?select=*&order=created.desc`;
-    const res = await fetch(url, { headers: SH.supabaseHeaders() });
+    const res = await SH.fetchWithTimeout(url, {
+      headers: SH.supabaseHeaders(),
+    });
     if (!res.ok) throw new Error('Supabase fetch failed');
     const data = await res.json();
     // Normalize rows to app format if needed
@@ -68,8 +95,7 @@ SH.fetchProjectsFromSupabase = async () => {
     return SH.projects;
   } catch (e) {
     console.warn('Supabase projects load failed, using local cache', e);
-    const raw = localStorage.getItem('sh_projects');
-    SH.projects = raw ? JSON.parse(raw) : SH.projects || [];
+    SH.projects = SH.readLocalArray('sh_projects', SH.projects || []);
     return SH.projects;
   }
 };
@@ -96,11 +122,15 @@ SH.saveProjectToSupabase = async (project) => {
       demo_url: project.demoUrl || null,
       org_id: project.orgId || SH.getActiveOrgId(),
     };
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: SH.supabaseHeaders(),
-      body: JSON.stringify(payload),
-    });
+    const res = await SH.fetchWithTimeout(
+      url,
+      {
+        method: 'POST',
+        headers: SH.supabaseHeaders(),
+        body: JSON.stringify(payload),
+      },
+      5000
+    );
     if (!res.ok) throw new Error('Supabase insert failed');
     const resp = await res.json();
     // Supabase returns an array of inserted rows
@@ -110,7 +140,7 @@ SH.saveProjectToSupabase = async (project) => {
     console.warn('Supabase save failed, saving locally', e);
     // assign an id and save locally
     project.id = project.id || Date.now();
-    const cur = JSON.parse(localStorage.getItem('sh_projects') || '[]');
+    const cur = SH.readLocalArray('sh_projects');
     cur.unshift(project);
     localStorage.setItem('sh_projects', JSON.stringify(cur));
     return project;
@@ -120,7 +150,9 @@ SH.saveProjectToSupabase = async (project) => {
 SH.fetchIdeasFromSupabase = async () => {
   try {
     const url = `${SH.SUPABASE_URL}/rest/v1/ideas?select=*&order=created.desc`;
-    const res = await fetch(url, { headers: SH.supabaseHeaders() });
+    const res = await SH.fetchWithTimeout(url, {
+      headers: SH.supabaseHeaders(),
+    });
     if (!res.ok) throw new Error('Supabase ideas fetch failed');
     const data = await res.json();
     SH.ideas = data.map((d) => ({
@@ -142,8 +174,7 @@ SH.fetchIdeasFromSupabase = async () => {
     return SH.ideas;
   } catch (e) {
     console.warn('Supabase ideas load failed, using local cache', e);
-    const raw = localStorage.getItem('sh_ideas');
-    SH.ideas = raw ? JSON.parse(raw) : SH.ideas || [];
+    SH.ideas = SH.readLocalArray('sh_ideas', SH.ideas || []);
     return SH.ideas;
   }
 };
@@ -165,11 +196,15 @@ SH.saveIdeaToSupabase = async (idea) => {
       created: idea.time,
       org_id: idea.orgId || SH.getActiveOrgId(),
     };
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: SH.supabaseHeaders(),
-      body: JSON.stringify(payload),
-    });
+    const res = await SH.fetchWithTimeout(
+      url,
+      {
+        method: 'POST',
+        headers: SH.supabaseHeaders(),
+        body: JSON.stringify(payload),
+      },
+      5000
+    );
     if (!res.ok) throw new Error('Supabase idea insert failed');
     const resp = await res.json();
     const row = Array.isArray(resp) ? resp[0] : resp;
@@ -177,7 +212,7 @@ SH.saveIdeaToSupabase = async (idea) => {
   } catch (e) {
     console.warn('Supabase idea save failed, saving locally', e);
     idea.id = idea.id || Date.now();
-    const cur = JSON.parse(localStorage.getItem('sh_ideas') || '[]');
+    const cur = SH.readLocalArray('sh_ideas');
     cur.unshift(idea);
     localStorage.setItem('sh_ideas', JSON.stringify(cur));
     return idea;
@@ -259,10 +294,14 @@ SH.canManageItem = (item) => {
 
 SH.deleteProjectFromSupabase = async (id) => {
   try {
-    const res = await fetch(`${SH.SUPABASE_URL}/rest/v1/projects?id=eq.${id}`, {
-      method: 'DELETE',
-      headers: SH.supabaseHeaders(),
-    });
+    const res = await SH.fetchWithTimeout(
+      `${SH.SUPABASE_URL}/rest/v1/projects?id=eq.${id}`,
+      {
+        method: 'DELETE',
+        headers: SH.supabaseHeaders(),
+      },
+      5000
+    );
     if (!res.ok) throw new Error('Supabase project delete failed');
   } catch (e) {
     console.warn('Supabase project delete failed, removing locally', e);
@@ -271,10 +310,14 @@ SH.deleteProjectFromSupabase = async (id) => {
 
 SH.deleteIdeaFromSupabase = async (id) => {
   try {
-    const res = await fetch(`${SH.SUPABASE_URL}/rest/v1/ideas?id=eq.${id}`, {
-      method: 'DELETE',
-      headers: SH.supabaseHeaders(),
-    });
+    const res = await SH.fetchWithTimeout(
+      `${SH.SUPABASE_URL}/rest/v1/ideas?id=eq.${id}`,
+      {
+        method: 'DELETE',
+        headers: SH.supabaseHeaders(),
+      },
+      5000
+    );
     if (!res.ok) throw new Error('Supabase idea delete failed');
   } catch (e) {
     console.warn('Supabase idea delete failed, removing locally', e);
@@ -960,14 +1003,20 @@ SH.repoIssuesUrl = (repoUrl) => {
 };
 
 SH.fetchRepoApi = async (owner, repo) => {
-  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+  const res = await SH.fetchWithTimeout(
+    `https://api.github.com/repos/${owner}/${repo}`,
+    {},
+    3500
+  );
   if (!res.ok) throw new Error('repo fetch failed');
   return res.json();
 };
 
 SH.fetchPackageJsonHomepage = async (owner, repo) => {
-  const res = await fetch(
-    `https://api.github.com/repos/${owner}/${repo}/contents/package.json`
+  const res = await SH.fetchWithTimeout(
+    `https://api.github.com/repos/${owner}/${repo}/contents/package.json`,
+    {},
+    3500
   );
   if (!res.ok) return null;
   const json = await res.json();
@@ -983,7 +1032,7 @@ SH.fetchPackageJsonHomepage = async (owner, repo) => {
 
 SH.testUrlExists = async (url) => {
   try {
-    const res = await fetch(url, { method: 'HEAD' });
+    const res = await SH.fetchWithTimeout(url, { method: 'HEAD' }, 3000);
     return res.ok;
   } catch (e) {
     return false;
@@ -2070,35 +2119,39 @@ document.addEventListener('DOMContentLoaded', () => {
   SH.renderSidebar && SH.renderSidebar();
   // Fetch live GitHub stats for the repo and show them on the homepage
   SH.fetchGitHubStats = async () => {
+    const starsEl = document.getElementById('gh-stars');
+    const forksEl = document.getElementById('gh-forks');
+    const contribsEl = document.getElementById('gh-contribs');
+    if (!starsEl && !forksEl && !contribsEl) return;
     try {
-      const repoRes = await fetch(
-        `https://api.github.com/repos/${SH.githubRepo}`
+      const repoRes = await SH.fetchWithTimeout(
+        `https://api.github.com/repos/${SH.githubRepo}`,
+        {},
+        2500
       );
       if (!repoRes.ok) return;
       const repo = await repoRes.json();
-      const starsEl = document.getElementById('gh-stars');
-      const forksEl = document.getElementById('gh-forks');
       if (starsEl)
         starsEl.textContent = repo.stargazers_count?.toLocaleString() || '0';
       if (forksEl)
         forksEl.textContent = repo.forks_count?.toLocaleString() || '0';
 
       // Contributors (first 6)
-      const contribRes = await fetch(
-        `https://api.github.com/repos/${SH.githubRepo}/contributors?per_page=6`
+      if (!contribsEl) return;
+      const contribRes = await SH.fetchWithTimeout(
+        `https://api.github.com/repos/${SH.githubRepo}/contributors?per_page=6`,
+        {},
+        2500
       );
       if (!contribRes.ok) return;
       const contribs = await contribRes.json();
-      const contribsEl = document.getElementById('gh-contribs');
-      if (contribsEl) {
-        contribsEl.innerHTML = contribs
-          .slice(0, 6)
-          .map(
-            (c) =>
-              `<img src="${c.avatar_url}" alt="${c.login}" title="${c.login}" style="width:28px;height:28px;border-radius:99px;border:2px solid var(--surface);">`
-          )
-          .join('');
-      }
+      contribsEl.innerHTML = contribs
+        .slice(0, 6)
+        .map(
+          (c) =>
+            `<img src="${c.avatar_url}" alt="${c.login}" title="${c.login}" style="width:28px;height:28px;border-radius:99px;border:2px solid var(--surface);">`
+        )
+        .join('');
     } catch (e) {
       console.warn('GitHub stats fetch failed', e);
     }

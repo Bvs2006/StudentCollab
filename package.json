@@ -1,14 +1,40 @@
 {
   "name": "studenthub",
-  "version": "0.1.0",
-  "description": "StudentHub — a collaborative frontend prototype for student projects",
+  "version": "1.0.0",
+  "description": "StudentHub — The verified organisation workspace for student collaboration. Projects, DSA prep, alumni interviews, learning events, and ideas. All in one place.",
   "main": "index.html",
+  "homepage": "https://bvs2006.github.io/StudentCollab",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Bvs2006/StudentCollab.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Bvs2006/StudentCollab/issues"
+  },
+  "keywords": [
+    "studenthub",
+    "student-collaboration",
+    "college-projects",
+    "dsa-prep",
+    "alumni-interviews",
+    "organisation-workspace",
+    "vanilla-js",
+    "static-site"
+  ],
+  "author": "Bvs2006 <bvs2006@studenthub.local>",
+  "license": "MIT",
   "scripts": {
     "start": "npx serve .",
+    "dev": "npx serve . --listen 3000",
     "lint": "eslint assets/js --ext .js",
+    "lint:fix": "eslint assets/js --ext .js --fix",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "jest",
-    "prepare": "husky install"
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "prepare": "husky install",
+    "validate": "npm run lint && npm run format:check && npm run test"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",
@@ -29,5 +55,15 @@
       "npm run lint",
       "npm run format"
     ]
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/__tests__/**/*.test.js"
+    ]
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   }
 }

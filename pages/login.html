@@ -216,7 +216,9 @@
 
       function setLoginRole(role) {
         loginRole = role;
-        document.getElementById('user-tab')?.classList.toggle('active', role === 'user');
+        document
+          .getElementById('user-tab')
+          ?.classList.toggle('active', role === 'user');
         document
           .getElementById('org-tab')
           ?.classList.toggle('active', role === 'org_admin');
@@ -243,7 +245,8 @@
         const panel = document.getElementById('forgot-form');
         const shouldShow =
           typeof force === 'boolean' ? force : panel.style.display === 'none';
-        panel.style.display = shouldShow && loginRole !== 'admin' ? 'block' : 'none';
+        panel.style.display =
+          shouldShow && loginRole !== 'admin' ? 'block' : 'none';
         if (shouldShow) {
           document.getElementById('forgot-email').value =
             document.getElementById('login-email').value;
